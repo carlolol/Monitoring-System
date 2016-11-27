@@ -362,12 +362,12 @@ public class MainUI extends JPanel
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon("../Thesis/Images/home.png"));
+		btnNewButton.setIcon(new ImageIcon("C:\\Users\\Melvin\\Documents\\Workspace\\Thesis\\Images\\home.png"));
 		btnNewButton.setBounds(29, 216, 50, 50);
 		centerP.add(btnNewButton);
 		
 		lblBg = new JLabel();
-		lblBg.setIcon(new ImageIcon("../Thesis/Images/IoT.png"));
+		lblBg.setIcon(new ImageIcon("C:\\Users\\Melvin\\Documents\\Workspace\\Thesis\\Images\\IoT.png"));
 		lblBg.setBounds(0,0,450,325);
 		centerP.add(lblBg);
 		

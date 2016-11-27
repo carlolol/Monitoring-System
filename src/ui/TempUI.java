@@ -38,7 +38,7 @@ public class TempUI extends JPanel
 	private JFreeChart tempLine2;
 	private ChartPanel chartPanel1;
 	private ChartPanel chartPanel2;
-
+	
 	public TempUI(SystemUI systemUI)
 	{
 		rand = new Random();
@@ -51,7 +51,7 @@ public class TempUI extends JPanel
 		
 		for(int a = 0; a < statTemp2.length; a++)
 			statTemp2[a] = rand.nextInt(10) + 30;
-
+		
 		setLayout(new GridLayout(1, 1));
 		this.systemUI = systemUI;
 		
@@ -64,7 +64,7 @@ public class TempUI extends JPanel
 		lblTemperatureSensor.setForeground(Color.BLACK);
 		lblTemperatureSensor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTemperatureSensor.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblTemperatureSensor.setBounds(27, 27, 156, 23);
+		lblTemperatureSensor.setBounds(70, 80, 156, 23);
 		centerP.add(lblTemperatureSensor);
 		
 		textField = new JTextField();
@@ -73,7 +73,7 @@ public class TempUI extends JPanel
 		textField.setText(statTemp1[23] + "");
 		textField.setBackground(new Color(255, 0, 0));
 		textField.setEditable(false);
-		textField.setBounds(323, 29, 51, 20);
+		textField.setBounds(370, 81, 51, 20);
 		centerP.add(textField);
 		textField.setColumns(10);
 		
@@ -81,7 +81,7 @@ public class TempUI extends JPanel
 		btnOn.setBackground(Color.WHITE);
 		btnOn.setForeground(Color.BLACK);
 		btnOn.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnOn.setBounds(193, 27, 55, 23);
+		btnOn.setBounds(230, 80, 55, 23);
 		btnOn.setActionCommand("ON");
 		centerP.add(btnOn);
 		
@@ -90,7 +90,7 @@ public class TempUI extends JPanel
 		btnOff.setBackground(Color.WHITE);
 		btnOff.setForeground(Color.BLACK);
 		btnOff.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnOff.setBounds(258, 27, 55, 23);
+		btnOff.setBounds(290, 80, 55, 23);
 		btnOff.setActionCommand("OFF");
 		centerP.add(btnOff);
 		
@@ -98,14 +98,14 @@ public class TempUI extends JPanel
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setForeground(Color.BLACK);
 		label.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		label.setBounds(27, 205, 156, 23);
+		label.setBounds(70, 380, 156, 23);
 		centerP.add(label);
 		
 		button = new JButton("On");
 		button.setBackground(Color.WHITE);
 		button.setForeground(Color.BLACK);
 		button.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button.setBounds(193, 205, 55, 23);
+		button.setBounds(230, 380, 55, 23);
 		button.setActionCommand("ON1");
 		centerP.add(button);
 		
@@ -114,7 +114,7 @@ public class TempUI extends JPanel
 		button_1.setBackground(Color.WHITE);
 		button_1.setForeground(Color.BLACK);
 		button_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_1.setBounds(258, 205, 55, 23);
+		button_1.setBounds(290, 380, 55, 23);
 		button_1.setActionCommand("OFF1");
 		centerP.add(button_1);
 		
@@ -125,7 +125,7 @@ public class TempUI extends JPanel
 		textField_1.setBackground(new Color(255, 0, 0));
 		textField_1.setEditable(false);
 		textField_1.setColumns(10);
-		textField_1.setBounds(323, 207, 51, 20);
+		textField_1.setBounds(370, 381, 51, 20);
 		centerP.add(textField_1);
 		
 		/*
@@ -241,15 +241,13 @@ public class TempUI extends JPanel
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon("../Thesis/Images/returnIcon.png"));
 		btnNewButton.setRolloverIcon(new ImageIcon("../Thesis/Images/returnIconY.png"));
-		btnNewButton.setBounds(440, 390, 60, 60);
+		btnNewButton.setBounds(1200, 640, 60, 60);
 		btnNewButton.setOpaque(false);
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.setBorderPainted(false);
 		btnNewButton.setActionCommand("Return");
 		btnNewButton.addActionListener(loginHandler);
 		centerP.add(btnNewButton);
-
-		add(centerP);
 		
 		DefaultCategoryDataset dataset1 = new DefaultCategoryDataset();
 		
@@ -272,26 +270,27 @@ public class TempUI extends JPanel
 		chartPanel2.setMouseZoomable(false);
 
 		temperature1 = new JPanel();
-		temperature1.setBounds(15, 66, 565, 130);
+		temperature1.setBounds(70, 120, 565, 130);
 		temperature1.add(chartPanel1, BorderLayout.CENTER);
 		temperature1.validate();
 		centerP.add(temperature1);
 		
 		temperature2 = new JPanel();
-		temperature2.setBounds(15, 245, 565, 130);
+		temperature2.setBounds(70, 420, 565, 130);
 		temperature2.add(chartPanel2, BorderLayout.CENTER);
 		temperature2.validate();
 		centerP.add(temperature2);
-		
-		JLabel lblNewLabel = new JLabel("");
+	
+		/*JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setBounds(73, 380, 450, 84);
 		centerP.add(lblNewLabel);
-		lblNewLabel.setIcon(new ImageIcon("../Thesis/Images/shadowBg.png"));
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Melvin\\Documents\\Workspace\\Thesis\\Images\\shadowBg.png"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		*/
 		
 		lblBg = new JLabel();
-		lblBg.setIcon(new ImageIcon("../Thesis/Images/IoTBg.png"));
-		lblBg.setBounds(0,0,600,500);
+		lblBg.setIcon(new ImageIcon("../Thesis/Images/nb3.png"));
+		lblBg.setBounds(0,0,1366,780);
 		centerP.add(lblBg);
 		
 		btnOn.addActionListener(loginHandler);
@@ -299,7 +298,7 @@ public class TempUI extends JPanel
 		button.addActionListener(loginHandler);
 		button_1.addActionListener(loginHandler);
 		
-		centerP.repaint();
+		add(centerP);
 	}
 	
 	private class LoginHandler implements ActionListener

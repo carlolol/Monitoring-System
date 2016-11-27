@@ -27,14 +27,14 @@ public class HomeUI extends JPanel
 		JLabel lblOryzaSativa = new JLabel("Oryza Sativa Grains Monitoring System");
 		lblOryzaSativa.setForeground(Color.BLACK);
 		lblOryzaSativa.setHorizontalAlignment(SwingConstants.CENTER);
-		lblOryzaSativa.setFont(new Font("Times New Roman", Font.BOLD, 24));
-		lblOryzaSativa.setBounds(78, 60, 440, 50);
+		lblOryzaSativa.setFont(new Font("Times New Roman", Font.BOLD, 32));
+		lblOryzaSativa.setBounds(380, 120, 600, 50);
 		centerP.add(lblOryzaSativa);
 		
 		JButton btnNewButton_2 = new JButton("");
 		btnNewButton_2.setIcon(new ImageIcon("../Thesis/Images/exitIcon.png"));
 		btnNewButton_2.setRolloverIcon(new ImageIcon("../Thesis/Images/exitIconY.png"));
-		btnNewButton_2.setBounds(440, 390, 60, 60);
+		btnNewButton_2.setBounds(1200, 640, 60, 60);
 		btnNewButton_2.setOpaque(false);
 		btnNewButton_2.setContentAreaFilled(false);
 		btnNewButton_2.setBorderPainted(false);
@@ -45,7 +45,7 @@ public class HomeUI extends JPanel
 		JButton btnNewButton_1 = new JButton("");
 		btnNewButton_1.setIcon(new ImageIcon("../Thesis/Images/moistureIcon.png"));
 		btnNewButton_1.setRolloverIcon(new ImageIcon("../Thesis/Images/moistureIconY.png"));
-		btnNewButton_1.setBounds(300, 390, 60, 60);
+		btnNewButton_1.setBounds(1100, 640, 60, 60);
 		btnNewButton_1.setOpaque(false);
 		btnNewButton_1.setContentAreaFilled(false);
 		btnNewButton_1.setBorderPainted(false);
@@ -59,20 +59,21 @@ public class HomeUI extends JPanel
 		btnNewButton.setOpaque(false);
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.setBorderPainted(false);
-		btnNewButton.setBounds(370, 390, 60, 60);
+		btnNewButton.setBounds(1000, 640, 60, 60);
 		btnNewButton.setActionCommand("Temp");
 		btnNewButton.addActionListener(loginHandler);
 		centerP.add(btnNewButton);
 		
-		JLabel lblNewLabel = new JLabel("");
+		/*JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setBounds(73, 380, 450, 84);
 		centerP.add(lblNewLabel);
-		lblNewLabel.setIcon(new ImageIcon("../Thesis/Images/shadowBg.png"));
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Melvin\\Documents\\Workspace\\Thesis\\Images\\shadowBg.png"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		*/
 		
 		lblBg = new JLabel();
-		lblBg.setIcon(new ImageIcon("../Thesis/Images/IoTBg.png"));
-		lblBg.setBounds(0,0,600,500);
+		lblBg.setIcon(new ImageIcon("../Thesis/Images/nb3.png"));
+		lblBg.setBounds(0,0,1366,780);
 		centerP.add(lblBg);
 		
 		add(centerP);

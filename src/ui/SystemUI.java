@@ -28,6 +28,8 @@ public class SystemUI extends JFrame
 		
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		setUndecorated(true);
 		setVisible(true);
 	}
 	
@@ -35,8 +37,8 @@ public class SystemUI extends JFrame
 	{
 		
 		setTitle("Oryza Sativa Grains Monitoring System");
-		setSize(600,500);
-		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//setSize(600,500);
+		
 		setLocationRelativeTo(null);
 		card.show(container, "Main");
 		repaint();
@@ -47,8 +49,7 @@ public class SystemUI extends JFrame
 		setTitle("Oryza Sativa Grains Monitoring System");
 		tempUI = new TempUI(this);
 		container.add(tempUI, "Temperature");
-		setSize(600,500);
-		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//setSize(600,500);
 		setLocationRelativeTo(null);
 		card.show(container, "Temperature");
 		repaint();
@@ -59,8 +60,7 @@ public class SystemUI extends JFrame
 		setTitle("Oryza Sativa Grains Monitoring System");
 		moistUI = new MoistUI(this);
 		container.add(moistUI, "Moisture");
-		setSize(600,500);
-		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//setSize(600,500);
 		setLocationRelativeTo(null);
 		card.show(container, "Moisture");
 		repaint();
