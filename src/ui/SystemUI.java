@@ -2,7 +2,6 @@ package ui;
 
 import java.awt.CardLayout;
 import java.awt.Container;
-
 import javax.swing.*;
 
 public class SystemUI extends JFrame
@@ -16,8 +15,7 @@ public class SystemUI extends JFrame
 	private MoistUI moistUI;
 	
 	public SystemUI()
-	{
-		
+	{	
 		container = getContentPane();
 		
 		card = new CardLayout();
@@ -35,10 +33,7 @@ public class SystemUI extends JFrame
 	
 	public void showMain()
 	{
-		
-		setTitle("Oryza Sativa Grains Monitoring System");
-		//setSize(600,500);
-		
+		setTitle("Oryza Sativa Grains Monitoring System");	
 		setLocationRelativeTo(null);
 		card.show(container, "Main");
 		repaint();
@@ -49,7 +44,6 @@ public class SystemUI extends JFrame
 		setTitle("Oryza Sativa Grains Monitoring System");
 		tempUI = new TempUI(this);
 		container.add(tempUI, "Temperature");
-		//setSize(600,500);
 		setLocationRelativeTo(null);
 		card.show(container, "Temperature");
 		repaint();
@@ -60,7 +54,6 @@ public class SystemUI extends JFrame
 		setTitle("Oryza Sativa Grains Monitoring System");
 		moistUI = new MoistUI(this);
 		container.add(moistUI, "Moisture");
-		//setSize(600,500);
 		setLocationRelativeTo(null);
 		card.show(container, "Moisture");
 		repaint();

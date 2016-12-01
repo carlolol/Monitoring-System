@@ -20,24 +20,17 @@ public class MoistUI extends JPanel
 	
 	private Random rand;
 	
-	private JButton btnOn, btnOff, button, button_1;
-	private JLabel lblBg;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
+	private JButton returnB, btnOn1, btnOff1, btnOn2, btnOff2;
+	private JLabel lblBg, lblMoistureSensor1, lblMoistureSensor2;
+	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
+	
 	private int[] statMoist1;
 	private int[] statMoist2;	
-	private JPanel moisture1;
-	private JPanel moisture2;
+	private JPanel moisture1, moisture2;
 	
-	private JFreeChart moistLine1;
-	private JFreeChart moistLine2;
-	private ChartPanel chartPanel1;
-	private ChartPanel chartPanel2;
+	private JFreeChart moistLine1, moistLine2;
+	private ChartPanel chartPanel1, chartPanel2;
 	
 	public MoistUI(SystemUI systemUI)
 	{
@@ -60,194 +53,84 @@ public class MoistUI extends JPanel
 		
 		loginHandler = new LoginHandler();
 		
-		JLabel lblTemperatureSensor = new JLabel("Moisture Sensor #1");
-		lblTemperatureSensor.setForeground(Color.BLACK);
-		lblTemperatureSensor.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTemperatureSensor.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblTemperatureSensor.setBounds(70, 80, 156, 23);
-		centerP.add(lblTemperatureSensor);
+		lblMoistureSensor1 = new JLabel("Moisture Sensor #1");
+		lblMoistureSensor1.setForeground(Color.BLACK);
+		lblMoistureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMoistureSensor1.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		lblMoistureSensor1.setBounds(70, 80, 156, 23);
+		centerP.add(lblMoistureSensor1);
 		
-		textField = new JTextField();
-		textField.setForeground(Color.WHITE);
-		textField.setHorizontalAlignment(SwingConstants.CENTER);
-		textField.setText(statMoist1[23] + "");
-		textField.setBackground(new Color(255, 0, 0));
-		textField.setEditable(false);
-		textField.setBounds(370, 81, 51, 20);
-		centerP.add(textField);
-		textField.setColumns(10);
+		textField1 = new JTextField();
+		textField1.setForeground(Color.WHITE);
+		textField1.setHorizontalAlignment(SwingConstants.CENTER);
+		textField1.setText(statMoist1[23] + "");
+		textField1.setBackground(new Color(255, 0, 0));
+		textField1.setEditable(false);
+		textField1.setBounds(370, 81, 51, 20);
+		centerP.add(textField1);
+		textField1.setColumns(10);
 		
-		btnOn = new JButton("On");
-		btnOn.setBackground(Color.WHITE);
-		btnOn.setForeground(Color.BLACK);
-		btnOn.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnOn.setBounds(230, 80, 55, 23);
-		btnOn.setActionCommand("ON");
-		centerP.add(btnOn);
+		btnOn1 = new JButton("On");
+		btnOn1.setBackground(Color.WHITE);
+		btnOn1.setForeground(Color.BLACK);
+		btnOn1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnOn1.setBounds(230, 80, 55, 23);
+		btnOn1.setActionCommand("ON");
+		centerP.add(btnOn1);
 		
-		btnOff = new JButton("Off");
-		btnOff.setEnabled(false);
-		btnOff.setBackground(Color.WHITE);
-		btnOff.setForeground(Color.BLACK);
-		btnOff.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnOff.setBounds(290, 80, 55, 23);
-		btnOff.setActionCommand("OFF");
-		centerP.add(btnOff);
+		btnOff1 = new JButton("Off");
+		btnOff1.setEnabled(false);
+		btnOff1.setBackground(Color.WHITE);
+		btnOff1.setForeground(Color.BLACK);
+		btnOff1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnOff1.setBounds(290, 80, 55, 23);
+		btnOff1.setActionCommand("OFF");
+		centerP.add(btnOff1);
 		
-		JLabel label = new JLabel("Moisture Sensor #2");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setForeground(Color.BLACK);
-		label.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		label.setBounds(70, 380, 156, 23);
-		centerP.add(label);
+		lblMoistureSensor2 = new JLabel("Moisture Sensor #2");
+		lblMoistureSensor2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMoistureSensor2.setForeground(Color.BLACK);
+		lblMoistureSensor2.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		lblMoistureSensor2.setBounds(70, 380, 156, 23);
+		centerP.add(lblMoistureSensor2);
 		
-		button = new JButton("On");
-		button.setBackground(Color.WHITE);
-		button.setForeground(Color.BLACK);
-		button.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button.setBounds(230, 380, 55, 23);
-		button.setActionCommand("ON1");
-		centerP.add(button);
+		btnOn2 = new JButton("On");
+		btnOn2.setBackground(Color.WHITE);
+		btnOn2.setForeground(Color.BLACK);
+		btnOn2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnOn2.setBounds(230, 380, 55, 23);
+		btnOn2.setActionCommand("ON1");
+		centerP.add(btnOn2);
 		
-		button_1 = new JButton("Off");
-		button_1.setEnabled(false);
-		button_1.setBackground(Color.WHITE);
-		button_1.setForeground(Color.BLACK);
-		button_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_1.setBounds(290, 380, 55, 23);
-		button_1.setActionCommand("OFF1");
-		centerP.add(button_1);
+		btnOff2 = new JButton("Off");
+		btnOff2.setEnabled(false);
+		btnOff2.setBackground(Color.WHITE);
+		btnOff2.setForeground(Color.BLACK);
+		btnOff2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnOff2.setBounds(290, 380, 55, 23);
+		btnOff2.setActionCommand("OFF1");
+		centerP.add(btnOff2);
 		
-		textField_1 = new JTextField();
-		textField_1.setForeground(Color.WHITE);
-		textField_1.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_1.setText(statMoist2[23] + "");
-		textField_1.setBackground(new Color(255, 0, 0));
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
-		textField_1.setBounds(370, 381, 51, 20);
-		centerP.add(textField_1);
+		textField2 = new JTextField();
+		textField2.setForeground(Color.WHITE);
+		textField2.setHorizontalAlignment(SwingConstants.CENTER);
+		textField2.setText(statMoist2[23] + "");
+		textField2.setBackground(new Color(255, 0, 0));
+		textField2.setEditable(false);
+		textField2.setColumns(10);
+		textField2.setBounds(370, 381, 51, 20);
+		centerP.add(textField2);
 		
-		/*
-		JLabel label_1 = new JLabel("Moisture Sensor #3");
-		label_1.setHorizontalAlignment(SwingConstants.CENTER);
-		label_1.setForeground(Color.BLACK);
-		label_1.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		label_1.setBounds(63, 147, 156, 23);
-		centerP.add(label_1);
-		
-		JButton button_2 = new JButton("On");
-		button_2.setBackground(Color.WHITE);
-		button_2.setForeground(Color.BLACK);
-		button_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_2.setBounds(229, 148, 89, 23);
-		centerP.add(button_2);
-		
-		JButton button_3 = new JButton("Off");
-		button_3.setBackground(Color.WHITE);
-		button_3.setForeground(Color.BLACK);
-		button_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_3.setBounds(328, 148, 89, 23);
-		centerP.add(button_3);
-		
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
-		textField_2.setBounds(427, 149, 86, 20);
-		centerP.add(textField_2);
-		
-		JLabel label_2 = new JLabel("Moisture Sensor #4");
-		label_2.setHorizontalAlignment(SwingConstants.CENTER);
-		label_2.setForeground(Color.BLACK);
-		label_2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		label_2.setBounds(63, 181, 156, 23);
-		centerP.add(label_2);
-		
-		JButton button_4 = new JButton("On");
-		button_4.setBackground(Color.WHITE);
-		button_4.setForeground(Color.BLACK);
-		button_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_4.setBounds(229, 182, 89, 23);
-		centerP.add(button_4);
-		
-		JButton button_5 = new JButton("Off");
-		button_5.setBackground(Color.WHITE);
-		button_5.setForeground(Color.BLACK);
-		button_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_5.setBounds(328, 182, 89, 23);
-		centerP.add(button_5);
-		
-		textField_3 = new JTextField();
-		textField_3.setEditable(false);
-		textField_3.setColumns(10);
-		textField_3.setBounds(427, 183, 86, 20);
-		centerP.add(textField_3);
-		
-		JLabel label_3 = new JLabel("Moisture Sensor #5");
-		label_3.setHorizontalAlignment(SwingConstants.CENTER);
-		label_3.setForeground(Color.BLACK);
-		label_3.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		label_3.setBounds(63, 215, 156, 23);
-		centerP.add(label_3);
-		
-		JButton button_6 = new JButton("On");
-		button_6.setBackground(Color.WHITE);
-		button_6.setForeground(Color.BLACK);
-		button_6.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_6.setBounds(229, 216, 89, 23);
-		centerP.add(button_6);
-		
-		JButton button_7 = new JButton("Off");
-		button_7.setBackground(Color.WHITE);
-		button_7.setForeground(Color.BLACK);
-		button_7.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_7.setBounds(328, 216, 89, 23);
-		centerP.add(button_7);
-		
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setColumns(10);
-		textField_4.setBounds(427, 217, 86, 20);
-		centerP.add(textField_4);
-		
-		JLabel label_4 = new JLabel("Moisture Sensor #6");
-		label_4.setHorizontalAlignment(SwingConstants.CENTER);
-		label_4.setForeground(Color.BLACK);
-		label_4.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		label_4.setBounds(63, 249, 156, 23);
-		centerP.add(label_4);
-		
-		JButton button_8 = new JButton("On");
-		button_8.setBackground(Color.WHITE);
-		button_8.setForeground(Color.BLACK);
-		button_8.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_8.setBounds(229, 250, 89, 23);
-		centerP.add(button_8);
-		
-		JButton button_9 = new JButton("Off");
-		button_9.setBackground(Color.WHITE);
-		button_9.setForeground(Color.BLACK);
-		button_9.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		button_9.setBounds(328, 250, 89, 23);
-		centerP.add(button_9);
-		
-		textField_5 = new JTextField();
-		textField_5.setEditable(false);
-		textField_5.setColumns(10);
-		textField_5.setBounds(427, 251, 86, 20);
-		centerP.add(textField_5);
-		*/
-		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setIcon(new ImageIcon("../Thesis/Images/returnIcon.png"));
-		btnNewButton.setRolloverIcon(new ImageIcon("../Thesis/Images/returnIconY.png"));
-		btnNewButton.setBounds(1200, 640, 60, 60);
-		btnNewButton.setOpaque(false);
-		btnNewButton.setContentAreaFilled(false);
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setActionCommand("Return");
-		btnNewButton.addActionListener(loginHandler);
-		centerP.add(btnNewButton);
+		returnB = new JButton("");
+		returnB.setIcon(new ImageIcon("../Thesis/Images/returnIcon.png"));
+		returnB.setRolloverIcon(new ImageIcon("../Thesis/Images/returnIconY.png"));
+		returnB.setBounds(1200, 640, 60, 60);
+		returnB.setOpaque(false);
+		returnB.setContentAreaFilled(false);
+		returnB.setBorderPainted(false);
+		returnB.setActionCommand("Return");
+		returnB.addActionListener(loginHandler);
+		centerP.add(returnB);
 		
 		DefaultCategoryDataset dataset1 = new DefaultCategoryDataset();
 		
@@ -282,22 +165,15 @@ public class MoistUI extends JPanel
 		moisture2.validate();
 		centerP.add(moisture2);
 		
-		/*JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(73, 380, 450, 84);
-		centerP.add(lblNewLabel);
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Melvin\\Documents\\Workspace\\Thesis\\Images\\shadowBg.png"));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		*/
-		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/nb3.png"));
 		lblBg.setBounds(0,0,1366,780);
 		centerP.add(lblBg);
 		
-		btnOn.addActionListener(loginHandler);
-		btnOff.addActionListener(loginHandler);
-		button.addActionListener(loginHandler);
-		button_1.addActionListener(loginHandler);
+		btnOn1.addActionListener(loginHandler);
+		btnOff1.addActionListener(loginHandler);
+		btnOn2.addActionListener(loginHandler);
+		btnOff2.addActionListener(loginHandler);
 		
 		add(centerP);
 	}
@@ -314,23 +190,23 @@ public class MoistUI extends JPanel
 			}
 			else if(action.equals("ON"))
 			{
-				btnOn.setEnabled(false);
-				btnOff.setEnabled(true);
+				btnOn1.setEnabled(false);
+				btnOff1.setEnabled(true);
 			}
 			else if(action.equals("OFF"))
 			{
-				btnOn.setEnabled(true);
-				btnOff.setEnabled(false);
+				btnOn1.setEnabled(true);
+				btnOff1.setEnabled(false);
 			}
 			else if(action.equals("ON1"))
 			{
-				button.setEnabled(false);
-				button_1.setEnabled(true);
+				btnOn2.setEnabled(false);
+				btnOff2.setEnabled(true);
 			}
 			else if(action.equals("OFF1"))
 			{
-				button.setEnabled(true);
-				button_1.setEnabled(false);
+				btnOn2.setEnabled(true);
+				btnOff2.setEnabled(false);
 			}
 			repaint();
 		}
