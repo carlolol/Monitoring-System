@@ -2,6 +2,9 @@ package ui;
 
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javax.swing.*;
 
 public class SystemUI extends JFrame
@@ -13,9 +16,18 @@ public class SystemUI extends JFrame
 	private HomeUI homeUI;
 	private TempUI tempUI;
 	private MoistUI moistUI;
+	public static int h, w;
 	
 	public SystemUI()
 	{	
+		Toolkit t = Toolkit.getDefaultToolkit();
+		Dimension d = t.getScreenSize();
+
+		h = d.height;
+		w = d.width;
+
+		setSize( w , h );
+		
 		container = getContentPane();
 		
 		card = new CardLayout();
@@ -26,7 +38,7 @@ public class SystemUI extends JFrame
 		
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		setUndecorated(true);
 		setVisible(true);
 	}

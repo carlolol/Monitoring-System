@@ -1,6 +1,7 @@
 package ui;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -11,11 +12,18 @@ public class HomeUI extends JPanel
 	private SystemUI systemUI;
 	private LoginHandler loginHandler;
 	
-	private JLabel lblBg, lblOryzaSativa;
-	private JButton tempB, moistB, homeB, minimizeB, exitB;
+	private JLabel lblBg, lblOryzaSativa, lblBlock1, lblBlock2, lblAverageMoist, lblAverageTemp;
+	private JButton tempB, moistB, homeB, minimizeB, exitB, helpB;
+	private JTextField textField2;
+	public int h, w, resH, resW;
 	
 	public HomeUI(SystemUI systemUI) 
 	{
+		resH = SystemUI.h;
+		resW = SystemUI.w;
+		h = resH / 2;
+		w = resW / 2;
+		
 		setLayout(new GridLayout(1, 1));
 		this.systemUI = systemUI;
 		
@@ -28,14 +36,50 @@ public class HomeUI extends JPanel
 		lblOryzaSativa.setForeground(Color.BLACK);
 		lblOryzaSativa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOryzaSativa.setFont(new Font("Times New Roman", Font.BOLD, 32));
-		lblOryzaSativa.setBounds(380, 120, 600, 50);
+		lblOryzaSativa.setBounds(w-670, h+300, 600, 50);
 		centerP.add(lblOryzaSativa);
+		
+		lblAverageMoist = new JLabel("Average moisture content");
+		lblAverageMoist.setForeground(Color.BLACK);
+		lblAverageMoist.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAverageMoist.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblAverageMoist.setBounds(w+200, h-280, 600, 50);
+		centerP.add(lblAverageMoist);
+		
+		textField2 = new JTextField();
+		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
+		textField2.setForeground(Color.WHITE);
+		textField2.setHorizontalAlignment(SwingConstants.CENTER);
+		textField2.setText("0%");
+		textField2.setEditable(false);
+		textField2.setOpaque(false);
+		textField2.setBounds(w+400, h-200, 200, 90);
+		centerP.add(textField2);
+		textField2.setColumns(10);
+		
+		lblAverageTemp = new JLabel("Average temperature");
+		lblAverageTemp.setForeground(Color.BLACK);
+		lblAverageTemp.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAverageTemp.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblAverageTemp.setBounds(w+200, h-30, 600, 50);
+		centerP.add(lblAverageTemp);
+		
+		textField2 = new JTextField();
+		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
+		textField2.setForeground(Color.WHITE);
+		textField2.setHorizontalAlignment(SwingConstants.CENTER);
+		textField2.setText("0°F");
+		textField2.setEditable(false);
+		textField2.setOpaque(false);
+		textField2.setBounds(w+400, h+50, 200, 90);
+		centerP.add(textField2);
+		textField2.setColumns(10);
 		
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
 		exitB.setIcon(new ImageIcon("../Thesis/Images/x.png"));
 		exitB.setRolloverIcon(new ImageIcon("../Thesis/Images/xhover.png"));
-		exitB.setBounds(1315, 10, 40, 40);
+		exitB.setBounds(w+625, h-370, 40, 40);
 		exitB.setOpaque(false);
 		exitB.setContentAreaFilled(false);
 		exitB.setBorderPainted(false);
@@ -47,13 +91,25 @@ public class HomeUI extends JPanel
 		minimizeB.setToolTipText("Minimize");
 		minimizeB.setIcon(new ImageIcon("../Thesis/Images/minimize.png"));
 		minimizeB.setRolloverIcon(new ImageIcon("../Thesis/Images/minimizehover.png"));
-		minimizeB.setBounds(1270, 10, 40, 40);
+		minimizeB.setBounds(w+580, h-370, 40, 40);
 		minimizeB.setOpaque(false);
 		minimizeB.setContentAreaFilled(false);
 		minimizeB.setBorderPainted(false);
 		minimizeB.setActionCommand("Minimize");
 		minimizeB.addActionListener(loginHandler);
 		centerP.add(minimizeB);
+		
+		helpB = new JButton("");
+		helpB.setToolTipText("Help");
+		helpB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
+		helpB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
+		helpB.setBounds(w+535, h-370, 40, 40);
+		helpB.setOpaque(false);
+		helpB.setContentAreaFilled(false);
+		helpB.setBorderPainted(false);
+		helpB.setActionCommand("Help");
+		helpB.addActionListener(loginHandler);
+		centerP.add(helpB);
 		
 		tempB = new JButton("");
 		tempB.setToolTipText("Temperature");
@@ -62,7 +118,7 @@ public class HomeUI extends JPanel
 		tempB.setOpaque(false);
 		tempB.setContentAreaFilled(false);
 		tempB.setBorderPainted(false);
-		tempB.setBounds(1000, 640, 60, 60);
+		tempB.setBounds(w+390, h+290, 60, 60);
 		tempB.setActionCommand("Temp");
 		tempB.addActionListener(loginHandler);
 		centerP.add(tempB);
@@ -71,7 +127,7 @@ public class HomeUI extends JPanel
 		moistB.setToolTipText("Moisture");
 		moistB.setIcon(new ImageIcon("../Thesis/Images/moistureIcon.png"));
 		moistB.setRolloverIcon(new ImageIcon("../Thesis/Images/moistureIconhover.png"));
-		moistB.setBounds(1100, 640, 60, 60);
+		moistB.setBounds(w+490, h+290, 60, 60);
 		moistB.setOpaque(false);
 		moistB.setContentAreaFilled(false);
 		moistB.setBorderPainted(false);
@@ -83,7 +139,7 @@ public class HomeUI extends JPanel
 		homeB.setToolTipText("Home");
 		homeB.setIcon(new ImageIcon("../Thesis/Images/homehover.png"));
 		homeB.setRolloverIcon(new ImageIcon("../Thesis/Images/homehover.png"));
-		homeB.setBounds(1200, 640, 60, 60);
+		homeB.setBounds(w+590, h+290, 60, 60);
 		homeB.setOpaque(false);
 		homeB.setContentAreaFilled(false);
 		homeB.setBorderPainted(false);
@@ -92,9 +148,19 @@ public class HomeUI extends JPanel
 		homeB.setEnabled(false);
 		centerP.add(homeB);
 		
+		lblBlock1 = new JLabel();
+		lblBlock1.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock1.setBounds(w+380, h-300,300,250);
+		centerP.add(lblBlock1);
+		
+		lblBlock2 = new JLabel();
+		lblBlock2.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock2.setBounds(w+380, h-50,300,250);
+		centerP.add(lblBlock2);
+		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
-		lblBg.setBounds(0,0,1366,780);
+		lblBg.setBounds(0,0,resW,resH);
 		centerP.add(lblBg);
 		
 		add(centerP);
@@ -122,6 +188,11 @@ public class HomeUI extends JPanel
 			else if(action.equals("Minimize"))
 			{
 				systemUI.setState(Frame.ICONIFIED);
+			}
+			else if(action.equals("Help"))
+			{
+				JOptionPane.showMessageDialog(null, "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
+						"About", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else if(action.equals("Temp"))
 			{
