@@ -21,9 +21,9 @@ public class MoistUI extends JPanel
 	private Random rand;
 	private int trigger = 1, h, w, resH, resW;
 	
-	private JButton switchB, btnOn1, btnOff1, btnOn2, btnOff2, tempB, moistB, homeB, minimizeB, exitB, helpB,
+	private JButton btnOn1, btnOff1, tempB, moistB, homeB, minimizeB, exitB, helpB,
 					nextB, previousB;
-	private JLabel lblBg, lblMoistureSensor1, lblMoistureSensor2, lblCurrentMoist, lblAverageMoist;
+	private JLabel lblBg, lblMoistureSensor1, lblCurrentMoist, lblAverageMoist;
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
 	
@@ -60,14 +60,14 @@ public class MoistUI extends JPanel
 		
 		loginHandler = new LoginHandler();
 		
-		//------------------------------------------BLOCK 1------------------------------------------
+		//-----------------------------------------BLOCK-----------------------------------------
 		lblMoistureSensor1 = new JLabel("Moisture Sensor #1");
 		lblMoistureSensor1.setForeground(Color.BLACK);
 		lblMoistureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMoistureSensor1.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		lblMoistureSensor1.setBounds(w-610, h-300, 180, 50);
 		centerP.add(lblMoistureSensor1);
-		
+			
 		btnOn1 = new JButton("On");
 		btnOn1.setBackground(Color.WHITE);
 		btnOn1.setForeground(Color.BLACK);
@@ -76,7 +76,7 @@ public class MoistUI extends JPanel
 		btnOn1.setActionCommand("ON");
 		btnOn1.addActionListener(loginHandler);
 		centerP.add(btnOn1);
-		
+				
 		btnOff1 = new JButton("Off");
 		btnOff1.setEnabled(false);
 		btnOff1.setBackground(Color.WHITE);
@@ -86,14 +86,14 @@ public class MoistUI extends JPanel
 		btnOff1.setActionCommand("OFF");
 		btnOff1.addActionListener(loginHandler);
 		centerP.add(btnOff1);
-		
+				
 		lblCurrentMoist = new JLabel("Moisture content");
 		lblCurrentMoist.setForeground(Color.BLACK);
 		lblCurrentMoist.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCurrentMoist.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		lblCurrentMoist.setBounds(w+200, h-300, 600, 50);
 		centerP.add(lblCurrentMoist);
-		
+				
 		textField1 = new JTextField();
 		textField1.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField1.setForeground(Color.WHITE);
@@ -104,14 +104,14 @@ public class MoistUI extends JPanel
 		textField1.setBounds(w+400, h-250, 200, 90);
 		centerP.add(textField1);
 		textField1.setColumns(10);
-		
+				
 		lblAverageMoist = new JLabel("Average moisture content");
 		lblAverageMoist.setForeground(Color.BLACK);
 		lblAverageMoist.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAverageMoist.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		lblAverageMoist.setBounds(w+200, h-120, 600, 50);
 		centerP.add(lblAverageMoist);
-		
+				
 		textField2 = new JTextField();
 		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField2.setForeground(Color.WHITE);
@@ -121,96 +121,8 @@ public class MoistUI extends JPanel
 		textField2.setOpaque(false);
 		textField2.setBounds(w+400, h-70, 200, 90);
 		centerP.add(textField2);
-		textField2.setColumns(10);
-		
-		/*
-		//------------------------------------------BLOCK 2------------------------------------------
-		lblMoistureSensor2 = new JLabel("Moisture Sensor #2");
-		lblMoistureSensor2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMoistureSensor2.setForeground(Color.BLACK);
-		lblMoistureSensor2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblMoistureSensor2.setBounds(840, 180, 156, 23);
-		centerP.add(lblMoistureSensor2);
-		
-		btnOn2 = new JButton("On");
-		btnOn2.setBackground(Color.WHITE);
-		btnOn2.setForeground(Color.BLACK);
-		btnOn2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnOn2.setBounds(1000, 180, 55, 23);
-		btnOn2.setActionCommand("ON1");
-		btnOn2.addActionListener(loginHandler);
-		centerP.add(btnOn2);
-		
-		btnOff2 = new JButton("Off");
-		btnOff2.setEnabled(false);
-		btnOff2.setBackground(Color.WHITE);
-		btnOff2.setForeground(Color.BLACK);
-		btnOff2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnOff2.setBounds(1060, 180, 55, 23);
-		btnOff2.setActionCommand("OFF1");
-		btnOff2.addActionListener(loginHandler);
-		centerP.add(btnOff2);
-		
-		textField2 = new JTextField();
-		textField2.setForeground(Color.WHITE);
-		textField2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField2.setText("0");
-		textField2.setBackground(new Color(255, 0, 0));
-		textField2.setEditable(false);
-		textField2.setColumns(10);
-		textField2.setBounds(1140, 181, 51, 20);
-		centerP.add(textField2);
-		
-		switchB = new JButton("");
-		switchB.setToolTipText("Switch Sensor");
-		switchB.setIcon(new ImageIcon("../Thesis/Images/switch.png"));
-		switchB.setRolloverIcon(new ImageIcon("../Thesis/Images/switchhover.png"));
-		switchB.setBounds(790, 265, 40, 40);
-		switchB.setOpaque(false);
-		switchB.setContentAreaFilled(false);
-		switchB.setBorderPainted(false);
-		switchB.setActionCommand("Switch");
-		switchB.addActionListener(loginHandler);
-		centerP.add(switchB);
-		*/
-		
-		dataset1 = new DefaultCategoryDataset();
-		
-		for(int a = 0; a < statMoist1.length; a++)
-			dataset1.addValue(statMoist1[a], "moisture", "" + a + ":00");
-			
-		moistLine1 = ChartFactory.createLineChart("Moisture #1", "Time", "Moisture", dataset1);
-		chartPanel1 = new ChartPanel(moistLine1);
-		chartPanel1.setPreferredSize(new Dimension(900, 500));
-		chartPanel1.setMouseZoomable(false);
-		//chartPanel1.zoomInRange(0, 40);
-		
-		/*
-		dataset2 = new DefaultCategoryDataset();
-		
-		for(int a = 0; a < statMoist2.length; a++)
-			dataset2.addValue(statMoist2[a], "moisture", "" + a + ":00");
-		
-		moistLine2 = ChartFactory.createLineChart("Moisture #2", "Time", "Moisture", dataset2);
-		chartPanel2 = new ChartPanel(moistLine2);
-		chartPanel2.setPreferredSize(new Dimension(500, 145));
-		chartPanel2.setMouseZoomable(false);
-		*/
-
-		moisture1 = new JPanel();
-		moisture1.setBounds(w-600, h-250, 900, 480);
-		moisture1.add(chartPanel1, BorderLayout.CENTER);
-		moisture1.validate();
-		centerP.add(moisture1);
-		
-		/*
-		moisture2 = new JPanel();
-		moisture2.setBounds(840, 220, 500, 130);
-		moisture2.add(chartPanel2, BorderLayout.CENTER);
-		moisture2.validate();
-		centerP.add(moisture2);
-		*/
-		
+		textField2.setColumns(10);		
+	
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
 		exitB.setIcon(new ImageIcon("../Thesis/Images/x.png"));
@@ -308,6 +220,39 @@ public class MoistUI extends JPanel
 		homeB.addActionListener(loginHandler);
 		centerP.add(homeB);
 		
+		dataset1 = new DefaultCategoryDataset();
+		for(int a = 0; a < statMoist1.length; a++)
+			dataset1.addValue(statMoist1[a], "moisture", "" + a + ":00");
+			
+		moistLine1 = ChartFactory.createLineChart("Moisture #1", "Time", "Moisture", dataset1);
+		chartPanel1 = new ChartPanel(moistLine1);
+		chartPanel1.setPreferredSize(new Dimension(900, 500));
+		chartPanel1.setMouseZoomable(false);
+		//chartPanel1.zoomInRange(0, 40);
+		
+		moisture1 = new JPanel();
+		moisture1.setBounds(w-600, h-250, 900, 480);
+		moisture1.add(chartPanel1, BorderLayout.CENTER);
+		moisture1.validate();
+		centerP.add(moisture1);
+	
+		/*
+		dataset2 = new DefaultCategoryDataset();
+		for(int a = 0; a < statMoist2.length; a++)
+			dataset2.addValue(statMoist2[a], "moisture", "" + a + ":00");
+		
+		moistLine2 = ChartFactory.createLineChart("Moisture #2", "Time", "Moisture", dataset2);
+		chartPanel2 = new ChartPanel(moistLine2);
+		chartPanel2.setPreferredSize(new Dimension(900, 500));
+		chartPanel2.setMouseZoomable(false);	
+		
+		moisture2 = new JPanel();
+		moisture2.setBounds(w-600, h-250, 900, 480);
+		moisture2.add(chartPanel2, BorderLayout.CENTER);
+		moisture2.validate();
+		centerP.add(moisture2);
+		*/
+		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
 		lblBg.setBounds(0,0,resW,resH);
@@ -331,9 +276,6 @@ public class MoistUI extends JPanel
 				{
 	              System.exit(0);
 	            }
-				else
-				{
-				}
 			}
 			else if(action.equals("Minimize"))
 			{
@@ -348,15 +290,21 @@ public class MoistUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setBackground(new Color(75, 190, 0));
 				textField1.setText(statMoist1[23] + "%");
 			}
 			else if(action.equals("OFF"))
 			{
 				btnOn1.setEnabled(true);
 				btnOff1.setEnabled(false);
-				textField1.setBackground(new Color(255, 0, 0));
 				textField1.setText("0");
+			}
+			else if(action.equals("Next"))
+			{
+				lblMoistureSensor1.setText("Moisture Sensor #2");
+			}
+			else if(action.equals("Previous"))
+			{
+				lblMoistureSensor1.setText("Moisture Sensor #1");
 			}
 			/*
 			else if(action.equals("ON1"))
@@ -432,7 +380,6 @@ public class MoistUI extends JPanel
 			{
 				systemUI.showMain();
 			}
-			
 			repaint();
 		}
 	}

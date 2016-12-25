@@ -21,9 +21,9 @@ public class TempUI extends JPanel
 	private Random rand;
 	private int trigger = 1, h, w, resH, resW;
 	
-	private JButton switchB, btnOn1, btnOff1, btnOn2, btnOff2, tempB, moistB, homeB, minimizeB, exitB, helpB,
+	private JButton btnOn1, btnOff1, tempB, moistB, homeB, minimizeB, exitB, helpB,
 					nextB, previousB;
-	private JLabel lblBg, lblTemperatureSensor1, lblTemperatureSensor2,  lblCurrentTemp, lblAverageTemp;
+	private JLabel lblBg, lblTemperatureSensor1, lblCurrentTemp, lblAverageTemp;
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
 	
@@ -62,7 +62,7 @@ public class TempUI extends JPanel
 		
 		loginHandler = new LoginHandler();
 		
-		//------------------------------------------BLOCK 1------------------------------------------
+		//-----------------------------------------BLOCK-----------------------------------------
 		lblTemperatureSensor1 = new JLabel("Temperature Sensor #1");
 		lblTemperatureSensor1.setForeground(Color.BLACK);
 		lblTemperatureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -125,59 +125,7 @@ public class TempUI extends JPanel
 		centerP.add(textField2);
 		textField2.setColumns(10);
 		
-		/*
-		//------------------------------------------BLOCK 2------------------------------------------
-		lblTemperatureSensor2 = new JLabel("Temperature Sensor #2");
-		lblTemperatureSensor2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTemperatureSensor2.setForeground(Color.BLACK);
-		lblTemperatureSensor2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblTemperatureSensor2.setBounds(840, 180, 156, 23);
-		centerP.add(lblTemperatureSensor2);
-		
-		btnOn2 = new JButton("On");
-		btnOn2.setBackground(Color.WHITE);
-		btnOn2.setForeground(Color.BLACK);
-		btnOn2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnOn2.setBounds(1000, 180, 55, 23);
-		btnOn2.setActionCommand("ON1");
-		btnOn2.addActionListener(loginHandler);
-		centerP.add(btnOn2);
-		
-		btnOff2 = new JButton("Off");
-		btnOff2.setEnabled(false);
-		btnOff2.setBackground(Color.WHITE);
-		btnOff2.setForeground(Color.BLACK);
-		btnOff2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnOff2.setBounds(1060, 180, 55, 23);
-		btnOff2.setActionCommand("OFF1");
-		btnOff2.addActionListener(loginHandler);
-		centerP.add(btnOff2);
-		
-		textField2 = new JTextField();
-		textField2.setForeground(Color.WHITE);
-		textField2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField2.setText("0");
-		textField2.setBackground(new Color(255, 0, 0));
-		textField2.setEditable(false);
-		textField2.setColumns(10);
-		textField2.setBounds(1140, 181, 51, 20);
-		centerP.add(textField2);
-		
-		switchB = new JButton("");
-		switchB.setToolTipText("Switch Sensor");
-		switchB.setIcon(new ImageIcon("../Thesis/Images/switch.png"));
-		switchB.setRolloverIcon(new ImageIcon("../Thesis/Images/switchhover.png"));
-		switchB.setBounds(790, 265, 40, 40);
-		switchB.setOpaque(false);
-		switchB.setContentAreaFilled(false);
-		switchB.setBorderPainted(false);
-		switchB.setActionCommand("Switch");
-		switchB.addActionListener(loginHandler);
-		centerP.add(switchB);
-		*/
-		
 		dataset1 = new DefaultCategoryDataset();
-		
 		for(int a = 0; a < statTemp1.length; a++)
 			dataset1.addValue(statTemp1[a], "temperature", "" + a + ":00");
 			
@@ -186,18 +134,6 @@ public class TempUI extends JPanel
 		chartPanel1.setPreferredSize(new Dimension(900, 500));
 		chartPanel1.setMouseZoomable(false);
 		
-		/*
-		dataset2 = new DefaultCategoryDataset();
-		
-		for(int a = 0; a < statTemp2.length; a++)
-			dataset2.addValue(statTemp2[a], "temperature", "" + a + ":00");
-		
-		tempLine2 = ChartFactory.createLineChart("Temperature #2", "Time", "Temperature", dataset2);
-		chartPanel2 = new ChartPanel(tempLine2);
-		chartPanel2.setPreferredSize(new Dimension(500, 145));
-		chartPanel2.setMouseZoomable(false);
-		*/
-
 		temperature1 = new JPanel();
 		temperature1.setBounds(w-600, h-250, 900, 480);
 		temperature1.add(chartPanel1, BorderLayout.CENTER);
@@ -205,6 +141,15 @@ public class TempUI extends JPanel
 		centerP.add(temperature1);
 		
 		/*
+		dataset2 = new DefaultCategoryDataset();
+		for(int a = 0; a < statTemp2.length; a++)
+			dataset2.addValue(statTemp2[a], "temperature", "" + a + ":00");
+		
+		tempLine2 = ChartFactory.createLineChart("Temperature #2", "Time", "Temperature", dataset2);
+		chartPanel2 = new ChartPanel(tempLine2);
+		chartPanel2.setPreferredSize(new Dimension(500, 145));
+		chartPanel2.setMouseZoomable(false);
+		
 		temperature2 = new JPanel();
 		temperature2.setBounds(840, 220, 500, 130);
 		temperature2.add(chartPanel2, BorderLayout.CENTER);
@@ -332,9 +277,6 @@ public class TempUI extends JPanel
 				{
 	              System.exit(0);
 	            }
-				else
-				{
-				}
 			}
 			else if(action.equals("Minimize"))
 			{
@@ -349,16 +291,22 @@ public class TempUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setBackground(new Color(75, 190, 0));
 				textField1.setText(statTemp1[23] + "°F");
 			}
 			else if(action.equals("OFF"))
 			{
 				btnOn1.setEnabled(true);
 				btnOff1.setEnabled(false);
-				textField1.setBackground(new Color(255, 0, 0));
 				textField1.setText("0");
 			}
+			else if(action.equals("Next"))
+			{
+				lblTemperatureSensor1.setText("Temperature Sensor #2");
+			}
+			else if(action.equals("Previous"))
+			{
+				lblTemperatureSensor1.setText("Temperature Sensor #1");
+			}			
 			/*
 			else if(action.equals("ON1"))
 			{
@@ -433,7 +381,6 @@ public class TempUI extends JPanel
 			{
 				systemUI.showMain();
 			}
-			
 			repaint();
 		}
 	}

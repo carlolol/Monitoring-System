@@ -12,9 +12,11 @@ public class HomeUI extends JPanel
 	private SystemUI systemUI;
 	private LoginHandler loginHandler;
 	
-	private JLabel lblBg, lblOryzaSativa, lblBlock1, lblBlock2, lblAverageMoist, lblAverageTemp;
+	private JLabel lblBg, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, lblAverageMoist, 
+					lblAverageTemp, lblMoistureSensor1, lblMoistureSensor2, lblTemperatureSensor1, 
+					lblTemperatureSensor2, lblReportLog;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, helpB;
-	private JTextField textField2;
+	private JTextField textField1, textField2, textField3, textField4, textLog;
 	public int h, w, resH, resW;
 	
 	public HomeUI(SystemUI systemUI) 
@@ -36,33 +38,33 @@ public class HomeUI extends JPanel
 		lblOryzaSativa.setForeground(Color.BLACK);
 		lblOryzaSativa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOryzaSativa.setFont(new Font("Times New Roman", Font.BOLD, 32));
-		lblOryzaSativa.setBounds(w-670, h+300, 600, 50);
+		lblOryzaSativa.setBounds(w-670, h-370, 600, 50);
 		centerP.add(lblOryzaSativa);
 		
-		lblAverageMoist = new JLabel("Average moisture content");
-		lblAverageMoist.setForeground(Color.BLACK);
-		lblAverageMoist.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAverageMoist.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblAverageMoist.setBounds(w+200, h-280, 600, 50);
-		centerP.add(lblAverageMoist);
+		lblMoistureSensor1 = new JLabel("Moisture Sensor #1");
+		lblMoistureSensor1.setForeground(Color.BLACK);
+		lblMoistureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMoistureSensor1.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblMoistureSensor1.setBounds(w+200, h-280, 600, 50);
+		centerP.add(lblMoistureSensor1);
 		
-		textField2 = new JTextField();
-		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
-		textField2.setForeground(Color.WHITE);
-		textField2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField2.setText("0%");
-		textField2.setEditable(false);
-		textField2.setOpaque(false);
-		textField2.setBounds(w+400, h-200, 200, 90);
-		centerP.add(textField2);
-		textField2.setColumns(10);
+		textField1 = new JTextField();
+		textField1.setFont(new Font("Tahoma", Font.PLAIN, 48));
+		textField1.setForeground(Color.WHITE);
+		textField1.setHorizontalAlignment(SwingConstants.CENTER);
+		textField1.setText("0%");
+		textField1.setEditable(false);
+		textField1.setOpaque(false);
+		textField1.setBounds(w+400, h-200, 200, 90);
+		centerP.add(textField1);
+		textField1.setColumns(10);
 		
-		lblAverageTemp = new JLabel("Average temperature");
-		lblAverageTemp.setForeground(Color.BLACK);
-		lblAverageTemp.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAverageTemp.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblAverageTemp.setBounds(w+200, h-30, 600, 50);
-		centerP.add(lblAverageTemp);
+		lblMoistureSensor2 = new JLabel("Moisture Sensor #2");
+		lblMoistureSensor2.setForeground(Color.BLACK);
+		lblMoistureSensor2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMoistureSensor2.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblMoistureSensor2.setBounds(w+200, h-30, 600, 50);
+		centerP.add(lblMoistureSensor2);
 		
 		textField2 = new JTextField();
 		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
@@ -74,6 +76,60 @@ public class HomeUI extends JPanel
 		textField2.setBounds(w+400, h+50, 200, 90);
 		centerP.add(textField2);
 		textField2.setColumns(10);
+		
+		lblTemperatureSensor1 = new JLabel("Temperature Sensor #1");
+		lblTemperatureSensor1.setForeground(Color.BLACK);
+		lblTemperatureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTemperatureSensor1.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblTemperatureSensor1.setBounds(w-100, h-280, 600, 50);
+		centerP.add(lblTemperatureSensor1);
+		
+		textField3 = new JTextField();
+		textField3.setFont(new Font("Tahoma", Font.PLAIN, 48));
+		textField3.setForeground(Color.WHITE);
+		textField3.setHorizontalAlignment(SwingConstants.CENTER);
+		textField3.setText("0%");
+		textField3.setEditable(false);
+		textField3.setOpaque(false);
+		textField3.setBounds(w+100, h-200, 200, 90);
+		centerP.add(textField3);
+		textField3.setColumns(10);
+		
+		lblTemperatureSensor2 = new JLabel("Temperature Sensor #2");
+		lblTemperatureSensor2.setForeground(Color.BLACK);
+		lblTemperatureSensor2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTemperatureSensor2.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblTemperatureSensor2.setBounds(w-100, h-30, 600, 50);
+		centerP.add(lblTemperatureSensor2);
+		
+		textField4 = new JTextField();
+		textField4.setFont(new Font("Tahoma", Font.PLAIN, 48));
+		textField4.setForeground(Color.WHITE);
+		textField4.setHorizontalAlignment(SwingConstants.CENTER);
+		textField4.setText("0°F");
+		textField4.setEditable(false);
+		textField4.setOpaque(false);
+		textField4.setBounds(w+100, h+50, 200, 90);
+		centerP.add(textField4);
+		textField4.setColumns(10);
+		
+		lblReportLog = new JLabel("Report Log");
+		lblReportLog.setForeground(Color.BLACK);
+		lblReportLog.setHorizontalAlignment(SwingConstants.CENTER);
+		lblReportLog.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		lblReportLog.setBounds(w-425, h+167, 100, 50);
+		centerP.add(lblReportLog);
+		
+		textLog = new JTextField();
+		textLog.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textLog.setForeground(Color.WHITE);
+		textLog.setHorizontalAlignment(SwingConstants.CENTER);
+		textLog.setText("");
+		textLog.setEditable(false);
+		textLog.setOpaque(false);
+		textLog.setBounds(w-620, h+212, 500, 120);
+		centerP.add(textLog);
+		textLog.setColumns(10);
 		
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
@@ -157,6 +213,21 @@ public class HomeUI extends JPanel
 		lblBlock2.setIcon(new ImageIcon("../Thesis/Images/block.png"));
 		lblBlock2.setBounds(w+380, h-50,300,250);
 		centerP.add(lblBlock2);
+		
+		lblBlock3 = new JLabel();
+		lblBlock3.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock3.setBounds(w+80, h-300,300,250);
+		centerP.add(lblBlock3);
+		
+		lblBlock4 = new JLabel();
+		lblBlock4.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock4.setBounds(w+80, h-50,300,250);
+		centerP.add(lblBlock4);
+		
+		lblBlock5 = new JLabel();
+		lblBlock5.setIcon(new ImageIcon("../Thesis/Images/block2.png"));
+		lblBlock5.setBounds(w-630, h+180,520,160);
+		centerP.add(lblBlock5);
 		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
