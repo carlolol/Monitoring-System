@@ -236,7 +236,6 @@ public class MoistUI extends JPanel
 		moisture1.validate();
 		centerP.add(moisture1);
 	
-		/*
 		dataset2 = new DefaultCategoryDataset();
 		for(int a = 0; a < statMoist2.length; a++)
 			dataset2.addValue(statMoist2[a], "moisture", "" + a + ":00");
@@ -247,11 +246,10 @@ public class MoistUI extends JPanel
 		chartPanel2.setMouseZoomable(false);	
 		
 		moisture2 = new JPanel();
-		moisture2.setBounds(w-600, h-250, 900, 480);
+		moisture2.setBounds(w-600, h-250, 0, 0);
 		moisture2.add(chartPanel2, BorderLayout.CENTER);
 		moisture2.validate();
 		centerP.add(moisture2);
-		*/
 		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
@@ -300,74 +298,22 @@ public class MoistUI extends JPanel
 			}
 			else if(action.equals("Next"))
 			{
+				moisture1.setBounds(w-600, h-250, 0, 0);
+				moisture1.validate();
+				moisture2.setBounds(w-600, h-250, 900, 480);
+				moisture2.validate();
+				
 				lblMoistureSensor1.setText("Moisture Sensor #2");
 			}
 			else if(action.equals("Previous"))
 			{
+				moisture2.setBounds(w-600, h-250, 0, 0);
+				moisture2.validate();
+				moisture1.setBounds(w-600, h-250, 900, 480);
+				moisture1.validate();
+				
 				lblMoistureSensor1.setText("Moisture Sensor #1");
 			}
-			/*
-			else if(action.equals("ON1"))
-			{
-				btnOn2.setEnabled(false);
-				btnOff2.setEnabled(true);
-				textField2.setBackground(new Color(75, 190, 0));
-				textField2.setText(statMoist2[23] + "");
-			}
-			else if(action.equals("OFF1"))
-			{
-				btnOn2.setEnabled(true);
-				btnOff2.setEnabled(false);
-				textField2.setBackground(new Color(255, 0, 0));
-				textField2.setText("0");
-			}
-			else if(action.equals("Switch"))
-			{
-				if(trigger==1)
-				{
-					trigger = 2;
-					
-					chartPanel2.setPreferredSize(new Dimension(750, 400));
-					lblMoistureSensor2.setBounds(30, 80, 156, 23);
-					textField2.setBounds(330, 81, 51, 20);
-					btnOn2.setBounds(190, 80, 55, 23);
-					btnOff2.setBounds(250, 80, 55, 23);
-					moisture2.setBounds(30, 120, 750, 380);
-					moisture2.validate();
-					centerP.validate();
-					
-					chartPanel1.setPreferredSize(new Dimension(500, 145));
-					lblMoistureSensor1.setBounds(840, 180, 156, 23);
-					btnOn1.setBounds(1000, 180, 55, 23);
-					btnOff1.setBounds(1060, 180, 55, 23);
-					textField1.setBounds(1140, 181, 51, 20);
-					moisture1.setBounds(840, 220, 500, 130);
-					moisture1.validate();
-					centerP.validate();
-				}
-				else if(trigger==2)
-				{
-					trigger = 1;
-					chartPanel1.setPreferredSize(new Dimension(750, 400));
-					lblMoistureSensor1.setBounds(30, 80, 156, 23);
-					textField1.setBounds(330, 81, 51, 20);
-					btnOn1.setBounds(190, 80, 55, 23);
-					btnOff1.setBounds(250, 80, 55, 23);
-					moisture1.setBounds(30, 120, 750, 380);
-					moisture1.validate();
-					centerP.validate();
-					
-					chartPanel2.setPreferredSize(new Dimension(500, 145));
-					lblMoistureSensor2.setBounds(840, 180, 156, 23);
-					btnOn2.setBounds(1000, 180, 55, 23);
-					btnOff2.setBounds(1060, 180, 55, 23);
-					textField2.setBounds(1140, 181, 51, 20);
-					moisture2.setBounds(840, 220, 500, 130);
-					moisture2.validate();
-					centerP.validate();
-				}
-			}
-			*/
 			else if(action.equals("Temp"))
 			{
 				systemUI.showTemp();

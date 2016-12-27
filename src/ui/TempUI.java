@@ -140,22 +140,20 @@ public class TempUI extends JPanel
 		temperature1.validate();
 		centerP.add(temperature1);
 		
-		/*
 		dataset2 = new DefaultCategoryDataset();
 		for(int a = 0; a < statTemp2.length; a++)
 			dataset2.addValue(statTemp2[a], "temperature", "" + a + ":00");
 		
 		tempLine2 = ChartFactory.createLineChart("Temperature #2", "Time", "Temperature", dataset2);
 		chartPanel2 = new ChartPanel(tempLine2);
-		chartPanel2.setPreferredSize(new Dimension(500, 145));
+		chartPanel2.setPreferredSize(new Dimension(900, 500));
 		chartPanel2.setMouseZoomable(false);
 		
 		temperature2 = new JPanel();
-		temperature2.setBounds(840, 220, 500, 130);
+		temperature2.setBounds(w-600, h-250, 0, 0);
 		temperature2.add(chartPanel2, BorderLayout.CENTER);
 		temperature2.validate();
 		centerP.add(temperature2);
-		*/
 	
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
@@ -301,74 +299,22 @@ public class TempUI extends JPanel
 			}
 			else if(action.equals("Next"))
 			{
+				temperature1.setBounds(w-600, h-250, 0, 0);
+				temperature1.validate();
+				temperature2.setBounds(w-600, h-250, 900, 480);
+				temperature2.validate();
+				
 				lblTemperatureSensor1.setText("Temperature Sensor #2");
 			}
 			else if(action.equals("Previous"))
 			{
+				temperature2.setBounds(w-600, h-250, 0, 0);
+				temperature2.validate();
+				temperature1.setBounds(w-600, h-250, 900, 480);
+				temperature1.validate();
+				
 				lblTemperatureSensor1.setText("Temperature Sensor #1");
-			}			
-			/*
-			else if(action.equals("ON1"))
-			{
-				btnOn2.setEnabled(false);
-				btnOff2.setEnabled(true);
-				textField2.setBackground(new Color(75, 190, 0));
-				textField2.setText(statTemp2[23] + "");
 			}
-			else if(action.equals("OFF1"))
-			{
-				btnOn2.setEnabled(true);
-				btnOff2.setEnabled(false);
-				textField2.setBackground(new Color(255, 0, 0));
-				textField2.setText("0");
-			}
-			else if(action.equals("Switch"))
-			{
-				if(trigger==1)
-				{
-					trigger = 2;
-					
-					chartPanel2.setPreferredSize(new Dimension(750, 400));
-					lblTemperatureSensor2.setBounds(30, 80, 156, 23);
-					textField2.setBounds(330, 81, 51, 20);
-					btnOn2.setBounds(190, 80, 55, 23);
-					btnOff2.setBounds(250, 80, 55, 23);
-					temperature2.setBounds(30, 120, 750, 380);
-					temperature2.validate();
-					centerP.validate();
-					
-					chartPanel1.setPreferredSize(new Dimension(500, 145));
-					lblTemperatureSensor1.setBounds(840, 180, 156, 23);
-					btnOn1.setBounds(1000, 180, 55, 23);
-					btnOff1.setBounds(1060, 180, 55, 23);
-					textField1.setBounds(1140, 181, 51, 20);
-					temperature1.setBounds(840, 220, 500, 130);
-					temperature1.validate();
-					centerP.validate();
-				}
-				else if(trigger==2)
-				{
-					trigger = 1;
-					chartPanel1.setPreferredSize(new Dimension(750, 400));
-					lblTemperatureSensor1.setBounds(30, 80, 156, 23);
-					textField1.setBounds(330, 81, 51, 20);
-					btnOn1.setBounds(190, 80, 55, 23);
-					btnOff1.setBounds(250, 80, 55, 23);
-					temperature1.setBounds(30, 120, 750, 380);
-					temperature1.validate();
-					centerP.validate();
-					
-					chartPanel2.setPreferredSize(new Dimension(500, 145));
-					lblTemperatureSensor2.setBounds(840, 180, 156, 23);
-					btnOn2.setBounds(1000, 180, 55, 23);
-					btnOff2.setBounds(1060, 180, 55, 23);
-					textField2.setBounds(1140, 181, 51, 20);
-					temperature2.setBounds(840, 220, 500, 130);
-					temperature2.validate();
-					centerP.validate();
-				}
-			}
-			*/
 			else if(action.equals("Temp"))
 			{
 				systemUI.showTemp();

@@ -12,9 +12,8 @@ public class HomeUI extends JPanel
 	private SystemUI systemUI;
 	private LoginHandler loginHandler;
 	
-	private JLabel lblBg, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, lblAverageMoist, 
-					lblAverageTemp, lblMoistureSensor1, lblMoistureSensor2, lblTemperatureSensor1, 
-					lblTemperatureSensor2, lblReportLog;
+	private JLabel lblBg, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, lblMoistureSensor1,
+					lblMoistureSensor2, lblTemperatureSensor1, lblTemperatureSensor2, lblReportLog;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, helpB;
 	private JTextField textField1, textField2, textField3, textField4, textLog;
 	public int h, w, resH, resW;
@@ -38,7 +37,7 @@ public class HomeUI extends JPanel
 		lblOryzaSativa.setForeground(Color.BLACK);
 		lblOryzaSativa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOryzaSativa.setFont(new Font("Times New Roman", Font.BOLD, 32));
-		lblOryzaSativa.setBounds(w-670, h-370, 600, 50);
+		lblOryzaSativa.setBounds(w-605, h-200, 600, 50);
 		centerP.add(lblOryzaSativa);
 		
 		lblMoistureSensor1 = new JLabel("Moisture Sensor #1");
@@ -117,7 +116,7 @@ public class HomeUI extends JPanel
 		lblReportLog.setForeground(Color.BLACK);
 		lblReportLog.setHorizontalAlignment(SwingConstants.CENTER);
 		lblReportLog.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblReportLog.setBounds(w-425, h+167, 100, 50);
+		lblReportLog.setBounds(w-350, h-120, 100, 50);
 		centerP.add(lblReportLog);
 		
 		textLog = new JTextField();
@@ -127,9 +126,8 @@ public class HomeUI extends JPanel
 		textLog.setText("");
 		textLog.setEditable(false);
 		textLog.setOpaque(false);
-		textLog.setBounds(w-620, h+212, 500, 120);
+		textLog.setBounds(w-555, h-80, 500, 120);
 		centerP.add(textLog);
-		textLog.setColumns(10);
 		
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
@@ -226,7 +224,7 @@ public class HomeUI extends JPanel
 		
 		lblBlock5 = new JLabel();
 		lblBlock5.setIcon(new ImageIcon("../Thesis/Images/block2.png"));
-		lblBlock5.setBounds(w-630, h+180,520,160);
+		lblBlock5.setBounds(w-565, h-110,520,160);
 		centerP.add(lblBlock5);
 		
 		lblBg = new JLabel();
@@ -276,8 +274,7 @@ public class HomeUI extends JPanel
 			else if(action.equals("Home"))
 			{
 				systemUI.showMain();
-			}
-			
+			}	
 			repaint();
 		}
 	}
