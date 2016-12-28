@@ -1,7 +1,6 @@
 package ui;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
 
@@ -14,7 +13,7 @@ public class HomeUI extends JPanel
 	
 	private JLabel lblBg, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, lblMoistureSensor1,
 					lblMoistureSensor2, lblTemperatureSensor1, lblTemperatureSensor2, lblReportLog;
-	private JButton tempB, moistB, homeB, minimizeB, exitB, helpB;
+	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB;
 	private JTextField textField1, textField2, textField3, textField4, textLog;
 	public int h, w, resH, resW;
 	
@@ -153,17 +152,17 @@ public class HomeUI extends JPanel
 		minimizeB.addActionListener(loginHandler);
 		centerP.add(minimizeB);
 		
-		helpB = new JButton("");
-		helpB.setToolTipText("Help");
-		helpB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
-		helpB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
-		helpB.setBounds(w+535, h-370, 40, 40);
-		helpB.setOpaque(false);
-		helpB.setContentAreaFilled(false);
-		helpB.setBorderPainted(false);
-		helpB.setActionCommand("Help");
-		helpB.addActionListener(loginHandler);
-		centerP.add(helpB);
+		aboutB = new JButton("");
+		aboutB.setToolTipText("About");
+		aboutB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
+		aboutB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
+		aboutB.setBounds(w+535, h-370, 40, 40);
+		aboutB.setOpaque(false);
+		aboutB.setContentAreaFilled(false);
+		aboutB.setBorderPainted(false);
+		aboutB.setActionCommand("About");
+		aboutB.addActionListener(loginHandler);
+		centerP.add(aboutB);
 		
 		tempB = new JButton("");
 		tempB.setToolTipText("Temperature");
@@ -243,7 +242,7 @@ public class HomeUI extends JPanel
 			
 			if(action.equals("Exit"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Are you sure", "Confirm",
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
 						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 
 				if(result == JOptionPane.YES_OPTION)
@@ -258,9 +257,10 @@ public class HomeUI extends JPanel
 			{
 				systemUI.setState(Frame.ICONIFIED);
 			}
-			else if(action.equals("Help"))
+			else if(action.equals("About"))
 			{
-				JOptionPane.showMessageDialog(null, "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
+				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.09\n\n"
+						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
 						"About", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else if(action.equals("Temp"))

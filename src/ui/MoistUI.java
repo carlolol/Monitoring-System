@@ -1,12 +1,10 @@
 package ui;
 
 import javax.swing.*;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,10 +17,9 @@ public class MoistUI extends JPanel
 	private SystemUI systemUI;
 	
 	private Random rand;
-	private int trigger = 1, h, w, resH, resW;
+	private int h, w, resH, resW;
 	
-	private JButton btnOn1, btnOff1, tempB, moistB, homeB, minimizeB, exitB, helpB,
-					nextB, previousB;
+	private JButton btnOn1, btnOff1, tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
 	private JLabel lblBg, lblMoistureSensor1, lblCurrentMoist, lblAverageMoist;
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
@@ -147,17 +144,17 @@ public class MoistUI extends JPanel
 		minimizeB.addActionListener(loginHandler);
 		centerP.add(minimizeB);
 		
-		helpB = new JButton("");
-		helpB.setToolTipText("Help");
-		helpB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
-		helpB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
-		helpB.setBounds(w+535, h-370, 40, 40);
-		helpB.setOpaque(false);
-		helpB.setContentAreaFilled(false);
-		helpB.setBorderPainted(false);
-		helpB.setActionCommand("Help");
-		helpB.addActionListener(loginHandler);
-		centerP.add(helpB);
+		aboutB = new JButton("");
+		aboutB.setToolTipText("About");
+		aboutB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
+		aboutB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
+		aboutB.setBounds(w+535, h-370, 40, 40);
+		aboutB.setOpaque(false);
+		aboutB.setContentAreaFilled(false);
+		aboutB.setBorderPainted(false);
+		aboutB.setActionCommand("About");
+		aboutB.addActionListener(loginHandler);
+		centerP.add(aboutB);
 		
 		nextB = new JButton("");
 		nextB.setToolTipText("Next sensor");
@@ -179,6 +176,7 @@ public class MoistUI extends JPanel
 		previousB.setOpaque(false);
 		previousB.setContentAreaFilled(false);
 		previousB.setBorderPainted(false);
+		previousB.setEnabled(false);
 		previousB.setActionCommand("Previous");
 		previousB.addActionListener(loginHandler);
 		centerP.add(previousB);
@@ -267,7 +265,7 @@ public class MoistUI extends JPanel
 			
 			if(action.equals("Exit"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Are you sure", "Confirm",
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
 						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 
 				if(result == JOptionPane.YES_OPTION)
@@ -279,9 +277,10 @@ public class MoistUI extends JPanel
 			{
 				systemUI.setState(Frame.ICONIFIED);
 			}
-			else if(action.equals("Help"))
+			else if(action.equals("About"))
 			{
-				JOptionPane.showMessageDialog(null, "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
+				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.09\n\n"
+						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
 						"About", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else if(action.equals("ON"))
@@ -296,8 +295,24 @@ public class MoistUI extends JPanel
 				btnOff1.setEnabled(false);
 				textField1.setText("0");
 			}
+			else if(action.equals("ON1"))
+			{
+				btnOn1.setEnabled(false);
+				btnOff1.setEnabled(true);
+				textField1.setText(statMoist2[23] + "%");
+			}
+			else if(action.equals("OFF1"))
+			{
+				btnOn1.setEnabled(true);
+				btnOff1.setEnabled(false);
+				textField1.setText("0");
+			}
 			else if(action.equals("Next"))
 			{
+				nextB.setEnabled(false);
+				previousB.setEnabled(true);
+				btnOn1.setActionCommand("ON1");
+				btnOff1.setActionCommand("OFF1");
 				moisture1.setBounds(w-600, h-250, 0, 0);
 				moisture1.validate();
 				moisture2.setBounds(w-600, h-250, 900, 480);
@@ -307,6 +322,10 @@ public class MoistUI extends JPanel
 			}
 			else if(action.equals("Previous"))
 			{
+				previousB.setEnabled(false);
+				nextB.setEnabled(true);
+				btnOn1.setActionCommand("ON");
+				btnOff1.setActionCommand("OFF");
 				moisture2.setBounds(w-600, h-250, 0, 0);
 				moisture2.validate();
 				moisture1.setBounds(w-600, h-250, 900, 480);
