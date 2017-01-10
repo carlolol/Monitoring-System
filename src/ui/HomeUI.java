@@ -1,6 +1,7 @@
 package ui;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -50,7 +51,7 @@ public class HomeUI extends JPanel
 		textField1.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField1.setForeground(Color.WHITE);
 		textField1.setHorizontalAlignment(SwingConstants.CENTER);
-		textField1.setText("0%");
+		textField1.setText(SystemUI.statMoist1[23] + "%");
 		textField1.setEditable(false);
 		textField1.setOpaque(false);
 		textField1.setBounds(w+400, h-200, 200, 90);
@@ -68,7 +69,7 @@ public class HomeUI extends JPanel
 		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField2.setForeground(Color.WHITE);
 		textField2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField2.setText("0°F");
+		textField2.setText(SystemUI.statTemp2[23] + "°F");
 		textField2.setEditable(false);
 		textField2.setOpaque(false);
 		textField2.setBounds(w+400, h+50, 200, 90);
@@ -86,7 +87,7 @@ public class HomeUI extends JPanel
 		textField3.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField3.setForeground(Color.WHITE);
 		textField3.setHorizontalAlignment(SwingConstants.CENTER);
-		textField3.setText("0%");
+		textField3.setText(SystemUI.statMoist1[23] + "%");
 		textField3.setEditable(false);
 		textField3.setOpaque(false);
 		textField3.setBounds(w+100, h-200, 200, 90);
@@ -104,7 +105,7 @@ public class HomeUI extends JPanel
 		textField4.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField4.setForeground(Color.WHITE);
 		textField4.setHorizontalAlignment(SwingConstants.CENTER);
-		textField4.setText("0°F");
+		textField4.setText(SystemUI.statTemp2[23] + "°F");
 		textField4.setEditable(false);
 		textField4.setOpaque(false);
 		textField4.setBounds(w+100, h+50, 200, 90);
@@ -249,9 +250,6 @@ public class HomeUI extends JPanel
 				{
 	              System.exit(0);
 	            }
-				else
-				{
-				}
 			}
 			else if(action.equals("Minimize"))
 			{

@@ -4,11 +4,9 @@ import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
 public class TempUI extends JPanel
 {
@@ -16,20 +14,15 @@ public class TempUI extends JPanel
 	private JPanel centerP, temperature1, temperature2;;
 	private SystemUI systemUI;
 	
-	private Random rand;
 	private int h, w, resH, resW;
 	
 	private JButton btnOn1, btnOff1, tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
 	private JLabel lblBg, lblTemperatureSensor1, lblCurrentTemp, lblAverageTemp;
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
-	
-	private int[] statTemp1, statTemp2;
-	
+		
 	private JFreeChart tempLine1, tempLine2;
 	private ChartPanel chartPanel1, chartPanel2;
-	
-	private DefaultCategoryDataset dataset1, dataset2;
 	
 	public TempUI(SystemUI systemUI)
 	{
@@ -37,17 +30,6 @@ public class TempUI extends JPanel
 		resW = SystemUI.w;
 		h = resH / 2;
 		w = resW / 2;
-		
-		rand = new Random();
-		
-		statTemp1 = new int[24];
-		statTemp2 = new int[24];
-		
-		for(int a = 0; a < statTemp1.length; a++)
-			statTemp1[a] = rand.nextInt(10) + 30;
-		
-		for(int a = 0; a < statTemp2.length; a++)
-			statTemp2[a] = rand.nextInt(10) + 30;
 		
 		setLayout(new GridLayout(1, 1));
 		this.systemUI = systemUI;
@@ -119,12 +101,8 @@ public class TempUI extends JPanel
 		textField2.setBounds(w+400, h-70, 200, 90);
 		centerP.add(textField2);
 		textField2.setColumns(10);
-		
-		dataset1 = new DefaultCategoryDataset();
-		for(int a = 0; a < statTemp1.length; a++)
-			dataset1.addValue(statTemp1[a], "temperature", "" + a + ":00");
 			
-		tempLine1 = ChartFactory.createLineChart("Temperature #1", "Time", "Temperature", dataset1);
+		tempLine1 = ChartFactory.createLineChart("Temperature #1", "Time", "Temperature", SystemUI.tdataset1);
 		chartPanel1 = new ChartPanel(tempLine1);
 		chartPanel1.setPreferredSize(new Dimension(900, 500));
 		chartPanel1.setMouseZoomable(false);
@@ -135,11 +113,7 @@ public class TempUI extends JPanel
 		temperature1.validate();
 		centerP.add(temperature1);
 		
-		dataset2 = new DefaultCategoryDataset();
-		for(int a = 0; a < statTemp2.length; a++)
-			dataset2.addValue(statTemp2[a], "temperature", "" + a + ":00");
-		
-		tempLine2 = ChartFactory.createLineChart("Temperature #2", "Time", "Temperature", dataset2);
+		tempLine2 = ChartFactory.createLineChart("Temperature #2", "Time", "Temperature", SystemUI.tdataset2);
 		chartPanel2 = new ChartPanel(tempLine2);
 		chartPanel2.setPreferredSize(new Dimension(900, 500));
 		chartPanel2.setMouseZoomable(false);
@@ -286,7 +260,7 @@ public class TempUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setText(statTemp1[23] + "°F");
+				textField1.setText(SystemUI.statTemp1[23] + "°F");
 			}
 			else if(action.equals("OFF"))
 			{
@@ -298,7 +272,7 @@ public class TempUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setText(statTemp2[23] + "°F");
+				textField1.setText(SystemUI.statTemp2[23] + "°F");
 			}
 			else if(action.equals("OFF1"))
 			{

@@ -4,11 +4,9 @@ import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
 public class MoistUI extends JPanel
 {
@@ -16,7 +14,6 @@ public class MoistUI extends JPanel
 	private JPanel centerP, moisture1, moisture2;
 	private SystemUI systemUI;
 	
-	private Random rand;
 	private int h, w, resH, resW;
 	
 	private JButton btnOn1, btnOff1, tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
@@ -24,12 +21,8 @@ public class MoistUI extends JPanel
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
 	
-	private int[] statMoist1, statMoist2;
-	
 	private JFreeChart moistLine1, moistLine2;
 	private ChartPanel chartPanel1, chartPanel2;
-	
-	private DefaultCategoryDataset dataset1, dataset2;
 	
 	public MoistUI(SystemUI systemUI)
 	{
@@ -37,17 +30,6 @@ public class MoistUI extends JPanel
 		resW = SystemUI.w;
 		h = resH / 2;
 		w = resW / 2;
-		
-		rand = new Random();
-		
-		statMoist1 = new int[24];
-		statMoist2 = new int[24];
-		
-		for(int a = 0; a < statMoist1.length; a++)
-			statMoist1[a] = rand.nextInt(10) + 30;
-		
-		for(int a = 0; a < statMoist2.length; a++)
-			statMoist2[a] = rand.nextInt(10) + 30;
 		
 		setLayout(new GridLayout(1, 1));
 		this.systemUI = systemUI;
@@ -217,12 +199,8 @@ public class MoistUI extends JPanel
 		homeB.setActionCommand("Home");
 		homeB.addActionListener(loginHandler);
 		centerP.add(homeB);
-		
-		dataset1 = new DefaultCategoryDataset();
-		for(int a = 0; a < statMoist1.length; a++)
-			dataset1.addValue(statMoist1[a], "moisture", "" + a + ":00");
-			
-		moistLine1 = ChartFactory.createLineChart("Moisture #1", "Time", "Moisture", dataset1);
+					
+		moistLine1 = ChartFactory.createLineChart("Moisture #1", "Time", "Moisture", SystemUI.mdataset1);
 		chartPanel1 = new ChartPanel(moistLine1);
 		chartPanel1.setPreferredSize(new Dimension(900, 500));
 		chartPanel1.setMouseZoomable(false);
@@ -233,12 +211,8 @@ public class MoistUI extends JPanel
 		moisture1.add(chartPanel1, BorderLayout.CENTER);
 		moisture1.validate();
 		centerP.add(moisture1);
-	
-		dataset2 = new DefaultCategoryDataset();
-		for(int a = 0; a < statMoist2.length; a++)
-			dataset2.addValue(statMoist2[a], "moisture", "" + a + ":00");
 		
-		moistLine2 = ChartFactory.createLineChart("Moisture #2", "Time", "Moisture", dataset2);
+		moistLine2 = ChartFactory.createLineChart("Moisture #2", "Time", "Moisture", SystemUI.mdataset2);
 		chartPanel2 = new ChartPanel(moistLine2);
 		chartPanel2.setPreferredSize(new Dimension(900, 500));
 		chartPanel2.setMouseZoomable(false);	
@@ -287,7 +261,7 @@ public class MoistUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setText(statMoist1[23] + "%");
+				textField1.setText(SystemUI.statMoist1[23] + "%");
 			}
 			else if(action.equals("OFF"))
 			{
@@ -299,7 +273,7 @@ public class MoistUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setText(statMoist2[23] + "%");
+				textField1.setText(SystemUI.statMoist2[23] + "%");
 			}
 			else if(action.equals("OFF1"))
 			{
