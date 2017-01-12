@@ -19,7 +19,7 @@ public class SystemUI extends JFrame
 	private HomeUI homeUI;
 	private TempUI tempUI;
 	private MoistUI moistUI;
-	public static int h, w;
+	private static int h, w;
 	private Random rand;
 	
 	public static DefaultCategoryDataset mdataset1, mdataset2;
@@ -134,6 +134,16 @@ public class SystemUI extends JFrame
 		repaint();
 	}
 	
+	public static int getH()
+	{
+		return h;
+	}
+	
+	public static int getW()
+	{
+		return w;
+	}
+		
 	public static void main(String [] args)
 	{
 		new SystemUI().showMain();

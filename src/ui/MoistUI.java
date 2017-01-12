@@ -1,9 +1,11 @@
 package ui;
 
 import javax.swing.*;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,8 +28,8 @@ public class MoistUI extends JPanel
 	
 	public MoistUI(SystemUI systemUI)
 	{
-		resH = SystemUI.h;
-		resW = SystemUI.w;
+		resH = SystemUI.getH();
+		resW = SystemUI.getW();
 		h = resH / 2;
 		w = resW / 2;
 		
@@ -106,19 +108,19 @@ public class MoistUI extends JPanel
 		exitB.setToolTipText("Exit");
 		exitB.setIcon(new ImageIcon("../Thesis/Images/x.png"));
 		exitB.setRolloverIcon(new ImageIcon("../Thesis/Images/xhover.png"));
-		exitB.setBounds(w+625, h-370, 40, 40);
+		exitB.setBounds(resW-60, 15, 40, 40);
 		exitB.setOpaque(false);
 		exitB.setContentAreaFilled(false);
 		exitB.setBorderPainted(false);
 		exitB.setActionCommand("Exit");
 		exitB.addActionListener(loginHandler);
 		centerP.add(exitB);
-	
+		
 		minimizeB = new JButton("");
 		minimizeB.setToolTipText("Minimize");
 		minimizeB.setIcon(new ImageIcon("../Thesis/Images/minimize.png"));
 		minimizeB.setRolloverIcon(new ImageIcon("../Thesis/Images/minimizehover.png"));
-		minimizeB.setBounds(w+580, h-370, 40, 40);
+		minimizeB.setBounds(resW-105, 15, 40, 40);
 		minimizeB.setOpaque(false);
 		minimizeB.setContentAreaFilled(false);
 		minimizeB.setBorderPainted(false);
@@ -130,7 +132,7 @@ public class MoistUI extends JPanel
 		aboutB.setToolTipText("About");
 		aboutB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
 		aboutB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
-		aboutB.setBounds(w+535, h-370, 40, 40);
+		aboutB.setBounds(resW-150, 15, 40, 40);
 		aboutB.setOpaque(false);
 		aboutB.setContentAreaFilled(false);
 		aboutB.setBorderPainted(false);
@@ -170,16 +172,16 @@ public class MoistUI extends JPanel
 		tempB.setOpaque(false);
 		tempB.setContentAreaFilled(false);
 		tempB.setBorderPainted(false);
-		tempB.setBounds(w+390, h+290, 60, 60);
+		tempB.setBounds(resW-240, resH-85, 60, 60);
 		tempB.setActionCommand("Temp");
 		tempB.addActionListener(loginHandler);
 		centerP.add(tempB);
 		
 		moistB = new JButton("");
 		moistB.setToolTipText("Moisture");
-		moistB.setIcon(new ImageIcon("../Thesis/Images/moistureIconhover.png"));
+		moistB.setIcon(new ImageIcon("../Thesis/Images/moistureIcon.png"));
 		moistB.setRolloverIcon(new ImageIcon("../Thesis/Images/moistureIconhover.png"));
-		moistB.setBounds(w+490, h+290, 60, 60);
+		moistB.setBounds(resW-160, resH-85, 60, 60);
 		moistB.setOpaque(false);
 		moistB.setContentAreaFilled(false);
 		moistB.setBorderPainted(false);
@@ -190,9 +192,9 @@ public class MoistUI extends JPanel
 		
 		homeB = new JButton("");
 		homeB.setToolTipText("Home");
-		homeB.setIcon(new ImageIcon("../Thesis/Images/home.png"));
+		homeB.setIcon(new ImageIcon("../Thesis/Images/homehover.png"));
 		homeB.setRolloverIcon(new ImageIcon("../Thesis/Images/homehover.png"));
-		homeB.setBounds(w+590, h+290, 60, 60);
+		homeB.setBounds(resW-80, resH-85, 60, 60);
 		homeB.setOpaque(false);
 		homeB.setContentAreaFilled(false);
 		homeB.setBorderPainted(false);

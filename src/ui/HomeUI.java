@@ -20,8 +20,8 @@ public class HomeUI extends JPanel
 	
 	public HomeUI(SystemUI systemUI) 
 	{
-		resH = SystemUI.h;
-		resW = SystemUI.w;
+		resH = SystemUI.getH();
+		resW = SystemUI.getW();
 		h = resH / 2;
 		w = resW / 2;
 		
@@ -69,7 +69,7 @@ public class HomeUI extends JPanel
 		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField2.setForeground(Color.WHITE);
 		textField2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField2.setText(SystemUI.statTemp2[23] + "°F");
+		textField2.setText(SystemUI.statTemp1[23] + "°F");
 		textField2.setEditable(false);
 		textField2.setOpaque(false);
 		textField2.setBounds(w+400, h+50, 200, 90);
@@ -87,7 +87,7 @@ public class HomeUI extends JPanel
 		textField3.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField3.setForeground(Color.WHITE);
 		textField3.setHorizontalAlignment(SwingConstants.CENTER);
-		textField3.setText(SystemUI.statMoist1[23] + "%");
+		textField3.setText(SystemUI.statMoist2[23] + "%");
 		textField3.setEditable(false);
 		textField3.setOpaque(false);
 		textField3.setBounds(w+100, h-200, 200, 90);
@@ -133,7 +133,7 @@ public class HomeUI extends JPanel
 		exitB.setToolTipText("Exit");
 		exitB.setIcon(new ImageIcon("../Thesis/Images/x.png"));
 		exitB.setRolloverIcon(new ImageIcon("../Thesis/Images/xhover.png"));
-		exitB.setBounds(w+625, h-370, 40, 40);
+		exitB.setBounds(resW-60, 15, 40, 40);
 		exitB.setOpaque(false);
 		exitB.setContentAreaFilled(false);
 		exitB.setBorderPainted(false);
@@ -145,7 +145,7 @@ public class HomeUI extends JPanel
 		minimizeB.setToolTipText("Minimize");
 		minimizeB.setIcon(new ImageIcon("../Thesis/Images/minimize.png"));
 		minimizeB.setRolloverIcon(new ImageIcon("../Thesis/Images/minimizehover.png"));
-		minimizeB.setBounds(w+580, h-370, 40, 40);
+		minimizeB.setBounds(resW-105, 15, 40, 40);
 		minimizeB.setOpaque(false);
 		minimizeB.setContentAreaFilled(false);
 		minimizeB.setBorderPainted(false);
@@ -157,7 +157,7 @@ public class HomeUI extends JPanel
 		aboutB.setToolTipText("About");
 		aboutB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
 		aboutB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
-		aboutB.setBounds(w+535, h-370, 40, 40);
+		aboutB.setBounds(resW-150, 15, 40, 40);
 		aboutB.setOpaque(false);
 		aboutB.setContentAreaFilled(false);
 		aboutB.setBorderPainted(false);
@@ -172,7 +172,7 @@ public class HomeUI extends JPanel
 		tempB.setOpaque(false);
 		tempB.setContentAreaFilled(false);
 		tempB.setBorderPainted(false);
-		tempB.setBounds(w+390, h+290, 60, 60);
+		tempB.setBounds(resW-240, resH-85, 60, 60);
 		tempB.setActionCommand("Temp");
 		tempB.addActionListener(loginHandler);
 		centerP.add(tempB);
@@ -181,7 +181,7 @@ public class HomeUI extends JPanel
 		moistB.setToolTipText("Moisture");
 		moistB.setIcon(new ImageIcon("../Thesis/Images/moistureIcon.png"));
 		moistB.setRolloverIcon(new ImageIcon("../Thesis/Images/moistureIconhover.png"));
-		moistB.setBounds(w+490, h+290, 60, 60);
+		moistB.setBounds(resW-160, resH-85, 60, 60);
 		moistB.setOpaque(false);
 		moistB.setContentAreaFilled(false);
 		moistB.setBorderPainted(false);
@@ -193,7 +193,7 @@ public class HomeUI extends JPanel
 		homeB.setToolTipText("Home");
 		homeB.setIcon(new ImageIcon("../Thesis/Images/homehover.png"));
 		homeB.setRolloverIcon(new ImageIcon("../Thesis/Images/homehover.png"));
-		homeB.setBounds(w+590, h+290, 60, 60);
+		homeB.setBounds(resW-80, resH-85, 60, 60);
 		homeB.setOpaque(false);
 		homeB.setContentAreaFilled(false);
 		homeB.setBorderPainted(false);
