@@ -21,6 +21,7 @@ public class SystemUI extends JFrame
 	private MoistUI moistUI;
 	private static int h, w;
 	private Random rand;
+	private ImageIcon img;
 	
 	public static DefaultCategoryDataset mdataset1, mdataset2;
 	public static int[] statMoist1, statMoist2;
@@ -71,6 +72,9 @@ public class SystemUI extends JFrame
 		Toolkit t = Toolkit.getDefaultToolkit();
 		Dimension d = t.getScreenSize();
 
+		img = new ImageIcon("../Thesis/Images/finallogo.png");
+		setIconImage(img.getImage());
+		
 		h = d.height;
 		w = d.width;
 

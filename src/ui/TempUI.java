@@ -214,7 +214,7 @@ public class TempUI extends JPanel
 		
 		homeB = new JButton("");
 		homeB.setToolTipText("Home");
-		homeB.setIcon(new ImageIcon("../Thesis/Images/homehover.png"));
+		homeB.setIcon(new ImageIcon("../Thesis/Images/home.png"));
 		homeB.setRolloverIcon(new ImageIcon("../Thesis/Images/homehover.png"));
 		homeB.setBounds(resW-80, resH-85, 60, 60);
 		homeB.setOpaque(false);
