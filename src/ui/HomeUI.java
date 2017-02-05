@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.net.*;
 
 public class HomeUI extends JPanel
 {
@@ -18,8 +19,11 @@ public class HomeUI extends JPanel
 	private JTextField textField1, textField2, textField3, textField4, textLog;
 	public int h, w, resH, resW;
 	
+	private Thread thread;
+	
 	public HomeUI(SystemUI systemUI) 
-	{
+	{			
+		// GUI components
 		resH = SystemUI.getH();
 		resW = SystemUI.getW();
 		h = resH / 2;
@@ -238,8 +242,56 @@ public class HomeUI extends JPanel
 		centerP.add(lblBg);
 		
 		add(centerP);
+		
+		// checks internet connectivity
+				boolean connectivity;
+						
+				try 
+				{
+					URL url = new URL("http://google.com/");
+					URLConnection conn = url.openConnection();
+					conn.connect();
+					connectivity = true;
+					System.out.println("Naka connect na pre.");
+					textLog.setText("Internet connection is established.");
+				} 
+				catch (Exception e) 
+				{
+					connectivity = false;
+					System.out.println("Reklamo ka pre sa PLDT.");
+					textLog.setText("Internet connection is disconnected.");
+				}
+		
+		startThread();
 	}
 	
+	public void startThread()
+	{
+		thread = new Thread()
+		{
+			public void run(){
+				int x = 0;
+				
+				for(x = 1; x>0; x++)
+				{
+					try {
+						Thread.sleep(5000);
+						x++;
+						textField1.setText(x + "°F");
+						textField2.setText((x+1) + "%");
+						textField3.setText((x+2) + "°F");
+						textField4.setText((x+3) + "%");
+						System.out.print(x);
+					} catch(Exception e) {
+						System.out.print("ERROR");
+					}
+				}
+			}
+		};
+		thread.start();
+	}
+	
+	// functionality
 	private class LoginHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) 

@@ -26,8 +26,11 @@ public class TempUI extends JPanel
 	private JFreeChart tempLine1, tempLine2;
 	private ChartPanel chartPanel1, chartPanel2;
 	
+	private Thread thread;
+	
 	public TempUI(SystemUI systemUI)
 	{
+		// GUI components
 		resH = SystemUI.getH();
 		resW = SystemUI.getW();
 		h = resH / 2;
@@ -41,7 +44,6 @@ public class TempUI extends JPanel
 		
 		loginHandler = new LoginHandler();
 		
-		//-----------------------------------------BLOCK-----------------------------------------
 		lblTemperatureSensor1 = new JLabel("Temperature Sensor #1");
 		lblTemperatureSensor1.setForeground(Color.BLACK);
 		lblTemperatureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -230,8 +232,35 @@ public class TempUI extends JPanel
 		centerP.add(lblBg);
 		
 		add(centerP);
+		
+		startThread();
 	}
 	
+	public void startThread()
+	{
+		thread = new Thread()
+		{
+			public void run(){
+				int x = 0;
+				
+				for(x = 1; x>0; x++)
+				{
+					try {
+						Thread.sleep(1000);
+						x++;
+						textField1.setText(x + "°F");
+						textField2.setText((x+1) + "°F");
+						System.out.print(x);//1000 milliseconds is one second.
+					} catch(Exception e) {
+						System.out.print("ERROR");
+					}
+				}
+			}
+		};
+		thread.start();
+	}
+	
+	// functionality
 	private class LoginHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) 

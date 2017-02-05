@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Random;
 
 import javax.swing.*;
@@ -31,12 +33,13 @@ public class SystemUI extends JFrame
 	
 	public SystemUI()
 	{	
+		// beta data
 		rand = new Random();
 		
 		statMoist1 = new int[24];
 		statMoist2 = new int[24];
 		
-		//MOISTURE
+		// moisture
 		for(int a = 0; a < statMoist1.length; a++)
 			statMoist1[a] = rand.nextInt(10) + 30;
 		
@@ -51,7 +54,7 @@ public class SystemUI extends JFrame
 		for(int a = 0; a < statMoist2.length; a++)
 			mdataset2.addValue(statMoist2[a], "moisture", "" + a + ":00");
 		
-		//TEMPERATURE
+		// temperature
 		statTemp1 = new int[24];
 		statTemp2 = new int[24];
 		
@@ -78,7 +81,7 @@ public class SystemUI extends JFrame
 		h = d.height;
 		w = d.width;
 
-		//checks if screen resolution is compatible
+		// checks if screen resolution is compatible
 		if((768>h) || (1366>w))
 		{
 			screenError();

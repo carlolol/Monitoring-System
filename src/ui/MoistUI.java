@@ -26,8 +26,11 @@ public class MoistUI extends JPanel
 	private JFreeChart moistLine1, moistLine2;
 	private ChartPanel chartPanel1, chartPanel2;
 	
+	private Thread thread;
+	
 	public MoistUI(SystemUI systemUI)
 	{
+		// GUI components
 		resH = SystemUI.getH();
 		resW = SystemUI.getW();
 		h = resH / 2;
@@ -41,7 +44,6 @@ public class MoistUI extends JPanel
 		
 		loginHandler = new LoginHandler();
 		
-		//-----------------------------------------BLOCK-----------------------------------------
 		lblMoistureSensor1 = new JLabel("Moisture Sensor #1");
 		lblMoistureSensor1.setForeground(Color.BLACK);
 		lblMoistureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -231,8 +233,35 @@ public class MoistUI extends JPanel
 		centerP.add(lblBg);
 		
 		add(centerP);
+		
+		startThread();
 	}
 	
+	public void startThread()
+	{
+		thread = new Thread()
+		{
+			public void run(){
+				int x = 0;
+				
+				for(x = 1; x>0; x++)
+				{
+					try {
+						Thread.sleep(1000);
+						x++;
+						textField1.setText(x + "%");
+						textField2.setText((x+1) + "%");
+						System.out.print(x);//1000 milliseconds is one second.
+					} catch(Exception e) {
+						System.out.print("ERROR");
+					}
+				}
+			}
+		};
+		thread.start();
+	}
+	
+	// functionality
 	private class LoginHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) 
