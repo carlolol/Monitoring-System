@@ -5,16 +5,19 @@ import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class MoistUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	private JPanel centerP, moisture1, moisture2;
 	private SystemUI systemUI;
+	private Random rand;
 	
 	private int h, w, resH, resW;
 	
@@ -25,11 +28,17 @@ public class MoistUI extends JPanel
 	
 	private JFreeChart moistLine1, moistLine2;
 	private ChartPanel chartPanel1, chartPanel2;
+	public static DefaultCategoryDataset mdataset1, mdataset2;
+	public static int[] statMoist1, statMoist2;
 	
 	private Thread thread;
 	
 	public MoistUI(SystemUI systemUI)
 	{
+		rand = new Random();
+		
+		generateRandomValue();
+		
 		// GUI components
 		resH = SystemUI.getH();
 		resW = SystemUI.getW();
@@ -203,20 +212,56 @@ public class MoistUI extends JPanel
 		homeB.setActionCommand("Home");
 		homeB.addActionListener(loginHandler);
 		centerP.add(homeB);
-					
-		moistLine1 = ChartFactory.createLineChart("Moisture #1", "Time", "Moisture", SystemUI.mdataset1);
+		
+		generateGraph();
+		
+		lblBg = new JLabel();
+		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
+		lblBg.setBounds(0,0,resW,resH);
+		centerP.add(lblBg);
+		
+		add(centerP);
+		
+		// starts updating the home UI
+		startThread();
+	}
+	
+	public void generateRandomValue()
+	{
+		statMoist1 = new int[24];
+		statMoist2 = new int[24];
+		
+		// moisture
+		for(int a = 0; a < statMoist1.length; a++)
+			statMoist1[a] = rand.nextInt(10) + 30;
+		
+		for(int a = 0; a < statMoist2.length; a++)
+			statMoist2[a] = rand.nextInt(10) + 30;
+		
+		mdataset1 = new DefaultCategoryDataset();
+		for(int a = 0; a < statMoist1.length; a++)
+			mdataset1.addValue(statMoist1[a], "moisture content reading", "" + a + ":00");
+		
+		mdataset2 = new DefaultCategoryDataset();
+		for(int a = 0; a < statMoist2.length; a++)
+			mdataset2.addValue(statMoist2[a], "moisture content reading", "" + a + ":00");	
+	}
+	
+	public void generateGraph()
+	{
+		moistLine1 = ChartFactory.createLineChart("Moisture #1", "Time", "Moisture", mdataset1);
 		chartPanel1 = new ChartPanel(moistLine1);
 		chartPanel1.setPreferredSize(new Dimension(900, 500));
 		chartPanel1.setMouseZoomable(false);
 		//chartPanel1.zoomInRange(0, 40);
 		
 		moisture1 = new JPanel();
-		moisture1.setBounds(w-600, h-250, 900, 480);
+		moisture1.setBounds(w-600, h-250, 900, 505);
 		moisture1.add(chartPanel1, BorderLayout.CENTER);
 		moisture1.validate();
 		centerP.add(moisture1);
 		
-		moistLine2 = ChartFactory.createLineChart("Moisture #2", "Time", "Moisture", SystemUI.mdataset2);
+		moistLine2 = ChartFactory.createLineChart("Moisture #2", "Time", "Moisture", mdataset2);
 		chartPanel2 = new ChartPanel(moistLine2);
 		chartPanel2.setPreferredSize(new Dimension(900, 500));
 		chartPanel2.setMouseZoomable(false);	
@@ -226,17 +271,9 @@ public class MoistUI extends JPanel
 		moisture2.add(chartPanel2, BorderLayout.CENTER);
 		moisture2.validate();
 		centerP.add(moisture2);
-		
-		lblBg = new JLabel();
-		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
-		lblBg.setBounds(0,0,resW,resH);
-		centerP.add(lblBg);
-		
-		add(centerP);
-		
-		startThread();
 	}
 	
+	// responsible for updating the home UI
 	public void startThread()
 	{
 		thread = new Thread()
@@ -246,13 +283,18 @@ public class MoistUI extends JPanel
 				
 				for(x = 1; x>0; x++)
 				{
-					try {
+					try 
+					{
 						Thread.sleep(1000);
 						x++;
-						textField1.setText(x + "%");
-						textField2.setText((x+1) + "%");
-						System.out.print(x);//1000 milliseconds is one second.
-					} catch(Exception e) {
+						textField1.setText((rand.nextInt(15) + 10) + "%");
+						textField2.setText((rand.nextInt(15) + 10) + "%");
+						generateRandomValue();
+						generateGraph();
+						moisture1.validate();
+					} 
+					catch(Exception e) 
+					{
 						System.out.print("ERROR");
 					}
 				}
@@ -270,8 +312,8 @@ public class MoistUI extends JPanel
 			
 			if(action.equals("Exit"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
-						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure? All connection will be disconnected.", 
+						"Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 
 				if(result == JOptionPane.YES_OPTION)
 				{
@@ -292,7 +334,7 @@ public class MoistUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setText(SystemUI.statMoist1[23] + "%");
+				textField1.setText(statMoist1[23] + "%");
 			}
 			else if(action.equals("OFF"))
 			{
@@ -304,7 +346,7 @@ public class MoistUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setText(SystemUI.statMoist2[23] + "%");
+				textField1.setText(statMoist2[23] + "%");
 			}
 			else if(action.equals("OFF1"))
 			{
@@ -320,7 +362,7 @@ public class MoistUI extends JPanel
 				btnOff1.setActionCommand("OFF1");
 				moisture1.setBounds(w-600, h-250, 0, 0);
 				moisture1.validate();
-				moisture2.setBounds(w-600, h-250, 900, 480);
+				moisture2.setBounds(w-600, h-250, 900, 505);
 				moisture2.validate();
 				
 				lblMoistureSensor1.setText("Moisture Sensor #2");
@@ -333,7 +375,7 @@ public class MoistUI extends JPanel
 				btnOff1.setActionCommand("OFF");
 				moisture2.setBounds(w-600, h-250, 0, 0);
 				moisture2.validate();
-				moisture1.setBounds(w-600, h-250, 900, 480);
+				moisture1.setBounds(w-600, h-250, 900, 505);
 				moisture1.validate();
 				
 				lblMoistureSensor1.setText("Moisture Sensor #1");

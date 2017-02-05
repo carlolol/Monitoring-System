@@ -22,56 +22,10 @@ public class SystemUI extends JFrame
 	private TempUI tempUI;
 	private MoistUI moistUI;
 	private static int h, w;
-	private Random rand;
 	private ImageIcon img;
-	
-	public static DefaultCategoryDataset mdataset1, mdataset2;
-	public static int[] statMoist1, statMoist2;
-	
-	public static DefaultCategoryDataset tdataset1, tdataset2;
-	public static int[] statTemp1, statTemp2;
 	
 	public SystemUI()
 	{	
-		// beta data
-		rand = new Random();
-		
-		statMoist1 = new int[24];
-		statMoist2 = new int[24];
-		
-		// moisture
-		for(int a = 0; a < statMoist1.length; a++)
-			statMoist1[a] = rand.nextInt(10) + 30;
-		
-		for(int a = 0; a < statMoist2.length; a++)
-			statMoist2[a] = rand.nextInt(10) + 30;
-		
-		mdataset1 = new DefaultCategoryDataset();
-		for(int a = 0; a < statMoist1.length; a++)
-			mdataset1.addValue(statMoist1[a], "moisture", "" + a + ":00");
-		
-		mdataset2 = new DefaultCategoryDataset();
-		for(int a = 0; a < statMoist2.length; a++)
-			mdataset2.addValue(statMoist2[a], "moisture", "" + a + ":00");
-		
-		// temperature
-		statTemp1 = new int[24];
-		statTemp2 = new int[24];
-		
-		for(int a = 0; a < statTemp1.length; a++)
-			statTemp1[a] = rand.nextInt(10) + 30;
-		
-		for(int a = 0; a < statTemp2.length; a++)
-			statTemp2[a] = rand.nextInt(10) + 30;
-		
-		tdataset1 = new DefaultCategoryDataset();
-		for(int a = 0; a < statTemp1.length; a++)
-			tdataset1.addValue(statTemp1[a], "temperature", "" + a + ":00");
-		
-		tdataset2 = new DefaultCategoryDataset();
-		for(int a = 0; a < statTemp2.length; a++)
-			tdataset2.addValue(statTemp2[a], "temperature", "" + a + ":00");
-		
 		Toolkit t = Toolkit.getDefaultToolkit();
 		Dimension d = t.getScreenSize();
 

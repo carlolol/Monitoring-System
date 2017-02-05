@@ -1,10 +1,12 @@
 package ui;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
+import java.util.Random;
 
 public class HomeUI extends JPanel
 {
@@ -12,17 +14,23 @@ public class HomeUI extends JPanel
 	private JPanel centerP;
 	private SystemUI systemUI;
 	private LoginHandler loginHandler;
+	private Random rand;
 	
-	private JLabel lblBg, lbllogo, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, lblMoistureSensor1,
-					lblMoistureSensor2, lblTemperatureSensor1, lblTemperatureSensor2, lblReportLog;
+	private JTextArea textLog;
+	private JLabel lblBg, lbllogo, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, 
+					lblMoistureSensor1, lblMoistureSensor2, lblTemperatureSensor1, lblTemperatureSensor2, 
+					lblReportLog;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB;
-	private JTextField textField1, textField2, textField3, textField4, textLog;
+	private JTextField textField1, textField2, textField3, textField4;
 	public int h, w, resH, resW;
+	public String log = "";
 	
 	private Thread thread;
 	
 	public HomeUI(SystemUI systemUI) 
 	{			
+		rand = new Random();
+		
 		// GUI components
 		resH = SystemUI.getH();
 		resW = SystemUI.getW();
@@ -48,17 +56,18 @@ public class HomeUI extends JPanel
 		lblMoistureSensor1.setForeground(Color.BLACK);
 		lblMoistureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMoistureSensor1.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblMoistureSensor1.setBounds(w+200, h-280, 600, 50);
+		lblMoistureSensor1.setBounds(w+180, h-250, 600, 50);
 		centerP.add(lblMoistureSensor1);
 		
 		textField1 = new JTextField();
 		textField1.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField1.setForeground(Color.WHITE);
 		textField1.setHorizontalAlignment(SwingConstants.CENTER);
-		textField1.setText(SystemUI.statMoist1[23] + "%");
+		textField1.setText("0%");
 		textField1.setEditable(false);
 		textField1.setOpaque(false);
-		textField1.setBounds(w+400, h-200, 200, 90);
+		textField1.setBounds(w+380, h-170, 200, 90);
+		textField1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		centerP.add(textField1);
 		textField1.setColumns(10);
 		
@@ -66,17 +75,18 @@ public class HomeUI extends JPanel
 		lblMoistureSensor2.setForeground(Color.BLACK);
 		lblMoistureSensor2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMoistureSensor2.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblMoistureSensor2.setBounds(w+200, h-30, 600, 50);
+		lblMoistureSensor2.setBounds(w+180, h-10, 600, 50);
 		centerP.add(lblMoistureSensor2);
 		
 		textField2 = new JTextField();
 		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField2.setForeground(Color.WHITE);
 		textField2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField2.setText(SystemUI.statMoist2[23] + "%");
+		textField2.setText("0%");
 		textField2.setEditable(false);
 		textField2.setOpaque(false);
-		textField2.setBounds(w+400, h+50, 200, 90);
+		textField2.setBounds(w+380, h+70, 200, 90);
+		textField2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		centerP.add(textField2);
 		textField2.setColumns(10);
 		
@@ -84,17 +94,18 @@ public class HomeUI extends JPanel
 		lblTemperatureSensor1.setForeground(Color.BLACK);
 		lblTemperatureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTemperatureSensor1.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblTemperatureSensor1.setBounds(w-100, h-280, 600, 50);
+		lblTemperatureSensor1.setBounds(w-100, h-250, 600, 50);
 		centerP.add(lblTemperatureSensor1);
 		
 		textField3 = new JTextField();
 		textField3.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField3.setForeground(Color.WHITE);
 		textField3.setHorizontalAlignment(SwingConstants.CENTER);
-		textField3.setText(SystemUI.statTemp1[23] + "°F");
+		textField3.setText("0°F");
 		textField3.setEditable(false);
 		textField3.setOpaque(false);
-		textField3.setBounds(w+100, h-200, 200, 90);
+		textField3.setBounds(w+100, h-170, 200, 90);
+		textField3.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		centerP.add(textField3);
 		textField3.setColumns(10);
 		
@@ -102,17 +113,18 @@ public class HomeUI extends JPanel
 		lblTemperatureSensor2.setForeground(Color.BLACK);
 		lblTemperatureSensor2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTemperatureSensor2.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblTemperatureSensor2.setBounds(w-100, h-30, 600, 50);
+		lblTemperatureSensor2.setBounds(w-100, h-10, 600, 50);
 		centerP.add(lblTemperatureSensor2);
 		
 		textField4 = new JTextField();
 		textField4.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField4.setForeground(Color.WHITE);
 		textField4.setHorizontalAlignment(SwingConstants.CENTER);
-		textField4.setText(SystemUI.statTemp2[23] + "°F");
+		textField4.setText("0°F");
 		textField4.setEditable(false);
 		textField4.setOpaque(false);
-		textField4.setBounds(w+100, h+50, 200, 90);
+		textField4.setBounds(w+100, h+70, 200, 90);
+		textField4.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		centerP.add(textField4);
 		textField4.setColumns(10);
 		
@@ -123,14 +135,13 @@ public class HomeUI extends JPanel
 		lblReportLog.setBounds(w-350, h+60, 100, 50);
 		centerP.add(lblReportLog);
 		
-		textLog = new JTextField();
+		textLog = new JTextArea(100, 200);
 		textLog.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textLog.setForeground(Color.WHITE);
-		textLog.setHorizontalAlignment(SwingConstants.CENTER);
-		textLog.setText("");
-		textLog.setEditable(false);
-		textLog.setOpaque(false);
-		textLog.setBounds(w-555, h+100, 500, 120);
+        textLog.setEditable(false);
+        textLog.setOpaque(false);
+        JScrollPane scrollPane = new JScrollPane(textLog);
+        textLog.setBounds(w-555, h+100, 500, 120);
 		centerP.add(textLog);
 		
 		exitB = new JButton("");
@@ -213,22 +224,22 @@ public class HomeUI extends JPanel
 		
 		lblBlock1 = new JLabel();
 		lblBlock1.setIcon(new ImageIcon("../Thesis/Images/block.png"));
-		lblBlock1.setBounds(w+380, h-300,300,250);
+		lblBlock1.setBounds(w+360, h-270,300,250);
 		centerP.add(lblBlock1);
 		
 		lblBlock2 = new JLabel();
 		lblBlock2.setIcon(new ImageIcon("../Thesis/Images/block.png"));
-		lblBlock2.setBounds(w+380, h-50,300,250);
+		lblBlock2.setBounds(w+360, h-30,300,250);
 		centerP.add(lblBlock2);
 		
 		lblBlock3 = new JLabel();
 		lblBlock3.setIcon(new ImageIcon("../Thesis/Images/block.png"));
-		lblBlock3.setBounds(w+80, h-300,300,250);
+		lblBlock3.setBounds(w+80, h-270,300,250);
 		centerP.add(lblBlock3);
 		
 		lblBlock4 = new JLabel();
 		lblBlock4.setIcon(new ImageIcon("../Thesis/Images/block.png"));
-		lblBlock4.setBounds(w+80, h-50,300,250);
+		lblBlock4.setBounds(w+80, h-30,300,250);
 		centerP.add(lblBlock4);
 		
 		lblBlock5 = new JLabel();
@@ -244,27 +255,29 @@ public class HomeUI extends JPanel
 		add(centerP);
 		
 		// checks internet connectivity
-				boolean connectivity;
+			boolean connectivity;
 						
-				try 
-				{
-					URL url = new URL("http://google.com/");
-					URLConnection conn = url.openConnection();
-					conn.connect();
-					connectivity = true;
-					System.out.println("Naka connect na pre.");
-					textLog.setText("Internet connection is established.");
-				} 
-				catch (Exception e) 
-				{
-					connectivity = false;
-					System.out.println("Reklamo ka pre sa PLDT.");
-					textLog.setText("Internet connection is disconnected.");
-				}
-		
+			try 
+			{
+				URL url = new URL("http://google.com/");
+				URLConnection conn = url.openConnection();
+				conn.connect();
+				connectivity = true;
+				log += "Internet connection is established. \n";
+				textLog.setText(log);
+			} 
+			catch (Exception e) 
+			{
+				connectivity = false;
+				log += "Internet connection is disconnected. \n";
+				textLog.setText(log);
+			}
+			
+		// starts updating the home UI
 		startThread();
 	}
 	
+	// responsible for updating the home UI
 	public void startThread()
 	{
 		thread = new Thread()
@@ -272,18 +285,22 @@ public class HomeUI extends JPanel
 			public void run(){
 				int x = 0;
 				
-				for(x = 1; x>0; x++)
+				for(x = 1; x>0; x++) // Don't stop belieben! HAHAHAHA.
 				{
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(5000); // 1000 milliseconds is equal to 1 sec
 						x++;
-						textField1.setText(x + "°F");
-						textField2.setText((x+1) + "%");
-						textField3.setText((x+2) + "°F");
-						textField4.setText((x+3) + "%");
-						System.out.print(x);
-					} catch(Exception e) {
-						System.out.print("ERROR");
+						textField1.setText((rand.nextInt(15) + 10) + "%");
+						textField2.setText((rand.nextInt(15) + 10) + "%");
+						textField3.setText((rand.nextInt(10) + 30) + "°F");
+						textField4.setText((rand.nextInt(10) + 30) + "°F");
+						log = "Reading of sensor is running... \n" + log;
+						textLog.setText(log);
+					}
+					catch(Exception e) 
+					{
+						log = "Reading of sensor is interrupted. \n" + log;
+						textLog.setText(log);
 					}
 				}
 			}
@@ -300,8 +317,8 @@ public class HomeUI extends JPanel
 			
 			if(action.equals("Exit"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
-						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure? All connection will be disconnected.", 
+						"Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 
 				if(result == JOptionPane.YES_OPTION)
 				{
@@ -312,7 +329,7 @@ public class HomeUI extends JPanel
 			{
 				systemUI.setState(Frame.ICONIFIED);
 			}
-			else if(action.equals("About"))
+			else if(action.equals("About")) 
 			{
 				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.09\n\n"
 						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",

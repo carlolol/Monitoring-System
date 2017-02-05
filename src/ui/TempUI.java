@@ -5,16 +5,19 @@ import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class TempUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	private JPanel centerP, temperature1, temperature2;;
 	private SystemUI systemUI;
+	private Random rand;
 	
 	private int h, w, resH, resW;
 	
@@ -25,11 +28,17 @@ public class TempUI extends JPanel
 		
 	private JFreeChart tempLine1, tempLine2;
 	private ChartPanel chartPanel1, chartPanel2;
+	public static DefaultCategoryDataset tdataset1, tdataset2;
+	public static int[] statTemp1, statTemp2;
 	
 	private Thread thread;
 	
 	public TempUI(SystemUI systemUI)
 	{
+		rand = new Random();
+		
+		generateRandomValue();
+		
 		// GUI components
 		resH = SystemUI.getH();
 		resW = SystemUI.getW();
@@ -104,30 +113,8 @@ public class TempUI extends JPanel
 		textField2.setOpaque(false);
 		textField2.setBounds(w+400, h-70, 200, 90);
 		centerP.add(textField2);
-		textField2.setColumns(10);
-			
-		tempLine1 = ChartFactory.createLineChart("Temperature #1", "Time", "Temperature", SystemUI.tdataset1);
-		chartPanel1 = new ChartPanel(tempLine1);
-		chartPanel1.setPreferredSize(new Dimension(900, 500));
-		chartPanel1.setMouseZoomable(false);
+		textField2.setColumns(10);	
 		
-		temperature1 = new JPanel();
-		temperature1.setBounds(w-600, h-250, 900, 480);
-		temperature1.add(chartPanel1, BorderLayout.CENTER);
-		temperature1.validate();
-		centerP.add(temperature1);
-		
-		tempLine2 = ChartFactory.createLineChart("Temperature #2", "Time", "Temperature", SystemUI.tdataset2);
-		chartPanel2 = new ChartPanel(tempLine2);
-		chartPanel2.setPreferredSize(new Dimension(900, 500));
-		chartPanel2.setMouseZoomable(false);
-		
-		temperature2 = new JPanel();
-		temperature2.setBounds(w-600, h-250, 0, 0);
-		temperature2.add(chartPanel2, BorderLayout.CENTER);
-		temperature2.validate();
-		centerP.add(temperature2);
-	
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
 		exitB.setIcon(new ImageIcon("../Thesis/Images/x.png"));
@@ -231,11 +218,61 @@ public class TempUI extends JPanel
 		lblBg.setBounds(0,0,resW,resH);
 		centerP.add(lblBg);
 		
+		generateGraph();
+		
 		add(centerP);
 		
+		// starts updating the home UI
 		startThread();
 	}
 	
+	public void generateRandomValue()
+	{
+		statTemp1 = new int[24];
+		statTemp2 = new int[24];
+		
+		// temperature
+		for(int a = 0; a < statTemp1.length; a++)
+		statTemp1[a] = rand.nextInt(10) + 30;
+		
+		for(int a = 0; a < statTemp2.length; a++)
+		statTemp2[a] = rand.nextInt(10) + 30;
+				
+		tdataset1 = new DefaultCategoryDataset();
+		for(int a = 0; a < statTemp1.length; a++)
+		tdataset1.addValue(statTemp1[a], "temperature", "" + a + ":00");
+				
+		tdataset2 = new DefaultCategoryDataset();
+		for(int a = 0; a < statTemp2.length; a++)
+		tdataset2.addValue(statTemp2[a], "temperature", "" + a + ":00");
+	}
+	
+	public void generateGraph()
+	{
+		tempLine1 = ChartFactory.createLineChart("Temperature #1", "Time", "Temperature", tdataset1);
+		chartPanel1 = new ChartPanel(tempLine1);
+		chartPanel1.setPreferredSize(new Dimension(900, 500));
+		chartPanel1.setMouseZoomable(false);
+		
+		temperature1 = new JPanel();
+		temperature1.setBounds(w-600, h-250, 900, 505);
+		temperature1.add(chartPanel1, BorderLayout.CENTER);
+		temperature1.validate();
+		centerP.add(temperature1);
+		
+		tempLine2 = ChartFactory.createLineChart("Temperature #2", "Time", "Temperature", tdataset2);
+		chartPanel2 = new ChartPanel(tempLine2);
+		chartPanel2.setPreferredSize(new Dimension(900, 500));
+		chartPanel2.setMouseZoomable(false);
+		
+		temperature2 = new JPanel();
+		temperature2.setBounds(w-600, h-250, 0, 0);
+		temperature2.add(chartPanel2, BorderLayout.CENTER);
+		temperature2.validate();
+		centerP.add(temperature2);
+	}
+	
+	// responsible for updating the home UI
 	public void startThread()
 	{
 		thread = new Thread()
@@ -245,13 +282,18 @@ public class TempUI extends JPanel
 				
 				for(x = 1; x>0; x++)
 				{
-					try {
+					try 
+					{
 						Thread.sleep(1000);
 						x++;
-						textField1.setText(x + "°F");
-						textField2.setText((x+1) + "°F");
-						System.out.print(x);//1000 milliseconds is one second.
-					} catch(Exception e) {
+						textField1.setText((rand.nextInt(10) + 30) + "°F");
+						textField2.setText((rand.nextInt(10) + 30) + "°F");
+						generateRandomValue();
+						generateGraph();
+						temperature1.validate();
+					} 
+					catch(Exception e) 
+					{
 						System.out.print("ERROR");
 					}
 				}
@@ -269,8 +311,8 @@ public class TempUI extends JPanel
 			
 			if(action.equals("Exit"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
-						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure? All connection will be disconnected.",
+						"Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 
 				if(result == JOptionPane.YES_OPTION)
 				{
@@ -291,7 +333,7 @@ public class TempUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setText(SystemUI.statTemp1[23] + "°F");
+				textField1.setText(statTemp1[23] + "°F");
 			}
 			else if(action.equals("OFF"))
 			{
@@ -303,7 +345,7 @@ public class TempUI extends JPanel
 			{
 				btnOn1.setEnabled(false);
 				btnOff1.setEnabled(true);
-				textField1.setText(SystemUI.statTemp2[23] + "°F");
+				textField1.setText(statTemp2[23] + "°F");
 			}
 			else if(action.equals("OFF1"))
 			{
@@ -319,7 +361,7 @@ public class TempUI extends JPanel
 				btnOff1.setActionCommand("OFF1");
 				temperature1.setBounds(w-600, h-250, 0, 0);
 				temperature1.validate();
-				temperature2.setBounds(w-600, h-250, 900, 480);
+				temperature2.setBounds(w-600, h-250, 900, 505);
 				temperature2.validate();
 				
 				lblTemperatureSensor1.setText("Temperature Sensor #2");
@@ -332,7 +374,7 @@ public class TempUI extends JPanel
 				btnOff1.setActionCommand("OFF");
 				temperature2.setBounds(w-600, h-250, 0, 0);
 				temperature2.validate();
-				temperature1.setBounds(w-600, h-250, 900, 480);
+				temperature1.setBounds(w-600, h-250, 900, 505);
 				temperature1.validate();
 				
 				lblTemperatureSensor1.setText("Temperature Sensor #1");
