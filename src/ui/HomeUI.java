@@ -6,6 +6,9 @@ import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public class HomeUI extends JPanel
@@ -15,6 +18,8 @@ public class HomeUI extends JPanel
 	private SystemUI systemUI;
 	private LoginHandler loginHandler;
 	private Random rand;
+	private DateFormat dateFormat;
+	private Date date;
 	
 	private JTextArea textLog;
 	private JLabel lblBg, lbllogo, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, 
@@ -23,13 +28,15 @@ public class HomeUI extends JPanel
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB;
 	private JTextField textField1, textField2, textField3, textField4;
 	public int h, w, resH, resW;
-	public String log = "";
+	public static String log = "";
 	
-	private Thread thread;
+	public static Thread thread;
 	
 	public HomeUI(SystemUI systemUI) 
-	{			
+	{
 		rand = new Random();
+	
+		getDate();
 		
 		// GUI components
 		resH = SystemUI.getH();
@@ -263,18 +270,25 @@ public class HomeUI extends JPanel
 				URLConnection conn = url.openConnection();
 				conn.connect();
 				connectivity = true;
-				log += "Internet connection is established. \n";
+				log += dateFormat.format(date) + " Internet connection: Connected \n";
 				textLog.setText(log);
 			} 
 			catch (Exception e) 
 			{
 				connectivity = false;
-				log += "Internet connection is disconnected. \n";
+				log += dateFormat.format(date) + " Internet connection: Disconnected \n";
 				textLog.setText(log);
 			}
 			
 		// starts updating the home UI
 		startThread();
+	}
+	
+	public void getDate()
+	{
+		// get date
+		dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		date = new Date();		
 	}
 	
 	// responsible for updating the home UI
@@ -288,18 +302,21 @@ public class HomeUI extends JPanel
 				for(x = 1; x>0; x++) // Don't stop belieben! HAHAHAHA.
 				{
 					try {
-						Thread.sleep(5000); // 1000 milliseconds is equal to 1 sec
+						Thread.sleep(2000); // 1000 milliseconds is equal to 1 sec
 						x++;
+						
+						getDate();
+						
 						textField1.setText((rand.nextInt(15) + 10) + "%");
 						textField2.setText((rand.nextInt(15) + 10) + "%");
 						textField3.setText((rand.nextInt(10) + 30) + "°F");
 						textField4.setText((rand.nextInt(10) + 30) + "°F");
-						log = "Reading of sensor is running... \n" + log;
+						log = dateFormat.format(date) + " Reading of sensor is running... \n" + log;
 						textLog.setText(log);
 					}
 					catch(Exception e) 
 					{
-						log = "Reading of sensor is interrupted. \n" + log;
+						log = dateFormat.format(date) + " Reading of sensor is interrupted. \n" + log;
 						textLog.setText(log);
 					}
 				}
@@ -337,10 +354,12 @@ public class HomeUI extends JPanel
 			}
 			else if(action.equals("Temp"))
 			{
+				thread.suspend();
 				systemUI.showTemp();
 			}
 			else if(action.equals("Moist"))
 			{
+				thread.suspend();
 				systemUI.showMoist();
 			}
 			else if(action.equals("Home"))
