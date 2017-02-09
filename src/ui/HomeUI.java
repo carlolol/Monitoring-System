@@ -1,7 +1,6 @@
 package ui;
 
 import javax.swing.*;
-import javax.swing.text.DefaultCaret;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -25,7 +24,7 @@ public class HomeUI extends JPanel
 	private JLabel lblBg, lbllogo, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, 
 					lblMoistureSensor1, lblMoistureSensor2, lblTemperatureSensor1, lblTemperatureSensor2, 
 					lblReportLog;
-	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB;
+	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB, btnNet;
 	private JTextField textField1, textField2, textField3, textField4;
 	public int h, w, resH, resW;
 	public static String log = "";
@@ -147,9 +146,17 @@ public class HomeUI extends JPanel
 		textLog.setForeground(Color.WHITE);
         textLog.setEditable(false);
         textLog.setOpaque(false);
-        JScrollPane scrollPane = new JScrollPane(textLog);
         textLog.setBounds(w-555, h+100, 500, 120);
 		centerP.add(textLog);
+		
+		btnNet = new JButton("Check connection");
+		btnNet.setBackground(Color.WHITE);
+		btnNet.setForeground(Color.BLACK);
+		btnNet.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnNet.setBounds(w-560, h+72, 135, 23);
+		btnNet.setActionCommand("Net");
+		btnNet.addActionListener(loginHandler);
+		centerP.add(btnNet);
 		
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
@@ -262,26 +269,31 @@ public class HomeUI extends JPanel
 		add(centerP);
 		
 		// checks internet connectivity
-			boolean connectivity;
-						
-			try 
-			{
-				URL url = new URL("http://google.com/");
-				URLConnection conn = url.openConnection();
-				conn.connect();
-				connectivity = true;
-				log += dateFormat.format(date) + " Internet connection: Connected \n";
-				textLog.setText(log);
-			} 
-			catch (Exception e) 
-			{
-				connectivity = false;
-				log += dateFormat.format(date) + " Internet connection: Disconnected \n";
-				textLog.setText(log);
-			}
-			
+		checkNet();
+				
 		// starts updating the home UI
 		startThread();
+	}
+	
+	public void checkNet()
+	{
+		boolean connectivity;
+								
+		try 
+		{
+			URL url = new URL("http://google.com/");
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			connectivity = true;
+			log = dateFormat.format(date) + " Internet connection: Connected \n" + log;
+			textLog.setText(log);
+		} 
+		catch (Exception e) 
+		{
+			connectivity = false;
+			log = dateFormat.format(date) + " Internet connection: Disconnected \n" + log;
+			textLog.setText(log);
+		}
 	}
 	
 	public void getDate()
@@ -365,7 +377,11 @@ public class HomeUI extends JPanel
 			else if(action.equals("Home"))
 			{
 				systemUI.showMain();
-			}	
+			}
+			else if(action.equals("Net"))
+			{
+				checkNet();
+			}
 			repaint();
 		}
 	}

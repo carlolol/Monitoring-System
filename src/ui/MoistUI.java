@@ -8,56 +8,41 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RefineryUtilities;
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
 
 public class MoistUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	private JPanel centerP, moisture1, moisture2, xymoisture;
+	private JPanel centerP, xymoisture;
 	private SystemUI systemUI;
 	private Random rand;
-	private int dbl;
-	private DateFormat dateFormat;
-	private Date date;
-	
-	private int h, w, resH, resW, dblparse;
+	private int dbl, h, w, resH, resW;
 	
 	private JButton btnConnect, tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
 	private JLabel lblBg, lblMoistureSensor1, lblCurrentMoist, lblAverageMoist, lblBlock1, lblBlock2;
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
 	
-	private JFreeChart moistLine1, moistLine2, moistChart;
-	private ChartPanel chartPanel1, chartPanel2, chart;
-	public static DefaultCategoryDataset mdataset1, mdataset2;
-	public static int[] statMoist1, statMoist2;
+	private JFreeChart moistChart;
+	private ChartPanel chart;
 	
-	private XYSeries series;
-	private XYSeriesCollection dataset;
+	private TimeSeries series;
+	private TimeSeriesCollection dataset;
 	private XYPlot plot;
-	private NumberAxis xAxis, yAxis;
+	private NumberAxis yAxis;
 	
 	private Thread thread;
 	
 	public MoistUI(SystemUI systemUI)
 	{		
-		// get date
-		dateFormat = new SimpleDateFormat("HH:mm:ss");
-		date = new Date();	
-		
 		rand = new Random();
 		
 		// GUI components
@@ -249,27 +234,21 @@ public class MoistUI extends JPanel
 	
 	public void generateGraph()
 	{
-		series = new XYSeries("Moisture Sensor Reading");
-		dataset = new XYSeriesCollection(series);
-		moistChart = ChartFactory.createXYLineChart("Moisture Sensor Reading", "Time (minute)",
-				"Hygrometer Reading(Moisture Sensor)", dataset, PlotOrientation.VERTICAL, true, true, false);
+		series = new TimeSeries("Sensor Reading Line");
+		dataset = new TimeSeriesCollection(series);
+		moistChart = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
+				"Hygrometer Reading(Moisture Sensor)", dataset, true, true, false);
 		
-			// Assign it to the chart
+		// Assign it to the chart
 		plot = (XYPlot) moistChart.getXYPlot();
 		ValueAxis axis = plot.getDomainAxis();
-		xAxis = (NumberAxis) plot.getDomainAxis();
-		xAxis.setTickUnit(new NumberTickUnit(2));
-		xAxis.setAutoRangeIncludesZero(false);
-		axis = plot.getRangeAxis();
-		xAxis.setAutoRange(true);
-		xAxis.setFixedAutoRange(60000.0);  // 60 seconds
-		xAxis.setRange(0,60);
-
+		axis.setAutoRange(true);
+        axis.setFixedAutoRange(10000.0);  // 600000 seconds
+        axis = plot.getRangeAxis();
+        
 		yAxis = (NumberAxis) plot.getRangeAxis();
 		yAxis.setTickUnit(new NumberTickUnit(2));
-		yAxis.setAutoRangeIncludesZero(false);
-		yAxis.setRange(30,40);
-		//plot.setDomainAxis(xAxis);
+		yAxis.setRange(20,50);
 		
 		chart = new ChartPanel(moistChart);
 		chart.setPreferredSize(new Dimension(900, 500));
@@ -295,16 +274,11 @@ public class MoistUI extends JPanel
 				{
 					try 
 					{
-						if(x==60)
-						{
-							series.clear();
-							x=0;
-						}
-						Thread.sleep(200);
+						Thread.sleep(1000);
 						dbl = rand.nextInt(10) + 30;
 						textField1.setText((rand.nextInt(15) + 10) + "%");
 						textField2.setText((rand.nextInt(15) + 10) + "%");
-						series.add(x, dbl);
+						series.add(new Millisecond(), dbl);
 					} 
 					catch(Exception e) 
 					{
@@ -339,7 +313,7 @@ public class MoistUI extends JPanel
 			}
 			else if(action.equals("About"))
 			{
-				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.09\n\n"
+				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.17\n\n"
 						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
 						"About", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -347,35 +321,21 @@ public class MoistUI extends JPanel
 			{
 				btnConnect.setText("Disconnect");
 				btnConnect.setActionCommand("Disconnect");
-				//textField1.setText(statMoist1[23] + "%");
 			}
 			else if(action.equals("Disconnect"))
 			{
 				btnConnect.setText("Connect");
 				btnConnect.setActionCommand("Connect");
-				//textField1.setText(statMoist1[23] + "%");
 			}
 			else if(action.equals("Next"))
 			{
 				nextB.setEnabled(false);
 				previousB.setEnabled(true);
-				moisture1.setBounds(w-600, h-250, 0, 0);
-				moisture1.validate();
-				moisture2.setBounds(w-600, h-250, 900, 505);
-				moisture2.validate();
-				
-				lblMoistureSensor1.setText("Moisture Sensor #2");
 			}
 			else if(action.equals("Previous"))
 			{
 				previousB.setEnabled(false);
 				nextB.setEnabled(true);
-				moisture2.setBounds(w-600, h-250, 0, 0);
-				moisture2.validate();
-				moisture1.setBounds(w-600, h-250, 900, 505);
-				moisture1.validate();
-				
-				lblMoistureSensor1.setText("Moisture Sensor #1");
 			}
 			else if(action.equals("Temp"))
 			{

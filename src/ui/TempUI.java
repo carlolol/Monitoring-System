@@ -5,7 +5,13 @@ import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,29 +21,29 @@ import java.util.Random;
 public class TempUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	private JPanel centerP, temperature1, temperature2;;
+	private JPanel centerP, xytemp;
 	private SystemUI systemUI;
 	private Random rand;
-	
-	private int h, w, resH, resW;
+	private int dbl, h, w, resH, resW;
 	
 	private JButton btnConnect, tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
 	private JLabel lblBg, lblTemperatureSensor1, lblCurrentTemp, lblAverageTemp, lblBlock1, lblBlock2;
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
 		
-	private JFreeChart tempLine1, tempLine2;
-	private ChartPanel chartPanel1, chartPanel2;
-	public static DefaultCategoryDataset tdataset1, tdataset2;
-	public static int[] statTemp1, statTemp2;
+	private JFreeChart tempChart;
+	private ChartPanel chart;
+	
+	private TimeSeries series;
+	private TimeSeriesCollection dataset;
+	private XYPlot plot;
+	private NumberAxis yAxis;
 	
 	private Thread thread;
 	
 	public TempUI(SystemUI systemUI)
 	{
 		rand = new Random();
-		
-		generateRandomValue();
 		
 		// GUI components
 		resH = SystemUI.getH();
@@ -226,50 +232,34 @@ public class TempUI extends JPanel
 		startThread();
 	}
 	
-	public void generateRandomValue()
-	{
-		statTemp1 = new int[24];
-		statTemp2 = new int[24];
-		
-		// temperature
-		for(int a = 0; a < statTemp1.length; a++)
-		statTemp1[a] = rand.nextInt(10) + 30;
-		
-		for(int a = 0; a < statTemp2.length; a++)
-		statTemp2[a] = rand.nextInt(10) + 30;
-				
-		tdataset1 = new DefaultCategoryDataset();
-		for(int a = 0; a < statTemp1.length; a++)
-		tdataset1.addValue(statTemp1[a], "temperature reading", "" + a + ":00");
-				
-		tdataset2 = new DefaultCategoryDataset();
-		for(int a = 0; a < statTemp2.length; a++)
-		tdataset2.addValue(statTemp2[a], "temperature reading", "" + a + ":00");
-	}
-	
 	public void generateGraph()
 	{
-		tempLine1 = ChartFactory.createLineChart("Temperature #1", "Time", "Temperature", tdataset1);
-		chartPanel1 = new ChartPanel(tempLine1);
-		chartPanel1.setPreferredSize(new Dimension(900, 500));
-		chartPanel1.setMouseZoomable(false);
+		series = new TimeSeries("Sensor Reading Line");
+		dataset = new TimeSeriesCollection(series);
+		tempChart = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
+				"Temperature Reading(ds18b20 Sensor)", dataset, true, true, false);
 		
-		temperature1 = new JPanel();
-		temperature1.setBounds(w-600, h-250, 900, 505);
-		temperature1.add(chartPanel1, BorderLayout.CENTER);
-		temperature1.validate();
-		centerP.add(temperature1);
+		// Assign it to the chart
+		plot = (XYPlot) tempChart.getXYPlot();
+		ValueAxis axis = plot.getDomainAxis();
+		axis.setAutoRange(true);
+        axis.setFixedAutoRange(10000.0);  // 600000 seconds
+        axis = plot.getRangeAxis();
+        
+		yAxis = (NumberAxis) plot.getRangeAxis();
+		yAxis.setTickUnit(new NumberTickUnit(2));
+		yAxis.setRange(20,60);
 		
-		tempLine2 = ChartFactory.createLineChart("Temperature #2", "Time", "Temperature", tdataset2);
-		chartPanel2 = new ChartPanel(tempLine2);
-		chartPanel2.setPreferredSize(new Dimension(900, 500));
-		chartPanel2.setMouseZoomable(false);
+		chart = new ChartPanel(tempChart);
+		chart.setPreferredSize(new Dimension(900, 500));
+		chart.setMouseZoomable(false);
 		
-		temperature2 = new JPanel();
-		temperature2.setBounds(w-600, h-250, 0, 0);
-		temperature2.add(chartPanel2, BorderLayout.CENTER);
-		temperature2.validate();
-		centerP.add(temperature2);
+		xytemp = new JPanel();
+		xytemp.setBounds(w-600, h-250, 900, 505);
+		xytemp.add(chart, BorderLayout.CENTER);
+		xytemp.validate();
+		
+		centerP.add(xytemp);
 	}
 	
 	// responsible for updating the temperature UI
@@ -284,13 +274,11 @@ public class TempUI extends JPanel
 				{
 					try 
 					{
-						Thread.sleep(2000);
-						x++;
+						Thread.sleep(1000);
+						dbl = rand.nextInt(10) + 30;
 						textField1.setText((rand.nextInt(10) + 30) + "°F");
 						textField2.setText((rand.nextInt(10) + 30) + "°F");
-						generateRandomValue();
-						generateGraph();
-						temperature1.validate();
+						series.add(new Millisecond(), dbl);
 					} 
 					catch(Exception e) 
 					{
@@ -333,35 +321,21 @@ public class TempUI extends JPanel
 			{
 				btnConnect.setText("Disconnect");
 				btnConnect.setActionCommand("Disconnect");
-				//textField1.setText(statMoist1[23] + "%");
 			}
 			else if(action.equals("Disconnect"))
 			{
 				btnConnect.setText("Connect");
 				btnConnect.setActionCommand("Connect");
-				//textField1.setText(statMoist1[23] + "%");
 			}
 			else if(action.equals("Next"))
 			{
 				nextB.setEnabled(false);
 				previousB.setEnabled(true);
-				temperature1.setBounds(w-600, h-250, 0, 0);
-				temperature1.validate();
-				temperature2.setBounds(w-600, h-250, 900, 505);
-				temperature2.validate();
-				
-				lblTemperatureSensor1.setText("Temperature Sensor #2");
 			}
 			else if(action.equals("Previous"))
 			{
 				previousB.setEnabled(false);
 				nextB.setEnabled(true);
-				temperature2.setBounds(w-600, h-250, 0, 0);
-				temperature2.validate();
-				temperature1.setBounds(w-600, h-250, 900, 505);
-				temperature1.validate();
-				
-				lblTemperatureSensor1.setText("Temperature Sensor #1");
 			}
 			else if(action.equals("Temp"))
 			{
