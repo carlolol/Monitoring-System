@@ -1,14 +1,17 @@
 package ui;
 
+
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
 import java.net.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import dao.FirebaseDAO;
 
 public class HomeUI extends JPanel
 {
@@ -19,6 +22,8 @@ public class HomeUI extends JPanel
 	private Random rand;
 	private DateFormat dateFormat;
 	private Date date;
+	
+	private FirebaseDAO fdao;
 	
 	private JTextArea textLog;
 	private JLabel lblBg, lbllogo, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, 
@@ -31,8 +36,9 @@ public class HomeUI extends JPanel
 	
 	public static Thread thread;
 	
-	public HomeUI(SystemUI systemUI) 
+	public HomeUI(SystemUI systemUI, FirebaseDAO fdao) 
 	{
+		this.fdao = fdao;
 		rand = new Random();
 	
 		getDate();
@@ -107,7 +113,7 @@ public class HomeUI extends JPanel
 		textField3.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField3.setForeground(Color.WHITE);
 		textField3.setHorizontalAlignment(SwingConstants.CENTER);
-		textField3.setText("0°F");
+		textField3.setText("-");
 		textField3.setEditable(false);
 		textField3.setOpaque(false);
 		textField3.setBounds(w+100, h-170, 200, 90);
@@ -126,7 +132,7 @@ public class HomeUI extends JPanel
 		textField4.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField4.setForeground(Color.WHITE);
 		textField4.setHorizontalAlignment(SwingConstants.CENTER);
-		textField4.setText("0°F");
+		textField4.setText("-");
 		textField4.setEditable(false);
 		textField4.setOpaque(false);
 		textField4.setBounds(w+100, h+70, 200, 90);
@@ -321,15 +327,15 @@ public class HomeUI extends JPanel
 						
 						textField1.setText((rand.nextInt(15) + 10) + "%");
 						textField2.setText((rand.nextInt(15) + 10) + "%");
-						textField3.setText((rand.nextInt(10) + 30) + "°F");
-						textField4.setText((rand.nextInt(10) + 30) + "°F");
+						textField3.setText(fdao.getTemperature().getFirst() + "\u00b0C");
+						textField4.setText((rand.nextInt(10) + 30) + "\u00b0C");
 						log = dateFormat.format(date) + " Reading of sensor is running... \n" + log;
 						textLog.setText(log);
 					}
 					catch(Exception e) 
 					{
-						log = dateFormat.format(date) + " Reading of sensor is interrupted. \n" + log;
-						textLog.setText(log);
+//						log = dateFormat.format(date) + " Reading of sensor is interrupted. \n" + log;
+//						textLog.setText(log);
 					}
 				}
 			}

@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Random;
@@ -11,6 +12,8 @@ import java.util.Random;
 import javax.swing.*;
 
 import org.jfree.data.category.DefaultCategoryDataset;
+
+import dao.FirebaseDAO;
 
 public class SystemUI extends JFrame
 {
@@ -23,6 +26,8 @@ public class SystemUI extends JFrame
 	private MoistUI moistUI;
 	private static int h, w;
 	private ImageIcon img;
+	
+	private FirebaseDAO fdao;
 	
 	public SystemUI()
 	{	
@@ -37,20 +42,34 @@ public class SystemUI extends JFrame
 
 		// checks if screen resolution is compatible
 		if((768>h) || (1366>w))
-		{
 			screenError();
-		}
 			
-		setSize( w , h );
+		setSize(w, h);
 		
 		container = getContentPane();
+		
+		try {
+			fdao = new FirebaseDAO();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		fdao.startRetrieveData();
 		
 		card = new CardLayout();
 		container.setLayout(card);
 		
-		homeUI = new HomeUI(this);
+		homeUI = new HomeUI(this, fdao);
 		container.add(homeUI, "Main");
 		
+		tempUI = new TempUI(this, fdao);
+		container.add(tempUI, "Temperature");
+		
+		moistUI = new MoistUI(this);
+		container.add(moistUI, "Moisture");
+		
+		setTitle("Oryza Sativa Grains Monitoring System");	
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -69,7 +88,6 @@ public class SystemUI extends JFrame
 	
 	public void showMain()
 	{
-		setTitle("Oryza Sativa Grains Monitoring System");	
 		setLocationRelativeTo(null);
 		card.show(container, "Main");
 		repaint();
@@ -77,9 +95,7 @@ public class SystemUI extends JFrame
 	
 	public void showTemp()
 	{
-		setTitle("Oryza Sativa Grains Monitoring System");
-		tempUI = new TempUI(this);
-		container.add(tempUI, "Temperature");
+//		setTitle("Oryza Sativa Grains Monitoring System");
 		setLocationRelativeTo(null);
 		card.show(container, "Temperature");
 		repaint();
@@ -87,9 +103,7 @@ public class SystemUI extends JFrame
 	
 	public void showMoist()
 	{
-		setTitle("Oryza Sativa Grains Monitoring System");
-		moistUI = new MoistUI(this);
-		container.add(moistUI, "Moisture");
+//		setTitle("Oryza Sativa Grains Monitoring System");
 		setLocationRelativeTo(null);
 		card.show(container, "Moisture");
 		repaint();

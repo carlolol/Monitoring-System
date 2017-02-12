@@ -1,6 +1,7 @@
 package ui;
 
 import javax.swing.*;
+import dao.FirebaseDAO;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -24,12 +25,15 @@ public class TempUI extends JPanel
 	private JPanel centerP, xytemp;
 	private SystemUI systemUI;
 	private Random rand;
-	private int dbl, h, w, resH, resW;
+	private int h, w, resH, resW;
+	private double dbl;
 	
 	private JButton btnConnect, tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
 	private JLabel lblBg, lblTemperatureSensor1, lblCurrentTemp, lblAverageTemp, lblBlock1, lblBlock2;
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
+	
+	private FirebaseDAO fdao;
 		
 	private JFreeChart tempChart;
 	private ChartPanel chart;
@@ -41,8 +45,9 @@ public class TempUI extends JPanel
 	
 	private Thread thread;
 	
-	public TempUI(SystemUI systemUI)
+	public TempUI(SystemUI systemUI, FirebaseDAO fdao)
 	{
+		this.fdao = fdao;
 		rand = new Random();
 		
 		// GUI components
@@ -86,7 +91,7 @@ public class TempUI extends JPanel
 		textField1.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField1.setForeground(Color.WHITE);
 		textField1.setHorizontalAlignment(SwingConstants.CENTER);
-		textField1.setText("0°F");
+		textField1.setText("0\u00b0C");
 		textField1.setEditable(false);
 		textField1.setOpaque(false);
 		textField1.setBounds(w+400, h-230, 200, 90);
@@ -104,7 +109,7 @@ public class TempUI extends JPanel
 		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textField2.setForeground(Color.WHITE);
 		textField2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField2.setText("0°F");
+		textField2.setText("0\u00b0C");
 		textField2.setEditable(false);
 		textField2.setOpaque(false);
 		textField2.setBounds(w+400, h-40, 200, 90);
@@ -275,13 +280,14 @@ public class TempUI extends JPanel
 					try 
 					{
 						Thread.sleep(1000);
-						dbl = rand.nextInt(10) + 30;
-						textField1.setText((rand.nextInt(10) + 30) + "°F");
-						textField2.setText((rand.nextInt(10) + 30) + "°F");
+						dbl = fdao.getTemperature().getFirst();
+						textField1.setText(fdao.getTemperature().getFirst() + "\u00b0C");
+						textField2.setText((rand.nextInt(10) + 30) + "\u00b0C");
 						series.add(new Millisecond(), dbl);
 					} 
 					catch(Exception e) 
 					{
+//						e.printStackTrace();
 						System.out.print("ERROR");
 					}
 				}

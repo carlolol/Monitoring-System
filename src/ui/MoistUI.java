@@ -8,6 +8,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
@@ -24,10 +25,10 @@ public class MoistUI extends JPanel
 	private JPanel centerP, xymoisture;
 	private SystemUI systemUI;
 	private Random rand;
-	private int dbl, h, w, resH, resW;
+	private int dbl, h, w, resH, resW, x;
 	
 	private JButton btnConnect, tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
-	private JLabel lblBg, lblMoistureSensor1, lblCurrentMoist, lblAverageMoist, lblBlock1, lblBlock2;
+	private JLabel lblBg, lblMoistureSensor, lblCurrentMoist, lblAverageMoist, lblBlock1, lblBlock2;
 	private JTextField textField1, textField2;
 	private LoginHandler loginHandler;
 	
@@ -59,12 +60,12 @@ public class MoistUI extends JPanel
 		
 		loginHandler = new LoginHandler();
 		
-		lblMoistureSensor1 = new JLabel("Moisture Sensor #1");
-		lblMoistureSensor1.setForeground(Color.BLACK);
-		lblMoistureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMoistureSensor1.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblMoistureSensor1.setBounds(w-500, h-300, 180, 50);
-		centerP.add(lblMoistureSensor1);
+		lblMoistureSensor = new JLabel("Moisture Sensor #1");
+		lblMoistureSensor.setForeground(Color.BLACK);
+		lblMoistureSensor.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMoistureSensor.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblMoistureSensor.setBounds(w-500, h-300, 180, 50);
+		centerP.add(lblMoistureSensor);
 			
 		btnConnect = new JButton("Connect");
 		btnConnect.setBackground(Color.WHITE);
@@ -219,7 +220,7 @@ public class MoistUI extends JPanel
 		lblBlock2.setBounds(w+380, h-100,300,180);
 		centerP.add(lblBlock2);
 				
-		generateGraph();
+		generateGraph1();
 		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
@@ -227,13 +228,11 @@ public class MoistUI extends JPanel
 		centerP.add(lblBg);
 		
 		add(centerP);
-		
-		// starts updating the home UI
-		startThread();
 	}
 	
-	public void generateGraph()
+	public void generateGraph1()
 	{
+		lblMoistureSensor.setText("Moisture Sensor #1");
 		series = new TimeSeries("Sensor Reading Line");
 		dataset = new TimeSeriesCollection(series);
 		moistChart = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
@@ -241,6 +240,39 @@ public class MoistUI extends JPanel
 		
 		// Assign it to the chart
 		plot = (XYPlot) moistChart.getXYPlot();
+		plot.getRenderer().setSeriesPaint(0, Color.RED);
+		ValueAxis axis = plot.getDomainAxis();
+		axis.setAutoRange(true);
+        axis.setFixedAutoRange(10000.0);  // 600000 seconds
+        axis = plot.getRangeAxis();
+        
+		yAxis = (NumberAxis) plot.getRangeAxis();
+		yAxis.setTickUnit(new NumberTickUnit(2));
+		yAxis.setRange(20,50);
+		
+		chart = new ChartPanel(moistChart);
+		chart.setPreferredSize(new Dimension(900, 500));
+		chart.setMouseZoomable(false);
+		
+		xymoisture = new JPanel();
+		xymoisture.setBounds(w-600, h-250, 900, 505);
+		xymoisture.add(chart, BorderLayout.CENTER);
+		xymoisture.validate();
+		
+		centerP.add(xymoisture);
+	}
+	
+	public void generateGraph2()
+	{
+		lblMoistureSensor.setText("Moisture Sensor #2");
+		series = new TimeSeries("Sensor Reading Line");
+		dataset = new TimeSeriesCollection(series);
+		moistChart = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
+				"Hygrometer Reading(Moisture Sensor)", dataset, true, true, false);
+		
+		// Assign it to the chart
+		plot = (XYPlot) moistChart.getXYPlot();
+		plot.getRenderer().setSeriesPaint(0, Color.BLUE);
 		ValueAxis axis = plot.getDomainAxis();
 		axis.setAutoRange(true);
         axis.setFixedAutoRange(10000.0);  // 600000 seconds
@@ -268,8 +300,7 @@ public class MoistUI extends JPanel
 		thread = new Thread()
 		{
 			public void run(){
-				int x;
-				
+								
 				for(x = 0; x>=0; x++)
 				{
 					try 
@@ -321,33 +352,103 @@ public class MoistUI extends JPanel
 			{
 				btnConnect.setText("Disconnect");
 				btnConnect.setActionCommand("Disconnect");
+				startThread();
 			}
 			else if(action.equals("Disconnect"))
 			{
 				btnConnect.setText("Connect");
 				btnConnect.setActionCommand("Connect");
+				series.clear();
+				thread.suspend();
 			}
 			else if(action.equals("Next"))
 			{
+				if(btnConnect.getActionCommand()==("Disconnect"))
+				{
+					int result = JOptionPane.showConfirmDialog(null, "Continue to change the sensor? "
+							+ "Current connection will be disconnected.", "Current session is active", 
+							JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+					if(result == JOptionPane.YES_OPTION)
+					{
+		              btnConnect.setText("Connect");
+		              btnConnect.setActionCommand("Connect");
+		              series.clear();
+		              thread.suspend();
+		              generateGraph2();
+		            }
+				}
+				else
+				{
+					btnConnect.setText("Connect");
+					btnConnect.setActionCommand("Connect");
+		            generateGraph2();
+				}
+				
 				nextB.setEnabled(false);
 				previousB.setEnabled(true);
 			}
 			else if(action.equals("Previous"))
 			{
+				if(btnConnect.getActionCommand()==("Disconnect"))
+				{
+					int result = JOptionPane.showConfirmDialog(null, "Continue to change the sensor? "
+							+ "Current connection will be disconnected.", "Current session is active", 
+							JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+					if(result == JOptionPane.YES_OPTION)
+					{
+		              btnConnect.setText("Connect");
+		              btnConnect.setActionCommand("Connect");
+		              series.clear();
+		              thread.suspend();
+		              generateGraph1();
+		            }
+				}
+				else
+				{
+					btnConnect.setText("Connect");
+					btnConnect.setActionCommand("Connect");
+		            generateGraph1();
+				}
+				
 				previousB.setEnabled(false);
 				nextB.setEnabled(true);
 			}
 			else if(action.equals("Temp"))
 			{
+				if(btnConnect.getActionCommand()==("Disconnect"))
+				{
+					int result = JOptionPane.showConfirmDialog(null, "Continue to interrupt the session? "
+							+ "Current connection will be disconnected.", "Current session is active", 
+							JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+					if(result == JOptionPane.YES_OPTION)
+					{
+		              btnConnect.setText("Connect");
+		              btnConnect.setActionCommand("Connect");
+		              series.clear();
+		              thread.suspend();
+		            }
+				}
 				systemUI.showTemp();
-			}
-			else if(action.equals("Moist"))
-			{
-				systemUI.showMoist();
 			}
 			else if(action.equals("Home"))
 			{
-				thread.suspend();
+				if(btnConnect.getActionCommand()==("Disconnect"))
+				{
+					int result = JOptionPane.showConfirmDialog(null, "Continue to interrupt the session? "
+							+ "Current connection will be disconnected.", "Current session is active", 
+							JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+					if(result == JOptionPane.YES_OPTION)
+					{
+		              btnConnect.setText("Connect");
+		              btnConnect.setActionCommand("Connect");
+		              series.clear();
+		              thread.suspend();
+		            }
+				}
 				HomeUI.thread.resume();
 				systemUI.showMain();
 			}
