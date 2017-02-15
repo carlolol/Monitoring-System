@@ -5,13 +5,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Random;
-
 import javax.swing.*;
-
-import org.jfree.data.category.DefaultCategoryDataset;
 
 import dao.FirebaseDAO;
 

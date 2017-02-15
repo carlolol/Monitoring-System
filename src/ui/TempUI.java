@@ -17,6 +17,8 @@ import org.jfree.data.time.TimeSeriesCollection;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Random;
 
 public class TempUI extends JPanel
@@ -26,11 +28,11 @@ public class TempUI extends JPanel
 	private SystemUI systemUI;
 	private Random rand;
 	private int h, w, resH, resW;
-	private double dbl;
+	private double tempValue, tempValueBeta;
 	
-	private JButton btnConnect, tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
-	private JLabel lblBg, lblTemperatureSensor1, lblCurrentTemp, lblAverageTemp, lblBlock1, lblBlock2;
-	private JTextField textField1, textField2;
+	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
+	private JLabel lblBg, lblTemperatureSensor, lblTemperature1, lblTemperature2, lblBlock1, lblBlock2;
+	private JTextField textTemperature1, textTemperature2;
 	private LoginHandler loginHandler;
 	
 	private FirebaseDAO fdao;
@@ -42,11 +44,15 @@ public class TempUI extends JPanel
 	private TimeSeriesCollection dataset;
 	private XYPlot plot;
 	private NumberAxis yAxis;
+	private ValueAxis axis;
+	private NumberFormat formatter;
 	
 	private Thread thread;
 	
 	public TempUI(SystemUI systemUI, FirebaseDAO fdao)
 	{
+		formatter = new DecimalFormat("#0.000");
+		
 		this.fdao = fdao;
 		rand = new Random();
 		
@@ -64,57 +70,48 @@ public class TempUI extends JPanel
 		
 		loginHandler = new LoginHandler();
 		
-		lblTemperatureSensor1 = new JLabel("Temperature Sensor #1");
-		lblTemperatureSensor1.setForeground(Color.BLACK);
-		lblTemperatureSensor1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTemperatureSensor1.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblTemperatureSensor1.setBounds(w-492, h-300, 200, 50);
-		centerP.add(lblTemperatureSensor1);
+		lblTemperatureSensor = new JLabel("Temperature Sensor #1");
+		lblTemperatureSensor.setForeground(Color.BLACK);
+		lblTemperatureSensor.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTemperatureSensor.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblTemperatureSensor.setBounds(w-600, h-300, 200, 50);
+		centerP.add(lblTemperatureSensor);
 		
-		btnConnect = new JButton("Connect");
-		btnConnect.setBackground(Color.WHITE);
-		btnConnect.setForeground(Color.BLACK);
-		btnConnect.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnConnect.setBounds(w-600, h-285, 100, 23);
-		btnConnect.setActionCommand("Connect");
-		btnConnect.addActionListener(loginHandler);
-		centerP.add(btnConnect);
+		lblTemperature1 = new JLabel("Temperature Sensor #1");
+		lblTemperature1.setForeground(Color.BLACK);
+		lblTemperature1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTemperature1.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblTemperature1.setBounds(w+200, h-300, 600, 50);
+		centerP.add(lblTemperature1);
 		
-		lblCurrentTemp = new JLabel("Temperature");
-		lblCurrentTemp.setForeground(Color.BLACK);
-		lblCurrentTemp.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCurrentTemp.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblCurrentTemp.setBounds(w+200, h-300, 600, 50);
-		centerP.add(lblCurrentTemp);
+		textTemperature1 = new JTextField();
+		textTemperature1.setFont(new Font("Tahoma", Font.PLAIN, 48));
+		textTemperature1.setForeground(Color.WHITE);
+		textTemperature1.setHorizontalAlignment(SwingConstants.CENTER);
+		textTemperature1.setText("-");
+		textTemperature1.setEditable(false);
+		textTemperature1.setOpaque(false);
+		textTemperature1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		textTemperature1.setBounds(w+400, h-230, 200, 90);
+		centerP.add(textTemperature1);
 		
-		textField1 = new JTextField();
-		textField1.setFont(new Font("Tahoma", Font.PLAIN, 48));
-		textField1.setForeground(Color.WHITE);
-		textField1.setHorizontalAlignment(SwingConstants.CENTER);
-		textField1.setText("0\u00b0C");
-		textField1.setEditable(false);
-		textField1.setOpaque(false);
-		textField1.setBounds(w+400, h-230, 200, 90);
-		centerP.add(textField1);
-		textField1.setColumns(10);
+		lblTemperature2 = new JLabel("Temperature Sensor #2");
+		lblTemperature2.setForeground(Color.BLACK);
+		lblTemperature2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTemperature2.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblTemperature2.setBounds(w+200, h-110, 600, 50);
+		centerP.add(lblTemperature2);
 		
-		lblAverageTemp = new JLabel("Average temperature");
-		lblAverageTemp.setForeground(Color.BLACK);
-		lblAverageTemp.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAverageTemp.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblAverageTemp.setBounds(w+200, h-110, 600, 50);
-		centerP.add(lblAverageTemp);
-		
-		textField2 = new JTextField();
-		textField2.setFont(new Font("Tahoma", Font.PLAIN, 48));
-		textField2.setForeground(Color.WHITE);
-		textField2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField2.setText("0\u00b0C");
-		textField2.setEditable(false);
-		textField2.setOpaque(false);
-		textField2.setBounds(w+400, h-40, 200, 90);
-		centerP.add(textField2);
-		textField2.setColumns(10);	
+		textTemperature2 = new JTextField();
+		textTemperature2.setFont(new Font("Tahoma", Font.PLAIN, 48));
+		textTemperature2.setForeground(Color.WHITE);
+		textTemperature2.setHorizontalAlignment(SwingConstants.CENTER);
+		textTemperature2.setText("-");
+		textTemperature2.setEditable(false);
+		textTemperature2.setOpaque(false);
+		textTemperature2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		textTemperature2.setBounds(w+400, h-40, 200, 90);
+		centerP.add(textTemperature2);
 		
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
@@ -224,7 +221,7 @@ public class TempUI extends JPanel
 		lblBlock2.setBounds(w+380, h-100,300,180);
 		centerP.add(lblBlock2);
 		
-		generateGraph();
+		generateGraph1();
 		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
@@ -237,8 +234,9 @@ public class TempUI extends JPanel
 		startThread();
 	}
 	
-	public void generateGraph()
+	public void generateGraph1()
 	{
+		lblTemperatureSensor.setText("Temperature Sensor #1");
 		series = new TimeSeries("Sensor Reading Line");
 		dataset = new TimeSeriesCollection(series);
 		tempChart = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
@@ -248,11 +246,43 @@ public class TempUI extends JPanel
 		plot = (XYPlot) tempChart.getXYPlot();
 		ValueAxis axis = plot.getDomainAxis();
 		axis.setAutoRange(true);
-        axis.setFixedAutoRange(10000.0);  // 600000 seconds
+        axis.setFixedAutoRange(600000.0);  // 600000 seconds
         axis = plot.getRangeAxis();
         
 		yAxis = (NumberAxis) plot.getRangeAxis();
-		yAxis.setTickUnit(new NumberTickUnit(2));
+		yAxis.setTickUnit(new NumberTickUnit(5));
+		yAxis.setRange(20,60);
+		
+		chart = new ChartPanel(tempChart);
+		chart.setPreferredSize(new Dimension(900, 500));
+		chart.setMouseZoomable(false);
+		
+		xytemp = new JPanel();
+		xytemp.setBounds(w-600, h-250, 900, 505);
+		xytemp.add(chart, BorderLayout.CENTER);
+		xytemp.validate();
+		
+		centerP.add(xytemp);
+	}
+	
+	public void generateGraph2()
+	{
+		lblTemperatureSensor.setText("Temperature Sensor #2");
+		series = new TimeSeries("Sensor Reading Line");
+		dataset = new TimeSeriesCollection(series);
+		tempChart = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
+				"Temperature Reading(ds18b20 Sensor)", dataset, true, true, false);
+		
+		// Assign it to the chart
+		plot = (XYPlot) tempChart.getXYPlot();
+		plot.getRenderer().setSeriesPaint(0, Color.BLUE);
+		axis = plot.getDomainAxis();
+		axis.setAutoRange(true);
+        axis.setFixedAutoRange(600000.0);  // 600000 seconds
+        axis = plot.getRangeAxis();
+        
+		yAxis = (NumberAxis) plot.getRangeAxis();
+		yAxis.setTickUnit(new NumberTickUnit(5));
 		yAxis.setRange(20,60);
 		
 		chart = new ChartPanel(tempChart);
@@ -279,15 +309,24 @@ public class TempUI extends JPanel
 				{
 					try 
 					{
-						Thread.sleep(1000);
-						dbl = fdao.getTemperature().getFirst();
-						textField1.setText(fdao.getTemperature().getFirst() + "\u00b0C");
-						textField2.setText((rand.nextInt(10) + 30) + "\u00b0C");
-						series.add(new Millisecond(), dbl);
+						Thread.sleep(60000); //1000 miliseconds = 1 seconds 60000
+						tempValue = fdao.getTemperature().getFirst();
+						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(10);
+						
+						textTemperature1.setText(formatter.format(tempValue) + "\u00b0C");
+						textTemperature2.setText(formatter.format(tempValueBeta) + "\u00b0C");
+						
+						if(lblTemperatureSensor.getText()=="Temperature Sensor #1")
+						{
+							series.add(new Millisecond(), tempValue);
+						}
+						else if(lblTemperatureSensor.getText()=="Temperature Sensor #2")
+						{
+							series.add(new Millisecond(), tempValueBeta);
+						}
 					} 
 					catch(Exception e) 
 					{
-//						e.printStackTrace();
 						System.out.print("ERROR");
 					}
 				}
@@ -319,29 +358,39 @@ public class TempUI extends JPanel
 			}
 			else if(action.equals("About"))
 			{
-				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.09\n\n"
+				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.19\n\n"
 						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
 						"About", JOptionPane.INFORMATION_MESSAGE);
 			}
-			else if(action.equals("Connect"))
-			{
-				btnConnect.setText("Disconnect");
-				btnConnect.setActionCommand("Disconnect");
-			}
-			else if(action.equals("Disconnect"))
-			{
-				btnConnect.setText("Connect");
-				btnConnect.setActionCommand("Connect");
-			}
 			else if(action.equals("Next"))
 			{
-				nextB.setEnabled(false);
-				previousB.setEnabled(true);
+				int result = JOptionPane.showConfirmDialog(null, "Continue to change the sensor? "
+						+ "Current connection will be disconnected.", "Current session is active", 
+						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+					if(result == JOptionPane.YES_OPTION)
+					{
+						lblTemperatureSensor.setText("Temperature Sensor #2");
+						series.clear();
+						generateGraph2();
+						nextB.setEnabled(false);
+						previousB.setEnabled(true);
+					}
 			}
 			else if(action.equals("Previous"))
 			{
-				previousB.setEnabled(false);
-				nextB.setEnabled(true);
+				int result = JOptionPane.showConfirmDialog(null, "Continue to change the sensor? "
+						+ "Current connection will be disconnected.", "Current session is active", 
+						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+					if(result == JOptionPane.YES_OPTION)
+					{
+						lblTemperatureSensor.setText("Temperature Sensor #1");
+						series.clear();
+						generateGraph1();
+						previousB.setEnabled(false);
+						nextB.setEnabled(true);
+					}
 			}
 			else if(action.equals("Temp"))
 			{
@@ -353,8 +402,6 @@ public class TempUI extends JPanel
 			}
 			else if(action.equals("Home"))
 			{
-				thread.suspend();
-				HomeUI.thread.resume();
 				systemUI.showMain();
 			}
 			repaint();

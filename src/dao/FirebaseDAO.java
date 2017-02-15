@@ -122,18 +122,18 @@ public class FirebaseDAO
 		return temperature;
 	}
 	
-	public static void main(String args[]) throws FileNotFoundException, InterruptedException
-	{
-		FirebaseDAO test = new FirebaseDAO();
-		test.startRetrieveData();
-		Thread.sleep(10000);
-		
-		while(true)
-		{
-			System.out.println(test.getDate().size());
-			Thread.sleep(1000);
-
-		}
-		
-	}
+//	public static void main(String args[]) throws FileNotFoundException, InterruptedException
+//	{
+//		FirebaseDAO test = new FirebaseDAO();
+//		test.startRetrieveData();
+//		Thread.sleep(10000);
+//		
+//		while(true)
+//		{
+//			System.out.println(test.getDate().size());
+//			Thread.sleep(1000);
+//
+//		}
+//		
+//	}
 }
