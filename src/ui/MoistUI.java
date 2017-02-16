@@ -14,6 +14,8 @@ import org.jfree.data.time.TimeSeriesCollection;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Random;
 
 public class MoistUI extends JPanel
@@ -22,25 +24,27 @@ public class MoistUI extends JPanel
 	private JPanel centerP, xymoisture;
 	private SystemUI systemUI;
 	private Random rand;
-	private int dbl, h, w, resH, resW, x;
-	
+	private int h, w, resH, resW, x;
+	private double moistValue, moistValueBeta;
+	private NumberFormat formatter;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
 	private JLabel lblBg, lblMoistureSensor, lblMoisture1, lblMoisture2, lblBlock1, lblBlock2;
 	private JTextField textMoisture1, textMoisture2;
 	private LoginHandler loginHandler;
-	
 	private JFreeChart moistChart;
 	private ChartPanel chart;
-	
 	private TimeSeries series;
 	private TimeSeriesCollection dataset;
 	private XYPlot plot;
 	private NumberAxis yAxis;
-	
 	private Thread thread;
 	
 	public MoistUI(SystemUI systemUI)
 	{		
+		// set the decimal format for the data
+		formatter = new DecimalFormat("#0.00");
+		
+		// misc
 		rand = new Random();
 		
 		// GUI components
@@ -82,7 +86,7 @@ public class MoistUI extends JPanel
 		textMoisture1.setBounds(w+400, h-230, 200, 90);
 		centerP.add(textMoisture1);
 				
-		lblMoisture2 = new JLabel("Average moisture content");
+		lblMoisture2 = new JLabel("Moisture content #2");
 		lblMoisture2.setForeground(Color.BLACK);
 		lblMoisture2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMoisture2.setFont(new Font("Times New Roman", Font.BOLD, 20));
@@ -208,6 +212,7 @@ public class MoistUI extends JPanel
 		lblBlock2.setBounds(w+380, h-100,300,180);
 		centerP.add(lblBlock2);
 				
+		// Jpanel for sensor #1
 		generateGraph1();
 		
 		lblBg = new JLabel();
@@ -217,9 +222,11 @@ public class MoistUI extends JPanel
 		
 		add(centerP);
 		
+		// starts updating of frame
 		startThread();
 	}
 	
+	// sensor #1
 	public void generateGraph1()
 	{
 		lblMoistureSensor.setText("Moisture Sensor #1");
@@ -228,7 +235,6 @@ public class MoistUI extends JPanel
 		moistChart = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
 				"Hygrometer Reading(Moisture Sensor)", dataset, true, true, false);
 		
-		// Assign it to the chart
 		plot = (XYPlot) moistChart.getXYPlot();
 		plot.getRenderer().setSeriesPaint(0, Color.RED);
 		ValueAxis axis = plot.getDomainAxis();
@@ -252,6 +258,7 @@ public class MoistUI extends JPanel
 		centerP.add(xymoisture);
 	}
 	
+	// sensor #2
 	public void generateGraph2()
 	{
 		lblMoistureSensor.setText("Moisture Sensor #2");
@@ -260,7 +267,6 @@ public class MoistUI extends JPanel
 		moistChart = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
 				"Hygrometer Reading(Moisture Sensor)", dataset, true, true, false);
 		
-		// Assign it to the chart
 		plot = (XYPlot) moistChart.getXYPlot();
 		plot.getRenderer().setSeriesPaint(0, Color.BLUE);
 		ValueAxis axis = plot.getDomainAxis();
@@ -284,7 +290,7 @@ public class MoistUI extends JPanel
 		centerP.add(xymoisture);
 	}
 	
-	// responsible for updating the moisture UI
+	// responsible for updating the frame
 	public void startThread()
 	{
 		thread = new Thread()
@@ -296,17 +302,35 @@ public class MoistUI extends JPanel
 					try 
 					{
 						Thread.sleep(1000);
-						dbl = rand.nextInt(10) + 30;
-						textMoisture1.setText(dbl + "%");
-						textMoisture2.setText((dbl + 5) + "%");
+						moistValue = rand.nextInt(10) + 20;
+						moistValueBeta = rand.nextInt(10) + 30;
 						
+						if(moistValue > 35)
+						{
+							textMoisture1.setForeground(Color.RED);	
+						}
+						else
+						{
+							textMoisture1.setForeground(Color.WHITE);
+						}
+						if(moistValueBeta > 35)
+						{
+							textMoisture2.setForeground(Color.RED);
+						}
+						else
+						{
+							textMoisture2.setForeground(Color.WHITE);
+						}
+						
+						textMoisture1.setText(formatter.format(moistValue) + "%");
+						textMoisture2.setText(formatter.format(moistValueBeta) + "%");
 						if(lblMoistureSensor.getText()=="Moisture Sensor #1")
 						{
-							series.add(new Millisecond(), dbl);
+							series.add(new Millisecond(), moistValue);
 						}
 						else if(lblMoistureSensor.getText()=="Moisture Sensor #2")
 						{
-							series.add(new Millisecond(), dbl+5);
+							series.add(new Millisecond(), moistValueBeta);
 						}
 					} 
 					catch(Exception e) 
@@ -342,7 +366,7 @@ public class MoistUI extends JPanel
 			}
 			else if(action.equals("About"))
 			{
-				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.19\n\n"
+				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.20\n\n"
 						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
 						"About", JOptionPane.INFORMATION_MESSAGE);
 			}

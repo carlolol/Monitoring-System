@@ -1,8 +1,6 @@
 package ui;
 
-
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
@@ -26,7 +24,6 @@ public class HomeUI extends JPanel
 	private Date date;
 	private FirebaseDAO fdao;
 	private Thread thread;
-	
 	private JTextArea textLog;
 	private JScrollPane scroll;
 	private JLabel lblBg, lbllogo, lblOryzaSativa, lblBlock1, lblBlock2, lblBlock3, lblBlock4, lblBlock5, 
@@ -34,17 +31,19 @@ public class HomeUI extends JPanel
 					lblReportLog;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB;
 	private JTextField textMoisture1, textMoisture2, textTemperature1, textTemperature2;
-	
 	private int h, w, resH, resW;
 	private double tempValue, tempValueBeta, moistValue, moistValueBeta;
 	private String log = "";
 	
 	public HomeUI(SystemUI systemUI, FirebaseDAO fdao) 
 	{
-		formatter = new DecimalFormat("#0.000");
+		// set the decimal format for the data
+		formatter = new DecimalFormat("#0.00");
+		
 		this.fdao = fdao;
-		rand = new Random();
-	
+		
+		// misc
+		rand = new Random();	
 		getDate();
 		
 		// GUI components
@@ -79,7 +78,7 @@ public class HomeUI extends JPanel
 		textMoisture1.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textMoisture1.setForeground(Color.WHITE);
 		textMoisture1.setHorizontalAlignment(SwingConstants.CENTER);
-		textMoisture1.setText("0%");
+		textMoisture1.setText("-");
 		textMoisture1.setEditable(false);
 		textMoisture1.setOpaque(false);
 		textMoisture1.setBounds(w+380, h-170, 200, 90);
@@ -97,7 +96,7 @@ public class HomeUI extends JPanel
 		textMoisture2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textMoisture2.setForeground(Color.WHITE);
 		textMoisture2.setHorizontalAlignment(SwingConstants.CENTER);
-		textMoisture2.setText("0%");
+		textMoisture2.setText("-");
 		textMoisture2.setEditable(false);
 		textMoisture2.setOpaque(false);
 		textMoisture2.setBounds(w+380, h+70, 200, 90);
@@ -270,12 +269,13 @@ public class HomeUI extends JPanel
 		// checks internet connectivity
 		checkNet();
 				
-		// starts updating the home UI
+		// starts updating of frame
 		startThread();
 	}
 	
 	public void checkNet()
 	{
+		@SuppressWarnings("unused")
 		boolean connectivity;
 								
 		try 
@@ -284,25 +284,25 @@ public class HomeUI extends JPanel
 			URLConnection conn = url.openConnection();
 			conn.connect();
 			connectivity = true;
-			log = dateFormat.format(date) + " Internet connection: Connected \n" + log;
+			log = dateFormat.format(date) + " Internet connection: Connected \n\n" + log;
 			textLog.setText(log);
 		} 
 		catch (Exception e) 
 		{
 			connectivity = false;
-			log = dateFormat.format(date) + " Internet connection: Disconnected \n" + log;
+			log = dateFormat.format(date) + " Internet connection: Disconnected \n\n" + log;
 			textLog.setText(log);
 		}
 	}
 	
+	// get date and time
 	public void getDate()
 	{
-		// get date
 		dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		date = new Date();		
 	}
 	
-	// responsible for updating the home UI
+	// responsible for updating the frame
 	public void startThread()
 	{
 		thread = new Thread()
@@ -313,17 +313,18 @@ public class HomeUI extends JPanel
 				for(x = 1; x>0; x++)
 				{
 					try {
-						Thread.sleep(2000); // 1000 milliseconds is equal to 1 sec
+						Thread.sleep(5000); // 1000 milliseconds is equal to 1 sec
 						getDate();
 						
 						// TEMPERATURE CHECKER
 						tempValue = fdao.getTemperature().getFirst();
-						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(10);
+						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(20);
 						
 						if(tempValue > 35)
 						{
 							log = dateFormat.format(date) + " Temp Sensor #1: "
-									+ "TEMPERATURE LEVEL IS ABOVE NORMAL! \n" + log;
+									+ "TEMPERATURE LEVEL IS ABOVE NORMAL! \n"
+									+ "Temperature reading: " + formatter.format(tempValue) + "\u00b0C\n\n"+ log;
 							textTemperature1.setForeground(Color.RED);	
 						}
 						else
@@ -334,7 +335,8 @@ public class HomeUI extends JPanel
 						if(tempValueBeta > 35)
 						{
 							log = dateFormat.format(date) + " Temp Sensor #2: "
-									+ "TEMPERATURE LEVEL IS ABOVE NORMAL! \n" + log;
+									+ "TEMPERATURE LEVEL IS ABOVE NORMAL! \n"
+									+ "\tTemperature reading: " + formatter.format(tempValueBeta) + "\u00b0C\n\n" + log;
 							textTemperature2.setForeground(Color.RED);
 						}
 						else if(tempValueBeta < 35)
@@ -343,10 +345,14 @@ public class HomeUI extends JPanel
 						}
 						
 						// MOISTURE CHECKER
+						moistValue = rand.nextInt(15) + 20;
+						moistValueBeta = rand.nextInt(20) + 20;
+						
 						if(moistValue > 35)
 						{
 							log = dateFormat.format(date) + " Moisture Sensor #1: "
-									+ "MOISTURE CONTENT IS ABOVE NORMAL! \n" + log;
+									+ "MOISTURE CONTENT IS ABOVE NORMAL! \n"
+									+ "\tMoisture content reading: " + formatter.format(moistValue) + "%\n\n" + log;
 							textMoisture1.setForeground(Color.RED);	
 						}
 						else
@@ -357,7 +363,8 @@ public class HomeUI extends JPanel
 						if(moistValueBeta > 35)
 						{
 							log = dateFormat.format(date) + " Moisture Sensor #2: "
-									+ "MOISTURE CONTENT IS ABOVE NORMAL! \n" + log;
+									+ "MOISTURE CONTENT IS ABOVE NORMAL! \n"
+									+ "\tMoisture content reading: " + formatter.format(moistValueBeta) + "%\n\n" + log;
 							textMoisture2.setForeground(Color.RED);
 						}
 						else
@@ -365,18 +372,16 @@ public class HomeUI extends JPanel
 							textMoisture2.setForeground(Color.WHITE);
 						}
 						
-						textMoisture1.setText((rand.nextInt(15) + 10) + "%");
-						textMoisture2.setText((rand.nextInt(15) + 10) + "%");
+						textMoisture1.setText(formatter.format(moistValue) + "%");
+						textMoisture2.setText(formatter.format(moistValueBeta) + "%");
 						textTemperature1.setText(formatter.format(tempValue) + "\u00b0C");
 						textTemperature2.setText(formatter.format(tempValueBeta) + "\u00b0C");
-						log = dateFormat.format(date) + " Executing readings of sensor... \n" + log;
 						
 						textLog.setText(log);
-						
 					}
 					catch(Exception e) 
 					{
-						log = dateFormat.format(date) + " Cannot read the sensor, trying to connect... \n" + log;
+						log = dateFormat.format(date) + " Connecting to Firebase, fetching data... \n\n" + log;
 						textLog.setText(log);
 					}
 				}
@@ -408,7 +413,7 @@ public class HomeUI extends JPanel
 			}
 			else if(action.equals("About")) 
 			{
-				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.19\n\n"
+				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.20\n\n"
 						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy\n\n",
 						"About", JOptionPane.INFORMATION_MESSAGE);
 			}

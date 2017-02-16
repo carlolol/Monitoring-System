@@ -2,7 +2,6 @@ package ui;
 
 import javax.swing.*;
 import dao.FirebaseDAO;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,7 +12,6 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,30 +27,27 @@ public class TempUI extends JPanel
 	private Random rand;
 	private int h, w, resH, resW;
 	private double tempValue, tempValueBeta;
-	
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
 	private JLabel lblBg, lblTemperatureSensor, lblTemperature1, lblTemperature2, lblBlock1, lblBlock2;
 	private JTextField textTemperature1, textTemperature2;
 	private LoginHandler loginHandler;
-	
 	private FirebaseDAO fdao;
-		
 	private JFreeChart tempChart;
 	private ChartPanel chart;
-	
 	private TimeSeries series;
 	private TimeSeriesCollection dataset;
 	private XYPlot plot;
 	private NumberAxis yAxis;
 	private ValueAxis axis;
 	private NumberFormat formatter;
-	
 	private Thread thread;
 	
 	public TempUI(SystemUI systemUI, FirebaseDAO fdao)
 	{
-		formatter = new DecimalFormat("#0.000");
+		// set the decimal format for the data
+		formatter = new DecimalFormat("#0.00");
 		
+		// misc
 		this.fdao = fdao;
 		rand = new Random();
 		
@@ -221,6 +216,7 @@ public class TempUI extends JPanel
 		lblBlock2.setBounds(w+380, h-100,300,180);
 		centerP.add(lblBlock2);
 		
+		// JPanel for sensor #1
 		generateGraph1();
 		
 		lblBg = new JLabel();
@@ -230,10 +226,11 @@ public class TempUI extends JPanel
 		
 		add(centerP);
 		
-		// starts updating the home UI
+		// starts updating of frame
 		startThread();
 	}
 	
+	// sensor #1
 	public void generateGraph1()
 	{
 		lblTemperatureSensor.setText("Temperature Sensor #1");
@@ -242,7 +239,6 @@ public class TempUI extends JPanel
 		tempChart = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
 				"Temperature Reading(ds18b20 Sensor)", dataset, true, true, false);
 		
-		// Assign it to the chart
 		plot = (XYPlot) tempChart.getXYPlot();
 		ValueAxis axis = plot.getDomainAxis();
 		axis.setAutoRange(true);
@@ -265,6 +261,7 @@ public class TempUI extends JPanel
 		centerP.add(xytemp);
 	}
 	
+	// sensor #2
 	public void generateGraph2()
 	{
 		lblTemperatureSensor.setText("Temperature Sensor #2");
@@ -273,7 +270,6 @@ public class TempUI extends JPanel
 		tempChart = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
 				"Temperature Reading(ds18b20 Sensor)", dataset, true, true, false);
 		
-		// Assign it to the chart
 		plot = (XYPlot) tempChart.getXYPlot();
 		plot.getRenderer().setSeriesPaint(0, Color.BLUE);
 		axis = plot.getDomainAxis();
@@ -297,7 +293,7 @@ public class TempUI extends JPanel
 		centerP.add(xytemp);
 	}
 	
-	// responsible for updating the temperature UI
+	// responsible for updating the frame
 	public void startThread()
 	{
 		thread = new Thread()
@@ -311,11 +307,28 @@ public class TempUI extends JPanel
 					{
 						Thread.sleep(60000); //1000 miliseconds = 1 seconds 60000
 						tempValue = fdao.getTemperature().getFirst();
-						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(10);
+						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(20);
+						
+						if(tempValue > 35)
+						{
+							textTemperature1.setForeground(Color.RED);	
+						}
+						else
+						{
+							textTemperature1.setForeground(Color.WHITE);
+						}
+						
+						if(tempValueBeta > 35)
+						{
+							textTemperature2.setForeground(Color.RED);
+						}
+						else if(tempValueBeta < 35)
+						{
+							textTemperature2.setForeground(Color.WHITE);
+						}
 						
 						textTemperature1.setText(formatter.format(tempValue) + "\u00b0C");
 						textTemperature2.setText(formatter.format(tempValueBeta) + "\u00b0C");
-						
 						if(lblTemperatureSensor.getText()=="Temperature Sensor #1")
 						{
 							series.add(new Millisecond(), tempValue);
@@ -358,7 +371,7 @@ public class TempUI extends JPanel
 			}
 			else if(action.equals("About"))
 			{
-				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.19\n\n"
+				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.20\n\n"
 						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
 						"About", JOptionPane.INFORMATION_MESSAGE);
 			}

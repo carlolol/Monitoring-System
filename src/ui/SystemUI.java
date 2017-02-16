@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import javax.swing.*;
-
 import dao.FirebaseDAO;
 
 public class SystemUI extends JFrame
@@ -14,13 +13,11 @@ public class SystemUI extends JFrame
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	private CardLayout card;
-	
 	private HomeUI homeUI;
 	private TempUI tempUI;
 	private MoistUI moistUI;
 	private static int h, w;
 	private ImageIcon img;
-	
 	private FirebaseDAO fdao;
 	
 	public SystemUI()
@@ -42,11 +39,13 @@ public class SystemUI extends JFrame
 		
 		container = getContentPane();
 		
-		try {
+		try 
+		{
 			fdao = new FirebaseDAO();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			System.out.print("Firebase connection cannot establish.");
 		}
 		
 		fdao.startRetrieveData();
@@ -56,10 +55,8 @@ public class SystemUI extends JFrame
 		
 		homeUI = new HomeUI(this, fdao);
 		container.add(homeUI, "Main");
-		
 		tempUI = new TempUI(this, fdao);
 		container.add(tempUI, "Temperature");
-		
 		moistUI = new MoistUI(this);
 		container.add(moistUI, "Moisture");
 		
@@ -89,7 +86,6 @@ public class SystemUI extends JFrame
 	
 	public void showTemp()
 	{
-//		setTitle("Oryza Sativa Grains Monitoring System");
 		setLocationRelativeTo(null);
 		card.show(container, "Temperature");
 		repaint();
@@ -97,7 +93,6 @@ public class SystemUI extends JFrame
 	
 	public void showMoist()
 	{
-//		setTitle("Oryza Sativa Grains Monitoring System");
 		setLocationRelativeTo(null);
 		card.show(container, "Moisture");
 		repaint();
