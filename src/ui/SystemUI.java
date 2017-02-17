@@ -57,7 +57,7 @@ public class SystemUI extends JFrame
 		container.add(homeUI, "Main");
 		tempUI = new TempUI(this, fdao);
 		container.add(tempUI, "Temperature");
-		moistUI = new MoistUI(this);
+		moistUI = new MoistUI(this, fdao);
 		container.add(moistUI, "Moisture");
 		
 		setTitle("Oryza Sativa Grains Monitoring System");	

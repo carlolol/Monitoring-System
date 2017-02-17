@@ -42,6 +42,11 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -49,6 +54,10 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.DateTickUnit;
+import org.jfree.chart.axis.DateTickUnitType;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Millisecond;
@@ -67,9 +76,10 @@ public class DynamicDataDemo extends ApplicationFrame implements ActionListener 
 
     /** The time series data. */
     private TimeSeries series;
+    private final Millisecond startTime = new Millisecond();
 
     /** The most recent value added. */
-    private double lastValue = 100.0;
+    private double lastValue = 50.0;
 
     /**
      * Constructs a new demonstration application.
@@ -103,7 +113,8 @@ public class DynamicDataDemo extends ApplicationFrame implements ActionListener 
      * 
      * @return A sample chart.
      */
-    private JFreeChart createChart(final XYDataset dataset) {
+    private JFreeChart createChart(final XYDataset dataset) 
+    {
         final JFreeChart result = ChartFactory.createTimeSeriesChart(
             "Dynamic Data Demo", 
             "Time", 
@@ -114,11 +125,33 @@ public class DynamicDataDemo extends ApplicationFrame implements ActionListener 
             false
         );
         final XYPlot plot = result.getXYPlot();
-        ValueAxis axis = plot.getDomainAxis();
-        axis.setAutoRange(true);
-        axis.setFixedAutoRange(60000.0);  // 60 seconds
-        axis = plot.getRangeAxis();
-        axis.setRange(0.0, 200.0); 
+        DateAxis xAxis = (DateAxis) plot.getDomainAxis();
+        xAxis.setAutoRange(true);
+//        xAxis.set
+        
+        final SimpleDateFormat hourFmt = new SimpleDateFormat("HH:mm:ss");
+        
+        xAxis.setDateFormatOverride(new DateFormat()
+        {
+
+            @Override
+            public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) 
+            {
+                return hourFmt.format(date, toAppendTo, fieldPosition);
+            }
+
+			@Override
+			public Date parse(String arg0, ParsePosition arg1) 
+			{
+				return null;
+			}
+
+        });
+//        xAxis.set
+//        xAxis.setFixedAutoRange(60000.0);  // 60 seconds
+        NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
+        yAxis.setAutoRangeIncludesZero(true);
+        yAxis.setAutoRange(true);
         return result;
     }
     

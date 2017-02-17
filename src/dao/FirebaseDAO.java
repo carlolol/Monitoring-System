@@ -23,10 +23,10 @@ public class FirebaseDAO
 {
 	private LinkedList<Long> date;
 	private LinkedList<Float> temperature;
+	private LinkedList<Float> moisture;
+	
 	private final String key = "../Thesis/temperature-19044-firebase-adminsdk-an3c5-261e0460e3.json";
 	
-	private int keyCount = 0;
-	private int dataCount = 0;
 	
 	public FirebaseDAO() throws FileNotFoundException
 	{
@@ -41,26 +41,29 @@ public class FirebaseDAO
 		
 		date = new LinkedList<Long>();
 		temperature = new LinkedList<Float>();
+		moisture = new LinkedList<Float>();
 		
 	}
 	
 	public void startRetrieveData()
 	{
+		retrieveTemperature();
+		
+		retrieveMoisture();
+	}
+	
+	private void retrieveTemperature()
+	{
 		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("sensor/temperature");
 		
-		ref.child("").limitToLast(1)
-			.addValueEventListener(new ValueEventListener() 
+		ref.child("").limitToLast(1).addValueEventListener(new ValueEventListener() 
 			{
-				
 				@Override
 				public void onDataChange(DataSnapshot dataSnapshot) 
 				{
 					Object[] d1 = dataSnapshot.getValue().toString().replace("=", "").split("\\{");
 					Object[] d2 = new Object[2];
-					
-					long time = 0;
-					float value = 0;
-					
+
 					int counter = 0;
 
 					for (Object data : d1)
@@ -71,11 +74,6 @@ public class FirebaseDAO
 						counter++;
 					}
 					
-//					Object temp[] = data[1].toString().split(",");
-//					data[1] = Integer.parseInt(temp[0].toString());
-//					data[2] = Double.parseDouble(temp[1].toString());
-					
-//					Object[] d3 = d2[1].toString().split(",");
 					int count = 0;
 					
 					for (Object dat : d2) 
@@ -94,21 +92,54 @@ public class FirebaseDAO
 						}
 						count++;
 					}
-//					
-//					System.out.println(time);
-//					System.out.println(value);
-//
-//					System.out.println();
-//					System.out.println(dataSnapshot.getValue());
 
 				}
 				
 				@Override
-				public void onCancelled(DatabaseError error) 
+				public void onCancelled(DatabaseError error) {}
+		    });
+	}
+	
+	private void retrieveMoisture()
+	{
+		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("sensor/moisture");
+		
+		ref.child("").limitToLast(1).addValueEventListener(new ValueEventListener() 
+			{
+				@Override
+				public void onDataChange(DataSnapshot dataSnapshot) 
 				{
-					// TODO Auto-generated method stub
+					Object[] d1 = dataSnapshot.getValue().toString().replace("=", "").split("\\{");
+					Object[] d2 = new Object[2];
+
+					int counter = 0;
+
+					for (Object data : d1)
+					{
+						if(counter == 2)
+							d2 = data.toString().replace("}", "")
+							.replace("date", "").replace("moisture", "").split(",");
+						counter++;
+					}
 					
+					int count = 0;
+					
+					for (Object dat : d2) 
+					{
+						dat = dat.toString().trim();
+						
+						if(count == 1)
+							moisture.addFirst(Float.parseFloat(dat.toString()));
+						
+						if(date.size() == 60)
+							moisture.removeLast();
+						count++;
+					}
+
 				}
+				
+				@Override
+				public void onCancelled(DatabaseError error) {}
 		    });
 	}
 	
@@ -122,18 +153,8 @@ public class FirebaseDAO
 		return temperature;
 	}
 	
-//	public static void main(String args[]) throws FileNotFoundException, InterruptedException
-//	{
-//		FirebaseDAO test = new FirebaseDAO();
-//		test.startRetrieveData();
-//		Thread.sleep(10000);
-//		
-//		while(true)
-//		{
-//			System.out.println(test.getDate().size());
-//			Thread.sleep(1000);
-//
-//		}
-//		
-//	}
+	public LinkedList<Float> getMoisture()
+	{
+		return moisture;
+	}
 }

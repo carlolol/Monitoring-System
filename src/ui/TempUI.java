@@ -5,24 +5,31 @@ import dao.FirebaseDAO;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.FieldPosition;
 import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public class TempUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	private JPanel centerP, xytemp;
+	private JPanel centerP, xytemp1, xytemp2;
 	private SystemUI systemUI;
 	private Random rand;
 	private int h, w, resH, resW;
@@ -32,13 +39,13 @@ public class TempUI extends JPanel
 	private JTextField textTemperature1, textTemperature2;
 	private LoginHandler loginHandler;
 	private FirebaseDAO fdao;
-	private JFreeChart tempChart;
-	private ChartPanel chart;
-	private TimeSeries series;
-	private TimeSeriesCollection dataset;
-	private XYPlot plot;
-	private NumberAxis yAxis;
-	private ValueAxis axis;
+	private JFreeChart tempChart1, tempChart2;
+	private ChartPanel chart1, chart2;
+	private TimeSeries series1, series2;
+	private TimeSeriesCollection dataset1, dataset2;
+	private XYPlot plot1, plot2;
+	private NumberAxis yAxis1, yAxis2;
+	private DateAxis xAxis1, xAxis2;
 	private NumberFormat formatter;
 	private Thread thread;
 	
@@ -218,6 +225,7 @@ public class TempUI extends JPanel
 		
 		// JPanel for sensor #1
 		generateGraph1();
+		generateGraph2();
 		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
@@ -233,64 +241,104 @@ public class TempUI extends JPanel
 	// sensor #1
 	public void generateGraph1()
 	{
-		lblTemperatureSensor.setText("Temperature Sensor #1");
-		series = new TimeSeries("Sensor Reading Line");
-		dataset = new TimeSeriesCollection(series);
-		tempChart = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
-				"Temperature Reading(ds18b20 Sensor)", dataset, true, true, false);
+		series1 = new TimeSeries("Sensor Reading Line");
+		dataset1 = new TimeSeriesCollection(series1);
+		tempChart1 = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
+				"Temperature Reading(DS18B20 Sensor)", dataset1, true, true, false);
 		
-		plot = (XYPlot) tempChart.getXYPlot();
-		ValueAxis axis = plot.getDomainAxis();
-		axis.setAutoRange(true);
-        axis.setFixedAutoRange(600000.0);  // 600000 seconds
-        axis = plot.getRangeAxis();
+		plot1 = (XYPlot) tempChart1.getXYPlot();
+		
+//		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+//		renderer.setBaseShapesVisible(true);
+		
+		xAxis1 = (DateAxis) plot1.getDomainAxis();
+		xAxis1.setAutoRange(true);
+		
+		final SimpleDateFormat hourFmt = new SimpleDateFormat("HH:mm:ss");
         
-		yAxis = (NumberAxis) plot.getRangeAxis();
-		yAxis.setTickUnit(new NumberTickUnit(5));
-		yAxis.setRange(20,60);
+        xAxis1.setDateFormatOverride(new DateFormat()
+        {
+
+            @Override
+            public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) 
+            {
+                return hourFmt.format(date, toAppendTo, fieldPosition);
+            }
+
+			@Override
+			public Date parse(String arg0, ParsePosition arg1) 
+			{
+				return null;
+			}
+
+        });
+        
+		yAxis1 = (NumberAxis) plot1.getRangeAxis();
+		yAxis1.setAutoRangeIncludesZero(true);
+        yAxis1.setAutoRange(true);
+        
+		chart1 = new ChartPanel(tempChart1);
+		chart1.setPreferredSize(new Dimension(900, 500));
+		chart1.setMouseZoomable(false);
 		
-		chart = new ChartPanel(tempChart);
-		chart.setPreferredSize(new Dimension(900, 500));
-		chart.setMouseZoomable(false);
+		xytemp1 = new JPanel();
+		xytemp1.setBounds(w-600, h-250, 900, 505);
+		xytemp1.add(chart1, BorderLayout.CENTER);
+		xytemp1.validate();
 		
-		xytemp = new JPanel();
-		xytemp.setBounds(w-600, h-250, 900, 505);
-		xytemp.add(chart, BorderLayout.CENTER);
-		xytemp.validate();
-		
-		centerP.add(xytemp);
+		centerP.add(xytemp1);
 	}
 	
 	// sensor #2
 	public void generateGraph2()
 	{
-		lblTemperatureSensor.setText("Temperature Sensor #2");
-		series = new TimeSeries("Sensor Reading Line");
-		dataset = new TimeSeriesCollection(series);
-		tempChart = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
-				"Temperature Reading(ds18b20 Sensor)", dataset, true, true, false);
+		series2 = new TimeSeries("Sensor Reading Line");
+		dataset2 = new TimeSeriesCollection(series2);
+		tempChart2 = ChartFactory.createTimeSeriesChart("Temperature Sensor Reading", "Time (minute)",
+				"Temperature Reading(DS18B20 Sensor)", dataset2, true, true, false);
 		
-		plot = (XYPlot) tempChart.getXYPlot();
-		plot.getRenderer().setSeriesPaint(0, Color.BLUE);
-		axis = plot.getDomainAxis();
-		axis.setAutoRange(true);
-        axis.setFixedAutoRange(600000.0);  // 600000 seconds
-        axis = plot.getRangeAxis();
+		plot2 = (XYPlot) tempChart2.getXYPlot();
+		
+//		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+//		renderer.setBaseShapesVisible(true);
+		
+		xAxis2 = (DateAxis) plot2.getDomainAxis();
+		xAxis2.setAutoRange(true);
+		
+		final SimpleDateFormat hourFmt = new SimpleDateFormat("HH:mm:ss");
         
-		yAxis = (NumberAxis) plot.getRangeAxis();
-		yAxis.setTickUnit(new NumberTickUnit(5));
-		yAxis.setRange(20,60);
+        xAxis2.setDateFormatOverride(new DateFormat()
+        {
+
+            @Override
+            public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) 
+            {
+                return hourFmt.format(date, toAppendTo, fieldPosition);
+            }
+
+			@Override
+			public Date parse(String arg0, ParsePosition arg1) 
+			{
+				return null;
+			}
+
+        });
+        
+		yAxis2 = (NumberAxis) plot2.getRangeAxis();
+		yAxis2.setAutoRangeIncludesZero(true);
+        yAxis2.setAutoRange(true);
+        
+		chart2 = new ChartPanel(tempChart2);
+		chart2.setPreferredSize(new Dimension(900, 500));
+		chart2.setMouseZoomable(false);
 		
-		chart = new ChartPanel(tempChart);
-		chart.setPreferredSize(new Dimension(900, 500));
-		chart.setMouseZoomable(false);
+		xytemp2 = new JPanel();
+		xytemp2.setBounds(w-600, h-250, 900, 505);
+		xytemp2.add(chart2, BorderLayout.CENTER);
+		xytemp2.validate();
+		xytemp2.setVisible(false);
 		
-		xytemp = new JPanel();
-		xytemp.setBounds(w-600, h-250, 900, 505);
-		xytemp.add(chart, BorderLayout.CENTER);
-		xytemp.validate();
-		
-		centerP.add(xytemp);
+		centerP.add(xytemp2);
 	}
 	
 	// responsible for updating the frame
@@ -298,45 +346,31 @@ public class TempUI extends JPanel
 	{
 		thread = new Thread()
 		{
-			public void run(){
-				int x = 0;
-				
-				for(x = 1; x>0; x++)
+			public void run()
+			{
+				while(true)
 				{
 					try 
 					{
-						Thread.sleep(60000); //1000 miliseconds = 1 seconds 60000
+						Thread.sleep(1000); //1000 milliseconds = 1 second; 60000 = 1 min
 						tempValue = fdao.getTemperature().getFirst();
 						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(20);
 						
 						if(tempValue > 35)
-						{
 							textTemperature1.setForeground(Color.RED);	
-						}
 						else
-						{
 							textTemperature1.setForeground(Color.WHITE);
-						}
 						
 						if(tempValueBeta > 35)
-						{
 							textTemperature2.setForeground(Color.RED);
-						}
 						else if(tempValueBeta < 35)
-						{
 							textTemperature2.setForeground(Color.WHITE);
-						}
 						
 						textTemperature1.setText(formatter.format(tempValue) + "\u00b0C");
 						textTemperature2.setText(formatter.format(tempValueBeta) + "\u00b0C");
-						if(lblTemperatureSensor.getText()=="Temperature Sensor #1")
-						{
-							series.add(new Millisecond(), tempValue);
-						}
-						else if(lblTemperatureSensor.getText()=="Temperature Sensor #2")
-						{
-							series.add(new Millisecond(), tempValueBeta);
-						}
+						
+						series1.add(new Millisecond(), tempValue);
+						series2.add(new Millisecond(), tempValueBeta);
 					} 
 					catch(Exception e) 
 					{
@@ -361,14 +395,10 @@ public class TempUI extends JPanel
 						"Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 
 				if(result == JOptionPane.YES_OPTION)
-				{
 	              System.exit(0);
-	            }
 			}
 			else if(action.equals("Minimize"))
-			{
 				systemUI.setState(Frame.ICONIFIED);
-			}
 			else if(action.equals("About"))
 			{
 				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.20\n\n"
@@ -377,46 +407,27 @@ public class TempUI extends JPanel
 			}
 			else if(action.equals("Next"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Continue to change the sensor? "
-						+ "Current connection will be disconnected.", "Current session is active", 
-						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-
-					if(result == JOptionPane.YES_OPTION)
-					{
-						lblTemperatureSensor.setText("Temperature Sensor #2");
-						series.clear();
-						generateGraph2();
-						nextB.setEnabled(false);
-						previousB.setEnabled(true);
-					}
+				lblTemperatureSensor.setText("Temperature Sensor #2");
+				xytemp1.setVisible(false);
+				xytemp2.setVisible(true);
+				nextB.setEnabled(false);
+				previousB.setEnabled(true);
 			}
 			else if(action.equals("Previous"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Continue to change the sensor? "
-						+ "Current connection will be disconnected.", "Current session is active", 
-						JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-
-					if(result == JOptionPane.YES_OPTION)
-					{
-						lblTemperatureSensor.setText("Temperature Sensor #1");
-						series.clear();
-						generateGraph1();
-						previousB.setEnabled(false);
-						nextB.setEnabled(true);
-					}
+				lblTemperatureSensor.setText("Temperature Sensor #1");
+				xytemp1.setVisible(true);
+				xytemp2.setVisible(false);
+				previousB.setEnabled(false);
+				nextB.setEnabled(true);
 			}
 			else if(action.equals("Temp"))
-			{
 				systemUI.showTemp();
-			}
 			else if(action.equals("Moist"))
-			{
 				systemUI.showMoist();
-			}
 			else if(action.equals("Home"))
-			{
 				systemUI.showMain();
-			}
+			
 			repaint();
 		}
 	}

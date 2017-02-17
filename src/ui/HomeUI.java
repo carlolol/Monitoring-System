@@ -313,12 +313,14 @@ public class HomeUI extends JPanel
 				for(x = 1; x>0; x++)
 				{
 					try {
-						Thread.sleep(5000); // 1000 milliseconds is equal to 1 sec
+						Thread.sleep(1000); // 1000 milliseconds is equal to 1 sec
 						getDate();
 						
 						// TEMPERATURE CHECKER
 						tempValue = fdao.getTemperature().getFirst();
 						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(20);
+						
+						
 						
 						if(tempValue > 35)
 						{
@@ -345,8 +347,8 @@ public class HomeUI extends JPanel
 						}
 						
 						// MOISTURE CHECKER
-						moistValue = rand.nextInt(15) + 20;
-						moistValueBeta = rand.nextInt(20) + 20;
+						moistValue = fdao.getMoisture().getFirst();
+						moistValueBeta = fdao.getMoisture().getFirst() + rand.nextInt(20);
 						
 						if(moistValue > 35)
 						{

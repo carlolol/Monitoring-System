@@ -4,24 +4,34 @@ import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+
+import dao.FirebaseDAO;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.FieldPosition;
 import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public class MoistUI extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	private JPanel centerP, xymoisture;
+	private JPanel centerP, xymoisture1, xymoisture2;
 	private SystemUI systemUI;
 	private Random rand;
 	private int h, w, resH, resW, x;
@@ -31,20 +41,23 @@ public class MoistUI extends JPanel
 	private JLabel lblBg, lblMoistureSensor, lblMoisture1, lblMoisture2, lblBlock1, lblBlock2;
 	private JTextField textMoisture1, textMoisture2;
 	private LoginHandler loginHandler;
-	private JFreeChart moistChart;
-	private ChartPanel chart;
-	private TimeSeries series;
-	private TimeSeriesCollection dataset;
-	private XYPlot plot;
-	private NumberAxis yAxis;
+	private FirebaseDAO fdao;
+	private JFreeChart moistChart1, moistChart2;
+	private ChartPanel chart1, chart2;
+	private TimeSeries series1, series2;
+	private TimeSeriesCollection dataset1, dataset2;
+	private XYPlot plot1, plot2;
+	private NumberAxis yAxis1, yAxis2;
+	private DateAxis xAxis1, xAxis2;
 	private Thread thread;
 	
-	public MoistUI(SystemUI systemUI)
+	public MoistUI(SystemUI systemUI, FirebaseDAO fdao)
 	{		
 		// set the decimal format for the data
 		formatter = new DecimalFormat("#0.00");
 		
 		// misc
+		this.fdao = fdao;
 		rand = new Random();
 		
 		// GUI components
@@ -79,7 +92,7 @@ public class MoistUI extends JPanel
 		textMoisture1.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textMoisture1.setForeground(Color.WHITE);
 		textMoisture1.setHorizontalAlignment(SwingConstants.CENTER);
-		textMoisture1.setText("0%");
+		textMoisture1.setText("-");
 		textMoisture1.setEditable(false);
 		textMoisture1.setOpaque(false);
 		textMoisture1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -97,7 +110,7 @@ public class MoistUI extends JPanel
 		textMoisture2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 		textMoisture2.setForeground(Color.WHITE);
 		textMoisture2.setHorizontalAlignment(SwingConstants.CENTER);
-		textMoisture2.setText("0%");
+		textMoisture2.setText("-");
 		textMoisture2.setEditable(false);
 		textMoisture2.setOpaque(false);
 		textMoisture2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -214,6 +227,7 @@ public class MoistUI extends JPanel
 				
 		// Jpanel for sensor #1
 		generateGraph1();
+		generateGraph2();
 		
 		lblBg = new JLabel();
 		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
@@ -229,65 +243,104 @@ public class MoistUI extends JPanel
 	// sensor #1
 	public void generateGraph1()
 	{
-		lblMoistureSensor.setText("Moisture Sensor #1");
-		series = new TimeSeries("Sensor Reading Line");
-		dataset = new TimeSeriesCollection(series);
-		moistChart = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
-				"Hygrometer Reading(Moisture Sensor)", dataset, true, true, false);
+		series1 = new TimeSeries("Sensor Reading Line");
+		dataset1 = new TimeSeriesCollection(series1);
+		moistChart1 = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
+				"Hygrometer Reading(Moisture Sensor)", dataset1, true, true, false);
 		
-		plot = (XYPlot) moistChart.getXYPlot();
-		plot.getRenderer().setSeriesPaint(0, Color.RED);
-		ValueAxis axis = plot.getDomainAxis();
-		axis.setAutoRange(true);
-        axis.setFixedAutoRange(10000.0);  // 600000 seconds
-        axis = plot.getRangeAxis();
+		plot1 = (XYPlot) moistChart1.getXYPlot();
+		
+//		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+//		renderer.setBaseShapesVisible(true);
+		
+		xAxis1 = (DateAxis) plot1.getDomainAxis();
+		xAxis1.setAutoRange(true);
+		
+		final SimpleDateFormat hourFmt = new SimpleDateFormat("HH:mm:ss");
         
-		yAxis = (NumberAxis) plot.getRangeAxis();
-		yAxis.setTickUnit(new NumberTickUnit(2));
-		yAxis.setRange(20,50);
+        xAxis1.setDateFormatOverride(new DateFormat()
+        {
+
+            @Override
+            public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) 
+            {
+                return hourFmt.format(date, toAppendTo, fieldPosition);
+            }
+
+			@Override
+			public Date parse(String arg0, ParsePosition arg1) 
+			{
+				return null;
+			}
+
+        });
+        
+		yAxis1 = (NumberAxis) plot1.getRangeAxis();
+		yAxis1.setAutoRangeIncludesZero(true);
+        yAxis1.setAutoRange(true);
 		
-		chart = new ChartPanel(moistChart);
-		chart.setPreferredSize(new Dimension(900, 500));
-		chart.setMouseZoomable(false);
+		chart1 = new ChartPanel(moistChart1);
+		chart1.setPreferredSize(new Dimension(900, 500));
+		chart1.setMouseZoomable(false);
 		
-		xymoisture = new JPanel();
-		xymoisture.setBounds(w-600, h-250, 900, 505);
-		xymoisture.add(chart, BorderLayout.CENTER);
-		xymoisture.validate();
+		xymoisture1 = new JPanel();
+		xymoisture1.setBounds(w-600, h-250, 900, 505);
+		xymoisture1.add(chart1, BorderLayout.CENTER);
+		xymoisture1.validate();
 		
-		centerP.add(xymoisture);
+		centerP.add(xymoisture1);
 	}
 	
 	// sensor #2
 	public void generateGraph2()
 	{
-		lblMoistureSensor.setText("Moisture Sensor #2");
-		series = new TimeSeries("Sensor Reading Line");
-		dataset = new TimeSeriesCollection(series);
-		moistChart = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
-				"Hygrometer Reading(Moisture Sensor)", dataset, true, true, false);
+		series2 = new TimeSeries("Sensor Reading Line");
+		dataset2 = new TimeSeriesCollection(series2);
+		moistChart2 = ChartFactory.createTimeSeriesChart("Moisture Sensor Reading", "Time (minute)",
+				"Hygrometer Reading(Moisture Sensor)", dataset2, true, true, false);
 		
-		plot = (XYPlot) moistChart.getXYPlot();
-		plot.getRenderer().setSeriesPaint(0, Color.BLUE);
-		ValueAxis axis = plot.getDomainAxis();
-		axis.setAutoRange(true);
-        axis.setFixedAutoRange(10000.0);  // 600000 seconds
-        axis = plot.getRangeAxis();
+		plot2 = (XYPlot) moistChart2.getXYPlot();
+		
+//		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+//		renderer.setBaseShapesVisible(true);
+		
+		xAxis2 = (DateAxis) plot2.getDomainAxis();
+		xAxis2.setAutoRange(true);
+		
+		final SimpleDateFormat hourFmt = new SimpleDateFormat("HH:mm:ss");
         
-		yAxis = (NumberAxis) plot.getRangeAxis();
-		yAxis.setTickUnit(new NumberTickUnit(2));
-		yAxis.setRange(20,50);
+        xAxis2.setDateFormatOverride(new DateFormat()
+        {
+
+            @Override
+            public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) 
+            {
+                return hourFmt.format(date, toAppendTo, fieldPosition);
+            }
+
+			@Override
+			public Date parse(String arg0, ParsePosition arg1) 
+			{
+				return null;
+			}
+
+        });
+        
+		yAxis2 = (NumberAxis) plot2.getRangeAxis();
+		yAxis2.setAutoRangeIncludesZero(true);
+        yAxis2.setAutoRange(true);
 		
-		chart = new ChartPanel(moistChart);
-		chart.setPreferredSize(new Dimension(900, 500));
-		chart.setMouseZoomable(false);
+		chart2 = new ChartPanel(moistChart2);
+		chart2.setPreferredSize(new Dimension(900, 500));
+		chart2.setMouseZoomable(false);
 		
-		xymoisture = new JPanel();
-		xymoisture.setBounds(w-600, h-250, 900, 505);
-		xymoisture.add(chart, BorderLayout.CENTER);
-		xymoisture.validate();
+		xymoisture2 = new JPanel();
+		xymoisture2.setBounds(w-600, h-250, 900, 505);
+		xymoisture2.add(chart2, BorderLayout.CENTER);
+		xymoisture2.validate();
+		xymoisture2.setVisible(false);
 		
-		centerP.add(xymoisture);
+		centerP.add(xymoisture2);
 	}
 	
 	// responsible for updating the frame
@@ -295,43 +348,31 @@ public class MoistUI extends JPanel
 	{
 		thread = new Thread()
 		{
-			public void run(){
-								
-				for(x = 0; x>=0; x++)
+			public void run()
+			{
+				while(true)
 				{
 					try 
 					{
 						Thread.sleep(1000);
-						moistValue = rand.nextInt(10) + 20;
-						moistValueBeta = rand.nextInt(10) + 30;
+						moistValue = fdao.getMoisture().getFirst();
+						moistValueBeta = moistValue + rand.nextInt(10);
 						
 						if(moistValue > 35)
-						{
 							textMoisture1.setForeground(Color.RED);	
-						}
 						else
-						{
 							textMoisture1.setForeground(Color.WHITE);
-						}
+						
 						if(moistValueBeta > 35)
-						{
 							textMoisture2.setForeground(Color.RED);
-						}
 						else
-						{
 							textMoisture2.setForeground(Color.WHITE);
-						}
 						
 						textMoisture1.setText(formatter.format(moistValue) + "%");
 						textMoisture2.setText(formatter.format(moistValueBeta) + "%");
-						if(lblMoistureSensor.getText()=="Moisture Sensor #1")
-						{
-							series.add(new Millisecond(), moistValue);
-						}
-						else if(lblMoistureSensor.getText()=="Moisture Sensor #2")
-						{
-							series.add(new Millisecond(), moistValueBeta);
-						}
+
+						series1.add(new Millisecond(), moistValue);
+						series2.add(new Millisecond(), moistValueBeta);
 					} 
 					catch(Exception e) 
 					{
@@ -356,56 +397,35 @@ public class MoistUI extends JPanel
 						"Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 
 				if(result == JOptionPane.YES_OPTION)
-				{
 	              System.exit(0);
-	            }
 			}
 			else if(action.equals("Minimize"))
-			{
 				systemUI.setState(Frame.ICONIFIED);
-			}
 			else if(action.equals("About"))
-			{
 				JOptionPane.showMessageDialog(null, "Oryza Sativa Grains Monitoring System\nv.20\n\n"
 						+ "Thesis by: \nMarc Angelo Martinez\nCarl Louie Aruta\nMelvin Uy",
 						"About", JOptionPane.INFORMATION_MESSAGE);
-			}
 			else if(action.equals("Next"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Continue to change the sensor? "
-					+ "Current connection will be disconnected.", "Current session is active", 
-					JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-
-				if(result == JOptionPane.YES_OPTION)
-				{
-					series.clear();
-					generateGraph2();
-					nextB.setEnabled(false);
-					previousB.setEnabled(true);
-	            }
+				lblMoistureSensor.setText("Moisture Sensor #2");
+				xymoisture1.setVisible(false);
+				xymoisture2.setVisible(true);
+				nextB.setEnabled(false);
+				previousB.setEnabled(true);
 			}
 			else if(action.equals("Previous"))
 			{
-				int result = JOptionPane.showConfirmDialog(null, "Continue to change the sensor? "
-					+ "Current connection will be disconnected.", "Current session is active", 
-					JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-
-				if(result == JOptionPane.YES_OPTION)
-				{
-					series.clear();
-		            generateGraph1();
-					previousB.setEnabled(false);
-					nextB.setEnabled(true);
-				}
+				lblMoistureSensor.setText("Moisture Sensor #1");
+				xymoisture1.setVisible(true);
+				xymoisture2.setVisible(false);
+				previousB.setEnabled(false);
+				nextB.setEnabled(true);
 			}
 			else if(action.equals("Temp"))
-			{
               	systemUI.showTemp();
-			}
 			else if(action.equals("Home"))
-			{
 		      	systemUI.showMain();
-			}
+			
 			repaint();
 		}
 	}
