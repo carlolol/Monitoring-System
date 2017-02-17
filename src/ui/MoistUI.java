@@ -6,10 +6,8 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.RangeType;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -34,7 +32,7 @@ public class MoistUI extends JPanel
 	private JPanel centerP, xymoisture1, xymoisture2;
 	private SystemUI systemUI;
 	private Random rand;
-	private int h, w, resH, resW, x;
+	private int h, w, resH, resW;
 	private double moistValue, moistValueBeta;
 	private NumberFormat formatter;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
@@ -241,6 +239,7 @@ public class MoistUI extends JPanel
 	}
 	
 	// sensor #1
+	@SuppressWarnings("serial")
 	public void generateGraph1()
 	{
 		series1 = new TimeSeries("Sensor Reading Line");
@@ -249,9 +248,6 @@ public class MoistUI extends JPanel
 				"Hygrometer Reading(Moisture Sensor)", dataset1, true, true, false);
 		
 		plot1 = (XYPlot) moistChart1.getXYPlot();
-		
-//		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
-//		renderer.setBaseShapesVisible(true);
 		
 		xAxis1 = (DateAxis) plot1.getDomainAxis();
 		xAxis1.setAutoRange(true);
@@ -278,6 +274,8 @@ public class MoistUI extends JPanel
 		yAxis1 = (NumberAxis) plot1.getRangeAxis();
 		yAxis1.setAutoRangeIncludesZero(true);
         yAxis1.setAutoRange(true);
+        yAxis1.setRangeType(RangeType.POSITIVE);
+        yAxis1.setNumberFormatOverride(new DecimalFormat("##0.0"));
 		
 		chart1 = new ChartPanel(moistChart1);
 		chart1.setPreferredSize(new Dimension(900, 500));
@@ -292,6 +290,7 @@ public class MoistUI extends JPanel
 	}
 	
 	// sensor #2
+	@SuppressWarnings("serial")
 	public void generateGraph2()
 	{
 		series2 = new TimeSeries("Sensor Reading Line");
@@ -329,7 +328,9 @@ public class MoistUI extends JPanel
 		yAxis2 = (NumberAxis) plot2.getRangeAxis();
 		yAxis2.setAutoRangeIncludesZero(true);
         yAxis2.setAutoRange(true);
-		
+        yAxis2.setRangeType(RangeType.POSITIVE);
+        yAxis2.setNumberFormatOverride(new DecimalFormat("##0.0"));
+
 		chart2 = new ChartPanel(moistChart2);
 		chart2.setPreferredSize(new Dimension(900, 500));
 		chart2.setMouseZoomable(false);
@@ -354,9 +355,8 @@ public class MoistUI extends JPanel
 				{
 					try 
 					{
-						Thread.sleep(1000);
 						moistValue = fdao.getMoisture().getFirst();
-						moistValueBeta = moistValue + rand.nextInt(10);
+						moistValueBeta = moistValue + rand.nextInt(2);
 						
 						if(moistValue > 35)
 							textMoisture1.setForeground(Color.RED);	
@@ -373,6 +373,8 @@ public class MoistUI extends JPanel
 
 						series1.add(new Millisecond(), moistValue);
 						series2.add(new Millisecond(), moistValueBeta);
+						
+						Thread.sleep(60000);
 					} 
 					catch(Exception e) 
 					{

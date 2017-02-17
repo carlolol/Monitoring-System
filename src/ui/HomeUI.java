@@ -39,12 +39,13 @@ public class HomeUI extends JPanel
 	{
 		// set the decimal format for the data
 		formatter = new DecimalFormat("#0.00");
-		
+		dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
 		this.fdao = fdao;
 		
 		// misc
 		rand = new Random();	
-		getDate();
+		updateDate();
 		
 		// GUI components
 		resH = SystemUI.getH();
@@ -296,9 +297,8 @@ public class HomeUI extends JPanel
 	}
 	
 	// get date and time
-	public void getDate()
+	public void updateDate()
 	{
-		dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		date = new Date();		
 	}
 	
@@ -307,50 +307,57 @@ public class HomeUI extends JPanel
 	{
 		thread = new Thread()
 		{
-			public void run(){
-				int x = 0;
-				
-				for(x = 1; x>0; x++)
+			public void run()
+			{
+				while(true)
 				{
-					try {
-						Thread.sleep(1000); // 1000 milliseconds is equal to 1 sec
-						getDate();
+					try 
+					{
+						updateDate();
 						
 						// TEMPERATURE CHECKER
 						tempValue = fdao.getTemperature().getFirst();
-						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(20);
+						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(5);
 						
-						
-						
-						if(tempValue > 35)
+						if(tempValue >= 40)
 						{
 							log = dateFormat.format(date) + " Temp Sensor #1: "
 									+ "TEMPERATURE LEVEL IS ABOVE NORMAL! \n"
 									+ "Temperature reading: " + formatter.format(tempValue) + "\u00b0C\n\n"+ log;
 							textTemperature1.setForeground(Color.RED);	
 						}
-						else
+						else if(tempValue <= 10)
 						{
-							textTemperature1.setForeground(Color.WHITE);
+							log = dateFormat.format(date) + " Temp Sensor #1: "
+									+ "TEMPERATURE LEVEL IS BELOW NORMAL! \n"
+									+ "Temperature reading: " + formatter.format(tempValue) + "\u00b0C\n\n"+ log;
+							textTemperature1.setForeground(Color.BLUE);	
 						}
+						else
+							textTemperature1.setForeground(Color.WHITE);
 						
-						if(tempValueBeta > 35)
+						if(tempValueBeta >= 40)
 						{
 							log = dateFormat.format(date) + " Temp Sensor #2: "
 									+ "TEMPERATURE LEVEL IS ABOVE NORMAL! \n"
 									+ "\tTemperature reading: " + formatter.format(tempValueBeta) + "\u00b0C\n\n" + log;
 							textTemperature2.setForeground(Color.RED);
 						}
-						else if(tempValueBeta < 35)
+						else if(tempValueBeta <= 10)
 						{
-							textTemperature2.setForeground(Color.WHITE);
+							log = dateFormat.format(date) + " Temp Sensor #1: "
+									+ "TEMPERATURE LEVEL IS BELOW NORMAL! \n"
+									+ "Temperature reading: " + formatter.format(tempValueBeta) + "\u00b0C\n\n"+ log;
+							textTemperature2.setForeground(Color.BLUE);	
 						}
+						else
+							textTemperature2.setForeground(Color.WHITE);
 						
 						// MOISTURE CHECKER
 						moistValue = fdao.getMoisture().getFirst();
-						moistValueBeta = fdao.getMoisture().getFirst() + rand.nextInt(20);
+						moistValueBeta = fdao.getMoisture().getFirst() + rand.nextInt(2);
 						
-						if(moistValue > 35)
+						if(moistValue > 14)
 						{
 							log = dateFormat.format(date) + " Moisture Sensor #1: "
 									+ "MOISTURE CONTENT IS ABOVE NORMAL! \n"
@@ -358,11 +365,9 @@ public class HomeUI extends JPanel
 							textMoisture1.setForeground(Color.RED);	
 						}
 						else
-						{
 							textMoisture1.setForeground(Color.WHITE);
-						}
 						
-						if(moistValueBeta > 35)
+						if(moistValueBeta > 14)
 						{
 							log = dateFormat.format(date) + " Moisture Sensor #2: "
 									+ "MOISTURE CONTENT IS ABOVE NORMAL! \n"
@@ -380,11 +385,19 @@ public class HomeUI extends JPanel
 						textTemperature2.setText(formatter.format(tempValueBeta) + "\u00b0C");
 						
 						textLog.setText(log);
+						
+						Thread.sleep(60000); // 1000 milliseconds is equal to 1 sec
+
 					}
 					catch(Exception e) 
 					{
 						log = dateFormat.format(date) + " Connecting to Firebase, fetching data... \n\n" + log;
 						textLog.setText(log);
+						try 
+						{
+							Thread.sleep(1000);
+						} 
+						catch (InterruptedException e1) { }
 					}
 				}
 			}

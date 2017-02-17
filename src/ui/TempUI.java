@@ -7,10 +7,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -239,6 +236,7 @@ public class TempUI extends JPanel
 	}
 	
 	// sensor #1
+	@SuppressWarnings("serial")
 	public void generateGraph1()
 	{
 		series1 = new TimeSeries("Sensor Reading Line");
@@ -290,6 +288,7 @@ public class TempUI extends JPanel
 	}
 	
 	// sensor #2
+	@SuppressWarnings("serial")
 	public void generateGraph2()
 	{
 		series2 = new TimeSeries("Sensor Reading Line");
@@ -352,9 +351,8 @@ public class TempUI extends JPanel
 				{
 					try 
 					{
-						Thread.sleep(1000); //1000 milliseconds = 1 second; 60000 = 1 min
 						tempValue = fdao.getTemperature().getFirst();
-						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(20);
+						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(5);
 						
 						if(tempValue > 35)
 							textTemperature1.setForeground(Color.RED);	
@@ -371,6 +369,9 @@ public class TempUI extends JPanel
 						
 						series1.add(new Millisecond(), tempValue);
 						series2.add(new Millisecond(), tempValueBeta);
+						
+						Thread.sleep(60000); //1000 milliseconds = 1 second; 60000 = 1 min
+
 					} 
 					catch(Exception e) 
 					{

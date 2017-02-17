@@ -2,13 +2,7 @@ package dao;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.Queue;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -25,8 +19,8 @@ public class FirebaseDAO
 	private LinkedList<Float> temperature;
 	private LinkedList<Float> moisture;
 	
+	//private key from the firebase project
 	private final String key = "../Thesis/temperature-19044-firebase-adminsdk-an3c5-261e0460e3.json";
-	
 	
 	public FirebaseDAO() throws FileNotFoundException
 	{
@@ -39,10 +33,10 @@ public class FirebaseDAO
 
 		FirebaseApp.initializeApp(options);
 		
+		//initialize LinkedLists to be used as storage
 		date = new LinkedList<Long>();
 		temperature = new LinkedList<Float>();
 		moisture = new LinkedList<Float>();
-		
 	}
 	
 	public void startRetrieveData()
@@ -54,38 +48,41 @@ public class FirebaseDAO
 	
 	private void retrieveTemperature()
 	{
+		//gets the reference sensor/temperature from the firebase project
 		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("sensor/temperature");
 		
+		//limitToLast(1) to get only the latest data stored
 		ref.child("").limitToLast(1).addValueEventListener(new ValueEventListener() 
 			{
 				@Override
 				public void onDataChange(DataSnapshot dataSnapshot) 
 				{
-					Object[] d1 = dataSnapshot.getValue().toString().replace("=", "").split("\\{");
-					Object[] d2 = new Object[2];
-
+					//store the latest data into an temporary array
+					String[] d1 = dataSnapshot.getValue().toString().replace("=", "").split("\\{");
+					String[] d2 = new String[2]; //storage to be used for parsing and splitting
+					System.out.println(d1[0]);
 					int counter = 0;
-
-					for (Object data : d1)
+					//d1 split into 3 parts: blank space, unique key, and the date and time combined together
+					for (String data : d1)
 					{
-						if(counter == 2)
-							d2 = data.toString().replace("}", "")
-							.replace("date", "").replace("temp", "").split(",");
+						if(counter == 2) //skip the other and straight to the date and time
+							d2 = data.replace("}", "").replace("date", "")
+								.replace("temp", "").split(","); //parse and split the data into d2
 						counter++;
 					}
 					
 					int count = 0;
 					
-					for (Object dat : d2) 
+					for (String dat : d2) 
 					{
-						dat = dat.toString().trim();
-						
+						dat = dat.trim();
+						//storing the parsed String to the LinkedList
 						if(count == 0)
-							date.addFirst(Long.parseLong(dat.toString()));
+							date.addFirst(Long.parseLong(dat));
 						else
-							temperature.addFirst(Float.parseFloat(dat.toString()));
+							temperature.addFirst(Float.parseFloat(dat));
 						
-						if(date.size() == 60)
+						if(date.size() == 60) //limit the List into 60 only
 						{
 							date.removeLast();
 							temperature.removeLast();
@@ -102,6 +99,7 @@ public class FirebaseDAO
 	
 	private void retrieveMoisture()
 	{
+		//same thing, only this time from sensor/moisture
 		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("sensor/moisture");
 		
 		ref.child("").limitToLast(1).addValueEventListener(new ValueEventListener() 
@@ -109,30 +107,31 @@ public class FirebaseDAO
 				@Override
 				public void onDataChange(DataSnapshot dataSnapshot) 
 				{
-					Object[] d1 = dataSnapshot.getValue().toString().replace("=", "").split("\\{");
-					Object[] d2 = new Object[2];
+					String[] d1 = dataSnapshot.getValue().toString().replace("=", "").split("\\{");
+					String[] d2 = new String[2];
 
 					int counter = 0;
 
-					for (Object data : d1)
+					for (String data : d1)
 					{
 						if(counter == 2)
-							d2 = data.toString().replace("}", "")
-							.replace("date", "").replace("moisture", "").split(",");
+							d2 = data.replace("}", "").replace("date", "")
+								.replace("moisture", "").split(",");
 						counter++;
 					}
 					
 					int count = 0;
 					
-					for (Object dat : d2) 
+					for (String dat : d2) 
 					{
 						dat = dat.toString().trim();
-						
+						//only getting the moisture, because there is already a date
 						if(count == 1)
 							moisture.addFirst(Float.parseFloat(dat.toString()));
-						
+						//remove from moisture list only, the latter already have a date limiter
 						if(date.size() == 60)
 							moisture.removeLast();
+						
 						count++;
 					}
 

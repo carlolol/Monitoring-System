@@ -45,7 +45,7 @@ public class SystemUI extends JFrame
 		} 
 		catch (FileNotFoundException e) 
 		{
-			System.out.print("Firebase connection cannot establish.");
+			System.out.print("Firebase connection cannot be established.");
 		}
 		
 		fdao.startRetrieveData();
