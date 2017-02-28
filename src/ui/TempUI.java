@@ -355,14 +355,26 @@ public class TempUI extends JPanel
 						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(5);
 						
 						if(tempValue > 35)
+						{
 							textTemperature1.setForeground(Color.RED);	
+							textTemperature1.setFont(new Font("Tahoma", Font.BOLD, 52));
+						}
 						else
+						{
 							textTemperature1.setForeground(Color.WHITE);
+							textTemperature1.setFont(new Font("Tahoma", Font.PLAIN, 48));
+						}
 						
 						if(tempValueBeta > 35)
+						{
 							textTemperature2.setForeground(Color.RED);
-						else if(tempValueBeta < 35)
+							textTemperature2.setFont(new Font("Tahoma", Font.BOLD, 52));
+						}
+						else
+						{
 							textTemperature2.setForeground(Color.WHITE);
+							textTemperature2.setFont(new Font("Tahoma", Font.PLAIN, 48));
+						}
 						
 						textTemperature1.setText(formatter.format(tempValue) + "\u00b0C");
 						textTemperature2.setText(formatter.format(tempValueBeta) + "\u00b0C");
@@ -370,7 +382,7 @@ public class TempUI extends JPanel
 						series1.add(new Millisecond(), tempValue);
 						series2.add(new Millisecond(), tempValueBeta);
 						
-						Thread.sleep(60000); //1000 milliseconds = 1 second; 60000 = 1 min
+						Thread.sleep(1000); //1000 milliseconds = 1 second; 60000 = 1 min
 
 					} 
 					catch(Exception e) 

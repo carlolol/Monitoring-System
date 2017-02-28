@@ -359,14 +359,26 @@ public class MoistUI extends JPanel
 						moistValueBeta = moistValue + rand.nextInt(2);
 						
 						if(moistValue > 35)
-							textMoisture1.setForeground(Color.RED);	
+						{
+							textMoisture1.setForeground(Color.RED);
+							textMoisture1.setFont(new Font("Tahoma", Font.BOLD, 52));
+						}
 						else
+						{
 							textMoisture1.setForeground(Color.WHITE);
+							textMoisture1.setFont(new Font("Tahoma", Font.PLAIN, 48));
+						}
 						
 						if(moistValueBeta > 35)
+						{
 							textMoisture2.setForeground(Color.RED);
+							textMoisture2.setFont(new Font("Tahoma", Font.BOLD, 52));
+						}
 						else
+						{
 							textMoisture2.setForeground(Color.WHITE);
+							textMoisture2.setFont(new Font("Tahoma", Font.PLAIN, 48));
+						}
 						
 						textMoisture1.setText(formatter.format(moistValue) + "%");
 						textMoisture2.setText(formatter.format(moistValueBeta) + "%");
@@ -374,7 +386,7 @@ public class MoistUI extends JPanel
 						series1.add(new Millisecond(), moistValue);
 						series2.add(new Millisecond(), moistValueBeta);
 						
-						Thread.sleep(60000);
+						Thread.sleep(1000);
 					} 
 					catch(Exception e) 
 					{

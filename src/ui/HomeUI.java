@@ -31,7 +31,7 @@ public class HomeUI extends JPanel
 					lblReportLog;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB;
 	private JTextField textMoisture1, textMoisture2, textTemperature1, textTemperature2;
-	private int h, w, resH, resW;
+	private int h, w, resH, resW, count1, count2, count3, count4;
 	private double tempValue, tempValueBeta, moistValue, moistValueBeta;
 	private String log = "";
 	
@@ -65,7 +65,7 @@ public class HomeUI extends JPanel
 		lblOryzaSativa.setForeground(Color.BLACK);
 		lblOryzaSativa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOryzaSativa.setFont(new Font("Times New Roman", Font.BOLD, 32));
-		lblOryzaSativa.setBounds(w-605, h-10, 600, 50);
+		lblOryzaSativa.setBounds(w-605, h-65, 600, 50);
 		centerP.add(lblOryzaSativa);
 		
 		lblMoistureSensor1 = new JLabel("Moisture Sensor #1");
@@ -82,7 +82,7 @@ public class HomeUI extends JPanel
 		textMoisture1.setText("-");
 		textMoisture1.setEditable(false);
 		textMoisture1.setOpaque(false);
-		textMoisture1.setBounds(w+380, h-170, 200, 90);
+		textMoisture1.setBounds(w+355, h-170, 250, 90);
 		textMoisture1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		centerP.add(textMoisture1);
 		
@@ -100,7 +100,7 @@ public class HomeUI extends JPanel
 		textMoisture2.setText("-");
 		textMoisture2.setEditable(false);
 		textMoisture2.setOpaque(false);
-		textMoisture2.setBounds(w+380, h+70, 200, 90);
+		textMoisture2.setBounds(w+355, h+70, 250, 90);
 		textMoisture2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		centerP.add(textMoisture2);
 		
@@ -118,7 +118,7 @@ public class HomeUI extends JPanel
 		textTemperature1.setText("-");
 		textTemperature1.setEditable(false);
 		textTemperature1.setOpaque(false);
-		textTemperature1.setBounds(w+100, h-170, 200, 90);
+		textTemperature1.setBounds(w+75, h-170, 250, 90);
 		textTemperature1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		centerP.add(textTemperature1);
 		
@@ -136,7 +136,7 @@ public class HomeUI extends JPanel
 		textTemperature2.setText("-");
 		textTemperature2.setEditable(false);
 		textTemperature2.setOpaque(false);
-		textTemperature2.setBounds(w+100, h+70, 200, 90);
+		textTemperature2.setBounds(w+75, h+70, 250, 90);
 		textTemperature2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		centerP.add(textTemperature2);
 		
@@ -144,17 +144,18 @@ public class HomeUI extends JPanel
 		lblReportLog.setForeground(Color.BLACK);
 		lblReportLog.setHorizontalAlignment(SwingConstants.CENTER);
 		lblReportLog.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblReportLog.setBounds(w-355, h+32, 100, 50);
+		lblReportLog.setBounds(w-355, h-32, 100, 50);
 		centerP.add(lblReportLog);
 		
 		textLog = new JTextArea(100, 200);
+		textLog.setFont(new Font(null, Font.PLAIN, 13));
 		textLog.setEditable(false);
         textLog.setBackground(Color.white);
 		scroll = new JScrollPane(textLog);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        scroll.setBounds(w-560, h+75, 510, 235);
+        scroll.setBounds(w-580, h+8, 550, 330);
         centerP.add(scroll);
 		
 		exitB = new JButton("");
@@ -232,7 +233,7 @@ public class HomeUI extends JPanel
 		
 		lbllogo = new JLabel();
 		lbllogo.setIcon(new ImageIcon("../Thesis/Images/finallogo.png"));
-		lbllogo.setBounds(w-420, h-250,250,250);
+		lbllogo.setBounds(w-420, h-300,250,250);
 		centerP.add(lbllogo);
 		
 		lblBlock1 = new JLabel();
@@ -257,7 +258,7 @@ public class HomeUI extends JPanel
 		
 		lblBlock5 = new JLabel();
 		lblBlock5.setIcon(new ImageIcon("../Thesis/Images/blueck.png"));
-		lblBlock5.setBounds(w-565, h+30,520,300);
+		lblBlock5.setBounds(w-585, h-15,560,360);
 		centerP.add(lblBlock5);
 		
 		lblBg = new JLabel();
@@ -309,53 +310,64 @@ public class HomeUI extends JPanel
 		{
 			public void run()
 			{
+				count1 = 0; count2 = 0; count3 = 0; count4 = 0;
 				while(true)
 				{
 					try 
 					{
+						
 						updateDate();
 						
 						// TEMPERATURE CHECKER
 						tempValue = fdao.getTemperature().getFirst();
-						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(5);
+						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(30);
 						
 						if(tempValue >= 40)
 						{
 							log = dateFormat.format(date) + " Temp Sensor #1: "
 									+ "TEMPERATURE LEVEL IS ABOVE NORMAL! \n"
 									+ "Temperature reading: " + formatter.format(tempValue) + "\u00b0C\n\n"+ log;
-							textTemperature1.setForeground(Color.RED);	
-						}
-						else if(tempValue <= 10)
-						{
-							log = dateFormat.format(date) + " Temp Sensor #1: "
-									+ "TEMPERATURE LEVEL IS BELOW NORMAL! \n"
-									+ "Temperature reading: " + formatter.format(tempValue) + "\u00b0C\n\n"+ log;
-							textTemperature1.setForeground(Color.BLUE);	
+							textTemperature1.setForeground(Color.RED);
+							textTemperature1.setFont(new Font("Tahoma", Font.BOLD, 52));
+							count1++;
+							if(count1>=10)
+							{
+								JOptionPane.showMessageDialog(null, "ALERT: 10 seconds of reading is still above normal.",
+										"Reading", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						else
+						{
+							count1 = 0;
 							textTemperature1.setForeground(Color.WHITE);
-						
+							textTemperature1.setFont(new Font("Tahoma", Font.PLAIN, 48));
+						}
+							
 						if(tempValueBeta >= 40)
 						{
 							log = dateFormat.format(date) + " Temp Sensor #2: "
 									+ "TEMPERATURE LEVEL IS ABOVE NORMAL! \n"
 									+ "\tTemperature reading: " + formatter.format(tempValueBeta) + "\u00b0C\n\n" + log;
 							textTemperature2.setForeground(Color.RED);
-						}
-						else if(tempValueBeta <= 10)
-						{
-							log = dateFormat.format(date) + " Temp Sensor #1: "
-									+ "TEMPERATURE LEVEL IS BELOW NORMAL! \n"
-									+ "Temperature reading: " + formatter.format(tempValueBeta) + "\u00b0C\n\n"+ log;
-							textTemperature2.setForeground(Color.BLUE);	
+							textTemperature2.setFont(new Font("Tahoma", Font.BOLD, 52));
+							
+							count2++;
+							if(count2>=10)
+							{
+								JOptionPane.showMessageDialog(null, "ALERT: 10 seconds of reading is still above normal.",
+										"Reading", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						else
+						{
+							count2 = 0;
 							textTemperature2.setForeground(Color.WHITE);
+							textTemperature2.setFont(new Font("Tahoma", Font.PLAIN, 48));
+						}
 						
 						// MOISTURE CHECKER
 						moistValue = fdao.getMoisture().getFirst();
-						moistValueBeta = fdao.getMoisture().getFirst() + rand.nextInt(2);
+						moistValueBeta = fdao.getMoisture().getFirst() + rand.nextInt(30);
 						
 						if(moistValue > 14)
 						{
@@ -363,20 +375,42 @@ public class HomeUI extends JPanel
 									+ "MOISTURE CONTENT IS ABOVE NORMAL! \n"
 									+ "\tMoisture content reading: " + formatter.format(moistValue) + "%\n\n" + log;
 							textMoisture1.setForeground(Color.RED);	
+							textMoisture1.setFont(new Font("Tahoma", Font.BOLD, 52));
+							
+							count3++;
+							if(count3>=10)
+							{
+								JOptionPane.showMessageDialog(null, "ALERT: 10 seconds of reading is still above normal.",
+										"Reading", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						else
+						{
+							count3 = 0;
 							textMoisture1.setForeground(Color.WHITE);
-						
+							textMoisture1.setFont(new Font("Tahoma", Font.PLAIN, 48));
+						}
+							
 						if(moistValueBeta > 14)
 						{
 							log = dateFormat.format(date) + " Moisture Sensor #2: "
 									+ "MOISTURE CONTENT IS ABOVE NORMAL! \n"
 									+ "\tMoisture content reading: " + formatter.format(moistValueBeta) + "%\n\n" + log;
 							textMoisture2.setForeground(Color.RED);
+							textMoisture2.setFont(new Font("Tahoma", Font.BOLD, 52));
+							
+							count4++;
+							if(count4>=10)
+							{
+								JOptionPane.showMessageDialog(null, "ALERT: 10 seconds of reading is still above normal.",
+										"Reading", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						else
 						{
+							count4 = 0;
 							textMoisture2.setForeground(Color.WHITE);
+							textMoisture2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 						}
 						
 						textMoisture1.setText(formatter.format(moistValue) + "%");
@@ -386,7 +420,7 @@ public class HomeUI extends JPanel
 						
 						textLog.setText(log);
 						
-						Thread.sleep(60000); // 1000 milliseconds is equal to 1 sec
+						Thread.sleep(1000); // 1000 milliseconds is equal to 1 sec
 
 					}
 					catch(Exception e) 
