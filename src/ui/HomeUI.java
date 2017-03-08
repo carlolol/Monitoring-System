@@ -160,8 +160,8 @@ public class HomeUI extends JPanel
 		
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
-		exitB.setIcon(new ImageIcon("../Thesis/Images/x.png"));
-		exitB.setRolloverIcon(new ImageIcon("../Thesis/Images/xhover.png"));
+		exitB.setIcon(new ImageIcon(HomeUI.class.getResource("/x.png")));
+		exitB.setRolloverIcon(new ImageIcon(HomeUI.class.getResource("/xhover.png")));
 		exitB.setBounds(resW-60, 15, 40, 40);
 		exitB.setOpaque(false);
 		exitB.setContentAreaFilled(false);
@@ -172,8 +172,8 @@ public class HomeUI extends JPanel
 		
 		minimizeB = new JButton("");
 		minimizeB.setToolTipText("Minimize");
-		minimizeB.setIcon(new ImageIcon("../Thesis/Images/minimize.png"));
-		minimizeB.setRolloverIcon(new ImageIcon("../Thesis/Images/minimizehover.png"));
+		minimizeB.setIcon(new ImageIcon(HomeUI.class.getResource("/minimize.png")));
+		minimizeB.setRolloverIcon(new ImageIcon(HomeUI.class.getResource("/minimizehover.png")));
 		minimizeB.setBounds(resW-105, 15, 40, 40);
 		minimizeB.setOpaque(false);
 		minimizeB.setContentAreaFilled(false);
@@ -184,8 +184,8 @@ public class HomeUI extends JPanel
 		
 		aboutB = new JButton("");
 		aboutB.setToolTipText("About");
-		aboutB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
-		aboutB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
+		aboutB.setIcon(new ImageIcon(HomeUI.class.getResource("/help.png")));
+		aboutB.setRolloverIcon(new ImageIcon(HomeUI.class.getResource("/helphover.png")));
 		aboutB.setBounds(resW-150, 15, 40, 40);
 		aboutB.setOpaque(false);
 		aboutB.setContentAreaFilled(false);
@@ -196,8 +196,8 @@ public class HomeUI extends JPanel
 		
 		tempB = new JButton("");
 		tempB.setToolTipText("Temperature");
-		tempB.setIcon(new ImageIcon("../Thesis/Images/tempIcon.png"));
-		tempB.setRolloverIcon(new ImageIcon("../Thesis/Images/tempIconhover.png"));
+		tempB.setIcon(new ImageIcon(HomeUI.class.getResource("/tempIcon.png")));
+		tempB.setRolloverIcon(new ImageIcon(HomeUI.class.getResource("/tempIconhover.png")));
 		tempB.setOpaque(false);
 		tempB.setContentAreaFilled(false);
 		tempB.setBorderPainted(false);
@@ -208,8 +208,8 @@ public class HomeUI extends JPanel
 		
 		moistB = new JButton("");
 		moistB.setToolTipText("Moisture");
-		moistB.setIcon(new ImageIcon("../Thesis/Images/moistureIcon.png"));
-		moistB.setRolloverIcon(new ImageIcon("../Thesis/Images/moistureIconhover.png"));
+		moistB.setIcon(new ImageIcon(HomeUI.class.getResource("/moistureIcon.png")));
+		moistB.setRolloverIcon(new ImageIcon(HomeUI.class.getResource("/moistureIconhover.png")));
 		moistB.setBounds(resW-160, resH-85, 60, 60);
 		moistB.setOpaque(false);
 		moistB.setContentAreaFilled(false);
@@ -220,8 +220,8 @@ public class HomeUI extends JPanel
 		
 		homeB = new JButton("");
 		homeB.setToolTipText("Home");
-		homeB.setIcon(new ImageIcon("../Thesis/Images/homehover.png"));
-		homeB.setRolloverIcon(new ImageIcon("../Thesis/Images/homehover.png"));
+		homeB.setIcon(new ImageIcon(HomeUI.class.getResource("/homehover.png")));
+		homeB.setRolloverIcon(new ImageIcon(HomeUI.class.getResource("/homehover.png")));
 		homeB.setBounds(resW-80, resH-85, 60, 60);
 		homeB.setOpaque(false);
 		homeB.setContentAreaFilled(false);
@@ -232,37 +232,37 @@ public class HomeUI extends JPanel
 		centerP.add(homeB);
 		
 		lbllogo = new JLabel();
-		lbllogo.setIcon(new ImageIcon("../Thesis/Images/finallogo.png"));
+		lbllogo.setIcon(new ImageIcon(HomeUI.class.getResource("/finallogo.png")));
 		lbllogo.setBounds(w-420, h-300,250,250);
 		centerP.add(lbllogo);
 		
 		lblBlock1 = new JLabel();
-		lblBlock1.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock1.setIcon(new ImageIcon(HomeUI.class.getResource("/block.png")));
 		lblBlock1.setBounds(w+360, h-270,300,250);
 		centerP.add(lblBlock1);
 		
 		lblBlock2 = new JLabel();
-		lblBlock2.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock2.setIcon(new ImageIcon(HomeUI.class.getResource("/block.png")));
 		lblBlock2.setBounds(w+360, h-30,300,250);
 		centerP.add(lblBlock2);
 		
 		lblBlock3 = new JLabel();
-		lblBlock3.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock3.setIcon(new ImageIcon(HomeUI.class.getResource("/block.png")));
 		lblBlock3.setBounds(w+80, h-270,300,250);
 		centerP.add(lblBlock3);
 		
 		lblBlock4 = new JLabel();
-		lblBlock4.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock4.setIcon(new ImageIcon(HomeUI.class.getResource("/block.png")));
 		lblBlock4.setBounds(w+80, h-30,300,250);
 		centerP.add(lblBlock4);
 		
 		lblBlock5 = new JLabel();
-		lblBlock5.setIcon(new ImageIcon("../Thesis/Images/blueck.png"));
+		lblBlock5.setIcon(new ImageIcon(HomeUI.class.getResource("/blueck.png")));
 		lblBlock5.setBounds(w-585, h-15,560,360);
 		centerP.add(lblBlock5);
 		
 		lblBg = new JLabel();
-		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
+		lblBg.setIcon(new ImageIcon(HomeUI.class.getResource("/bg.png")));
 		lblBg.setBounds(0,0,resW,resH);
 		centerP.add(lblBg);
 		

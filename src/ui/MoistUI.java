@@ -117,8 +117,8 @@ public class MoistUI extends JPanel
 	
 		exitB = new JButton("");
 		exitB.setToolTipText("Exit");
-		exitB.setIcon(new ImageIcon("../Thesis/Images/x.png"));
-		exitB.setRolloverIcon(new ImageIcon("../Thesis/Images/xhover.png"));
+		exitB.setIcon(new ImageIcon(MoistUI.class.getResource("/x.png")));
+		exitB.setRolloverIcon(new ImageIcon(MoistUI.class.getResource("/xhover.png")));
 		exitB.setBounds(resW-60, 15, 40, 40);
 		exitB.setOpaque(false);
 		exitB.setContentAreaFilled(false);
@@ -129,8 +129,8 @@ public class MoistUI extends JPanel
 		
 		minimizeB = new JButton("");
 		minimizeB.setToolTipText("Minimize");
-		minimizeB.setIcon(new ImageIcon("../Thesis/Images/minimize.png"));
-		minimizeB.setRolloverIcon(new ImageIcon("../Thesis/Images/minimizehover.png"));
+		minimizeB.setIcon(new ImageIcon(MoistUI.class.getResource("/minimize.png")));
+		minimizeB.setRolloverIcon(new ImageIcon(MoistUI.class.getResource("/minimizehover.png")));
 		minimizeB.setBounds(resW-105, 15, 40, 40);
 		minimizeB.setOpaque(false);
 		minimizeB.setContentAreaFilled(false);
@@ -141,8 +141,8 @@ public class MoistUI extends JPanel
 		
 		aboutB = new JButton("");
 		aboutB.setToolTipText("About");
-		aboutB.setIcon(new ImageIcon("../Thesis/Images/help.png"));
-		aboutB.setRolloverIcon(new ImageIcon("../Thesis/Images/helphover.png"));
+		aboutB.setIcon(new ImageIcon(MoistUI.class.getResource("/help.png")));
+		aboutB.setRolloverIcon(new ImageIcon(MoistUI.class.getResource("/helphover.png")));
 		aboutB.setBounds(resW-150, 15, 40, 40);
 		aboutB.setOpaque(false);
 		aboutB.setContentAreaFilled(false);
@@ -153,8 +153,8 @@ public class MoistUI extends JPanel
 		
 		nextB = new JButton("");
 		nextB.setToolTipText("Next sensor");
-		nextB.setIcon(new ImageIcon("../Thesis/Images/next.png"));
-		nextB.setRolloverIcon(new ImageIcon("../Thesis/Images/nexthover.png"));
+		nextB.setIcon(new ImageIcon(MoistUI.class.getResource("/next.png")));
+		nextB.setRolloverIcon(new ImageIcon(MoistUI.class.getResource("/nexthover.png")));
 		nextB.setBounds(w+520, h+100, 60, 50);
 		nextB.setOpaque(false);
 		nextB.setContentAreaFilled(false);
@@ -165,8 +165,8 @@ public class MoistUI extends JPanel
 		
 		previousB = new JButton("");
 		previousB.setToolTipText("Previous sensor");
-		previousB.setIcon(new ImageIcon("../Thesis/Images/previous.png"));
-		previousB.setRolloverIcon(new ImageIcon("../Thesis/Images/previoushover.png"));
+		previousB.setIcon(new ImageIcon(MoistUI.class.getResource("/previous.png")));
+		previousB.setRolloverIcon(new ImageIcon(MoistUI.class.getResource("/previoushover.png")));
 		previousB.setBounds(w+420, h+100, 60, 50);
 		previousB.setOpaque(false);
 		previousB.setContentAreaFilled(false);
@@ -178,8 +178,8 @@ public class MoistUI extends JPanel
 		
 		tempB = new JButton("");
 		tempB.setToolTipText("Temperature");
-		tempB.setIcon(new ImageIcon("../Thesis/Images/tempIcon.png"));
-		tempB.setRolloverIcon(new ImageIcon("../Thesis/Images/tempIconhover.png"));
+		tempB.setIcon(new ImageIcon(MoistUI.class.getResource("/tempIcon.png")));
+		tempB.setRolloverIcon(new ImageIcon(MoistUI.class.getResource("/tempIconhover.png")));
 		tempB.setOpaque(false);
 		tempB.setContentAreaFilled(false);
 		tempB.setBorderPainted(false);
@@ -190,8 +190,8 @@ public class MoistUI extends JPanel
 		
 		moistB = new JButton("");
 		moistB.setToolTipText("Moisture");
-		moistB.setIcon(new ImageIcon("../Thesis/Images/moistureIcon.png"));
-		moistB.setRolloverIcon(new ImageIcon("../Thesis/Images/moistureIconhover.png"));
+		moistB.setIcon(new ImageIcon(MoistUI.class.getResource("/moistureIcon.png")));
+		moistB.setRolloverIcon(new ImageIcon(MoistUI.class.getResource("/moistureIconhover.png")));
 		moistB.setBounds(resW-160, resH-85, 60, 60);
 		moistB.setOpaque(false);
 		moistB.setContentAreaFilled(false);
@@ -203,8 +203,8 @@ public class MoistUI extends JPanel
 		
 		homeB = new JButton("");
 		homeB.setToolTipText("Home");
-		homeB.setIcon(new ImageIcon("../Thesis/Images/home.png"));
-		homeB.setRolloverIcon(new ImageIcon("../Thesis/Images/homehover.png"));
+		homeB.setIcon(new ImageIcon(MoistUI.class.getResource("/home.png")));
+		homeB.setRolloverIcon(new ImageIcon(MoistUI.class.getResource("/homehover.png")));
 		homeB.setBounds(resW-80, resH-85, 60, 60);
 		homeB.setOpaque(false);
 		homeB.setContentAreaFilled(false);
@@ -214,12 +214,12 @@ public class MoistUI extends JPanel
 		centerP.add(homeB);
 		
 		lblBlock1 = new JLabel();
-		lblBlock1.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock1.setIcon(new ImageIcon(MoistUI.class.getResource("/block.png")));
 		lblBlock1.setBounds(w+380, h-290,300,180);
 		centerP.add(lblBlock1);
 		
 		lblBlock2 = new JLabel();
-		lblBlock2.setIcon(new ImageIcon("../Thesis/Images/block.png"));
+		lblBlock2.setIcon(new ImageIcon(MoistUI.class.getResource("/block.png")));
 		lblBlock2.setBounds(w+380, h-100,300,180);
 		centerP.add(lblBlock2);
 				
@@ -228,7 +228,7 @@ public class MoistUI extends JPanel
 		generateGraph2();
 		
 		lblBg = new JLabel();
-		lblBg.setIcon(new ImageIcon("../Thesis/Images/bg.png"));
+		lblBg.setIcon(new ImageIcon(MoistUI.class.getResource("/bg.png")));
 		lblBg.setBounds(0,0,resW,resH);
 		centerP.add(lblBg);
 		

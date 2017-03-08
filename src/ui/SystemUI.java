@@ -25,7 +25,7 @@ public class SystemUI extends JFrame
 		Toolkit t = Toolkit.getDefaultToolkit();
 		Dimension d = t.getScreenSize();
 
-		img = new ImageIcon("../Thesis/Images/finallogo.png");
+		img = new ImageIcon(SystemUI.class.getResource("/finallogo.png"));
 		setIconImage(img.getImage());
 		
 		h = d.height;

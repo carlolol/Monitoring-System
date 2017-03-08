@@ -2,7 +2,9 @@ package dao;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -20,11 +22,16 @@ public class FirebaseDAO
 	private LinkedList<Float> moisture;
 	
 	//private key from the firebase project
-	private final String key = "../Thesis/temperature-19044-firebase-adminsdk-an3c5-261e0460e3.json";
+	private final String key = "../Thesis/Images/temperature-19044-firebase-adminsdk-an3c5-261e0460e3.json";
+
+	final String text = new Scanner(FirebaseDAO.class.getResourceAsStream("/temperature-19044-firebase-adminsdk-an3c5-261e0460e3.json"), "UTF-8").useDelimiter("\\A").next();
 	
 	public FirebaseDAO() throws FileNotFoundException
 	{
-		FileInputStream serviceAccount = new FileInputStream(key);
+		//CARL ETO
+		System.out.print(text);
+		FileInputStream serviceAccount = new FileInputStream(text);
+		
 
 		FirebaseOptions options = new FirebaseOptions.Builder()
 		  .setCredential(FirebaseCredentials.fromCertificate(serviceAccount))
