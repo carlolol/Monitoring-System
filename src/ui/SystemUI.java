@@ -48,7 +48,14 @@ public class SystemUI extends JFrame
 			System.out.print("Firebase connection cannot be established.");
 		}
 		
-		fdao.startRetrieveData();
+		try
+		{
+			fdao.startRetrieveData();
+		}
+		catch (Exception e)
+		{
+			System.out.print("Dito may problema bes.");
+		}
 		
 		card = new CardLayout();
 		container.setLayout(card);

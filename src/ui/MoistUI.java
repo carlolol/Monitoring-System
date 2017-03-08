@@ -32,7 +32,7 @@ public class MoistUI extends JPanel
 	private JPanel centerP, xymoisture1, xymoisture2;
 	private SystemUI systemUI;
 	private Random rand;
-	private int h, w, resH, resW;
+	private int h, w, resH, resW, count1, count2;
 	private double moistValue, moistValueBeta;
 	private NumberFormat formatter;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
@@ -351,6 +351,7 @@ public class MoistUI extends JPanel
 		{
 			public void run()
 			{
+				count1 = 0; count2 = 0;
 				while(true)
 				{
 					try 
@@ -358,24 +359,41 @@ public class MoistUI extends JPanel
 						moistValue = fdao.getMoisture().getFirst();
 						moistValueBeta = moistValue + rand.nextInt(2);
 						
-						if(moistValue > 35)
+						if(moistValue > 14)
 						{
 							textMoisture1.setForeground(Color.RED);
 							textMoisture1.setFont(new Font("Tahoma", Font.BOLD, 52));
+							count1++;
+							if(count1>=30)
+							{
+								count1 = 0;
+								JOptionPane.showMessageDialog(null, "ALERT: 30 seconds of moisture reading is"
+										+ " still above normal.", "Reading", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						else
 						{
+							count1 = 0;
 							textMoisture1.setForeground(Color.WHITE);
 							textMoisture1.setFont(new Font("Tahoma", Font.PLAIN, 48));
 						}
 						
-						if(moistValueBeta > 35)
+						if(moistValueBeta > 14)
 						{
 							textMoisture2.setForeground(Color.RED);
 							textMoisture2.setFont(new Font("Tahoma", Font.BOLD, 52));
+							count2++;
+							if(count2>=30)
+							{
+								count2 = 0;
+								JOptionPane.showMessageDialog(null, "ALERT: 30 seconds of moisture reading is"
+										+ " still above normal.",
+										"Reading", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						else
 						{
+							count2 = 0;
 							textMoisture2.setForeground(Color.WHITE);
 							textMoisture2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 						}
@@ -390,7 +408,6 @@ public class MoistUI extends JPanel
 					} 
 					catch(Exception e) 
 					{
-						System.out.print("ERROR");
 					}
 				}
 			}

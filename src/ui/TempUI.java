@@ -29,7 +29,7 @@ public class TempUI extends JPanel
 	private JPanel centerP, xytemp1, xytemp2;
 	private SystemUI systemUI;
 	private Random rand;
-	private int h, w, resH, resW;
+	private int h, w, resH, resW, count1, count2;
 	private double tempValue, tempValueBeta;
 	private JButton tempB, moistB, homeB, minimizeB, exitB, aboutB, nextB, previousB;
 	private JLabel lblBg, lblTemperatureSensor, lblTemperature1, lblTemperature2, lblBlock1, lblBlock2;
@@ -347,6 +347,7 @@ public class TempUI extends JPanel
 		{
 			public void run()
 			{
+				count1 = 0; count2 = 0;
 				while(true)
 				{
 					try 
@@ -354,24 +355,40 @@ public class TempUI extends JPanel
 						tempValue = fdao.getTemperature().getFirst();
 						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(5);
 						
-						if(tempValue > 35)
+						if(tempValue > 40)
 						{
 							textTemperature1.setForeground(Color.RED);	
 							textTemperature1.setFont(new Font("Tahoma", Font.BOLD, 52));
+							count1++;
+							if(count1>=30)
+							{
+								count1 = 0;
+								JOptionPane.showMessageDialog(null, "ALERT: 30 seconds of temperature reading is"
+										+ " still above normal.", "Reading", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						else
 						{
+							count1 = 0;
 							textTemperature1.setForeground(Color.WHITE);
 							textTemperature1.setFont(new Font("Tahoma", Font.PLAIN, 48));
 						}
 						
-						if(tempValueBeta > 35)
+						if(tempValueBeta > 40)
 						{
 							textTemperature2.setForeground(Color.RED);
 							textTemperature2.setFont(new Font("Tahoma", Font.BOLD, 52));
+							count2++;
+							if(count2>=30)
+							{
+								count2 = 0;
+								JOptionPane.showMessageDialog(null, "ALERT: 30 seconds of temperature reading is"
+										+ " still above normal.", "Reading", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						else
 						{
+							count2 = 0;
 							textTemperature2.setForeground(Color.WHITE);
 							textTemperature2.setFont(new Font("Tahoma", Font.PLAIN, 48));
 						}
@@ -387,7 +404,6 @@ public class TempUI extends JPanel
 					} 
 					catch(Exception e) 
 					{
-						System.out.print("ERROR");
 					}
 				}
 			}

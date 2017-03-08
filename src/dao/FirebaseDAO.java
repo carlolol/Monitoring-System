@@ -41,9 +41,15 @@ public class FirebaseDAO
 	
 	public void startRetrieveData()
 	{
-		retrieveTemperature();
-		
-		retrieveMoisture();
+		try
+		{
+			retrieveTemperature();
+			retrieveMoisture();
+		}
+		catch(Exception e)
+		{
+			
+		}
 	}
 	
 	private void retrieveTemperature()

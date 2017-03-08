@@ -320,7 +320,7 @@ public class HomeUI extends JPanel
 						
 						// TEMPERATURE CHECKER
 						tempValue = fdao.getTemperature().getFirst();
-						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(30);
+						tempValueBeta = fdao.getTemperature().getFirst() + rand.nextInt(5);
 						
 						if(tempValue >= 40)
 						{
@@ -330,10 +330,11 @@ public class HomeUI extends JPanel
 							textTemperature1.setForeground(Color.RED);
 							textTemperature1.setFont(new Font("Tahoma", Font.BOLD, 52));
 							count1++;
-							if(count1>=10)
+							if(count1>=30)
 							{
-								JOptionPane.showMessageDialog(null, "ALERT: 10 seconds of reading is still above normal.",
-										"Reading", JOptionPane.WARNING_MESSAGE);
+								count1 = 0;
+								JOptionPane.showMessageDialog(null, "ALERT: 30 seconds of temperature reading is "
+										+ "still above normal.", "Reading", JOptionPane.WARNING_MESSAGE);
 							}
 						}
 						else
@@ -352,10 +353,11 @@ public class HomeUI extends JPanel
 							textTemperature2.setFont(new Font("Tahoma", Font.BOLD, 52));
 							
 							count2++;
-							if(count2>=10)
+							if(count2>=30)
 							{
-								JOptionPane.showMessageDialog(null, "ALERT: 10 seconds of reading is still above normal.",
-										"Reading", JOptionPane.WARNING_MESSAGE);
+								count2 = 0;
+								JOptionPane.showMessageDialog(null, "ALERT: 30 seconds of temperature reading is "
+										+ "still above normal.", "Reading", JOptionPane.WARNING_MESSAGE);
 							}
 						}
 						else
@@ -367,7 +369,7 @@ public class HomeUI extends JPanel
 						
 						// MOISTURE CHECKER
 						moistValue = fdao.getMoisture().getFirst();
-						moistValueBeta = fdao.getMoisture().getFirst() + rand.nextInt(30);
+						moistValueBeta = fdao.getMoisture().getFirst() + rand.nextInt(2);
 						
 						if(moistValue > 14)
 						{
@@ -378,10 +380,11 @@ public class HomeUI extends JPanel
 							textMoisture1.setFont(new Font("Tahoma", Font.BOLD, 52));
 							
 							count3++;
-							if(count3>=10)
+							if(count3>=30)
 							{
-								JOptionPane.showMessageDialog(null, "ALERT: 10 seconds of reading is still above normal.",
-										"Reading", JOptionPane.WARNING_MESSAGE);
+								count3 = 0;
+								JOptionPane.showMessageDialog(null, "ALERT: 30 seconds of moisture reading is "
+										+ "still above normal.", "Reading", JOptionPane.WARNING_MESSAGE);
 							}
 						}
 						else
@@ -400,10 +403,11 @@ public class HomeUI extends JPanel
 							textMoisture2.setFont(new Font("Tahoma", Font.BOLD, 52));
 							
 							count4++;
-							if(count4>=10)
+							if(count4>=30)
 							{
-								JOptionPane.showMessageDialog(null, "ALERT: 10 seconds of reading is still above normal.",
-										"Reading", JOptionPane.WARNING_MESSAGE);
+								count4 = 0;
+								JOptionPane.showMessageDialog(null, "ALERT: 30 seconds of moisture reading is "
+										+ "still above normal.", "Reading", JOptionPane.WARNING_MESSAGE);
 							}
 						}
 						else
